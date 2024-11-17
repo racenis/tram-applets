@@ -14,6 +14,7 @@ type
     procedure TestInvalid;
     procedure TestCanOpen;
     procedure TestCanParse;
+    procedure TestCanParseCorrectly;
   end;
 
 implementation
@@ -52,6 +53,26 @@ begin
   AssertEquals(parser.GetColCount(2), 3);
   AssertEquals(parser.GetColCount(3), 5);
   AssertEquals(parser.GetColCount(4), 3);
+
+  FreeAndNil(parser);
+end;
+
+procedure TramAssetParserTestTest.TestCanParseCorrectly;
+var
+  parser: TAssetParser;
+begin
+  parser := TAssetParser.Create('testdata/text.text');
+
+  AssertEquals(parser.IsOpen(), True);
+
+  AssertEquals(parser.GetValue(0, 0), 'hello');
+  AssertEquals(parser.GetValue(0, 1), 'this');
+  AssertEquals(parser.GetValue(0, 2), 'is');
+  AssertEquals(parser.GetValue(0, 3), 'line');
+
+  AssertEquals(parser.GetValue(4, 0), 'THIS');
+  AssertEquals(parser.GetValue(4, 1), ' is   ca  kcakke kkeeke');
+  AssertEquals(parser.GetValue(4, 2), 'yes');
 
   FreeAndNil(parser);
 end;

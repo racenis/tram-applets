@@ -8,7 +8,7 @@
       <Unit>
         <Filename Value="scratchpad.lpr"/>
         <IsPartOfProject Value="True"/>
-        <CursorPos X="5" Y="14"/>
+        <CursorPos X="26" Y="18"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
       </Unit>
@@ -23,61 +23,20 @@
         <UnitName Value="TramAssetParser"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="136"/>
-        <CursorPos X="33" Y="149"/>
+        <TopLine Value="144"/>
+        <CursorPos X="35" Y="150"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\sysutils\filutilh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="182"/>
+        <CursorPos X="10" Y="200"/>
+        <UsageCount Value="10"/>
+      </Unit>
     </Units>
-    <JumpHistory HistoryIndex="15">
-      <Position>
-        <Filename Value="scratchpad.lpr"/>
-        <Caret Line="15"/>
-      </Position>
-      <Position>
-        <Filename Value="scratchpad.lpr"/>
-        <Caret Line="13" Column="22"/>
-      </Position>
-      <Position>
-        <Filename Value="scratchpad.lpr"/>
-        <Caret Line="10"/>
-      </Position>
-      <Position>
-        <Filename Value="..\datalib\tramassetparser.pas"/>
-        <Caret Line="51" TopLine="28"/>
-      </Position>
-      <Position>
-        <Filename Value="..\datalib\tramassetparser.pas"/>
-        <Caret Line="50" Column="11" TopLine="26"/>
-      </Position>
-      <Position>
-        <Filename Value="..\datalib\tramassetparser.pas"/>
-        <Caret Line="52" Column="45" TopLine="32"/>
-      </Position>
-      <Position>
-        <Filename Value="..\datalib\tramassetparser.pas"/>
-        <Caret Line="51" Column="50" TopLine="34"/>
-      </Position>
-      <Position>
-        <Filename Value="..\datalib\tramassetparser.pas"/>
-        <Caret Line="53" TopLine="33"/>
-      </Position>
-      <Position>
-        <Filename Value="..\datalib\tramassetparser.pas"/>
-        <Caret Line="55" Column="16" TopLine="33"/>
-      </Position>
-      <Position>
-        <Filename Value="..\datalib\tramassetparser.pas"/>
-        <Caret Line="48" Column="11" TopLine="33"/>
-      </Position>
-      <Position>
-        <Filename Value="..\datalib\tramassetparser.pas"/>
-        <Caret Line="88" Column="32" TopLine="66"/>
-      </Position>
-      <Position>
-        <Filename Value="..\datalib\tramassetparser.pas"/>
-        <Caret Line="83" Column="55" TopLine="66"/>
-      </Position>
+    <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="..\datalib\tramassetparser.pas"/>
         <Caret Line="85" Column="40" TopLine="66"/>
@@ -93,6 +52,110 @@
       <Position>
         <Filename Value="..\datalib\tramassetparser.pas"/>
         <Caret Line="48" Column="5" TopLine="44"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="42" Column="26" TopLine="28"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="50" Column="6" TopLine="35"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="84" Column="33" TopLine="65"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="106" Column="44" TopLine="100"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="54" Column="17" TopLine="43"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="82" Column="26" TopLine="69"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="99" TopLine="84"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="79" Column="67" TopLine="60"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="88" Column="35" TopLine="69"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="89" Column="14" TopLine="69"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="107" Column="83" TopLine="93"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="83" Column="19" TopLine="58"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="85" Column="29" TopLine="66"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="108" TopLine="75"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="92" Column="54" TopLine="71"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="91" Column="35" TopLine="71"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="92" Column="43" TopLine="71"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="95" Column="40" TopLine="77"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="97" Column="45" TopLine="77"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="70" Column="34" TopLine="59"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="125" Column="45" TopLine="99"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="99" Column="18" TopLine="70"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="99" Column="18" TopLine="80"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="182" Column="13" TopLine="167"/>
+      </Position>
+      <Position>
+        <Filename Value="scratchpad.lpr"/>
+        <Caret Line="22" Column="21"/>
+      </Position>
+      <Position>
+        <Filename Value="..\datalib\tramassetparser.pas"/>
+        <Caret Line="17" Column="53"/>
       </Position>
     </JumpHistory>
     <RunParams>

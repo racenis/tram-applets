@@ -12,14 +12,14 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="21"/>
       </Unit>
       <Unit>
         <Filename Value="testcase1.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="TestCase1"/>
         <CursorPos X="31" Y="12"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="21"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -41,19 +41,19 @@
       <Unit>
         <Filename Value="tramassetparser.pas"/>
         <UnitName Value="TramAssetParser"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="32"/>
-        <CursorPos X="7" Y="47"/>
+        <TopLine Value="147"/>
+        <CursorPos X="12" Y="170"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="tramassetparsertest.pas"/>
         <UnitName Value="TramAssetParserTest"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="4"/>
-        <TopLine Value="29"/>
-        <CursorPos X="24" Y="43"/>
+        <TopLine Value="49"/>
+        <CursorPos X="36" Y="75"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit>

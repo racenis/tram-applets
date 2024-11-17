@@ -14,12 +14,14 @@ type
 
      function GetRowCount: Integer;
      function GetColCount(const row: Integer): Integer;
-     function GetValue(const col: Integer; const row: Integer): string;
+     function GetValue(const row: Integer; const col: Integer): string;
 
      function IsOpen(): Boolean;
   private
      rowCount: Integer;
      colCount: Integer;
+     rowIndex: Integer;
+     colIndex: Integer;
      opened: Boolean;
      data: array of array of string;
   end;
@@ -30,133 +32,151 @@ constructor TAssetParser.Create(const path: string);
 type
   ParseState = (normal, whitespace, quote, comment);
 var
-  readFile: TextFile;
+  readFile: File of Char;
   line: string;
   splitLine: array of string;
   token: string;
   state: ParseState;
   c: Char;
 begin
+  // init properties
+  data := [[]];
+  self.rowCount := 1;
+  self.colCount := 0;
+  self.rowIndex := 0;
+  self.colIndex := 0;
+
+  // check if file exists
   if not FileExists(path) then
   begin
     self.opened := False;
     Exit();
   end;
 
-  AssignFile(readFile, path);
+  // open gile
+  Assign(readFile, path);
+  Reset(readFile);
 
-  //try
-     reset(readFile);
+  // init first token
+  token := '';
 
-     // insert first token
-     data := [['']];
-     self.rowCount := 1;
-     self.colCount := 1;
+  // start the parse, char by char
+  while True do
+  begin
 
-     // start the parse, char by char
-     while True do
-     begin
+      // check if end of file
+      if EOF(readFile) then break;
 
-          // reads in next char
-          Read(readFile, c);
+      // read in next char
+      Read(readFile, c);
 
-          // check for comment
-          if c = '#' then
-          begin
-             state := comment;
-             Continue;
-          end;
+      // check for comment
+      if c = '#' then
+      begin
+         state := comment;
+         Continue;
+      end;
 
-          // check if newline
-          if c = #10 then
-          begin
-            rowCount := rowCount + 1;
+      // check if newline
+      if c = #10 then
+      begin
+         // append token
+         if token <> '' then
+         begin
+            SetLength(data[rowIndex], colIndex + 1);
+            data[rowIndex][colIndex] := token;
+            token := '';
+            colIndex += 1;
+         end;
+
+         // add new line
+         if data[rowIndex] <> nil then
+         begin
+            self.rowCount += 1;
+            self.rowIndex += 1;
             SetLength(data, rowCount);
-            data[rowCount - 1] := [''];
+            data[rowIndex] := [];
+         end;
 
-            //Continue;
-          end;
+         colIndex := 0;
 
-          //Write(state, #10);
+         state := whitespace;
+      end;
 
-          case state of
-               normal:
-                      begin
+      case state of
+           normal:
+                  begin
 
-                           // check if end of token
-                           if (c = #13) or (c = #9) or (c = ' ') then
-                           begin
-                              SetLength(data[rowCount - 1], Length(data[rowCount - 1]) + 1);
-                              state := whitespace;
-                              Continue;
-                           end;
+                       // check if end of token
+                       if (c = #9) or (c = ' ') then
+                       begin
+                          // append token
+                           SetLength(data[rowIndex], colIndex + 1);
+                           data[rowIndex][colIndex] := token;
+                           token := '';
+                           colIndex += 1;
 
-                           // append this char to token
-                           data[rowCount - 1][High(data[rowCount - 1])] += c;
+                          state := whitespace;
+                          Continue;
+                       end;
 
+                       // check if quote starts
+                       if c = '"' then
+                       begin
+                          state := quote;
+                          Continue;
+                       end;
 
-                           Write(c);
-                      end;
-               whitespace:
-                      begin
-                           if (c = #13) or (c = #10) or (c = #9) or (c = ' ') then Continue;
+                       // append this char to token
+                       if (c <> #13) and (c <> #10) then token += c;
 
-                           // if reached non-whitespace, i.e. new token
-                           //Seek(readFile, FilePos(readFile) - 1);
-                           state := normal;
-                      end;
-               comment:
-                      begin
-                           //Write('Comment char: ', c, #10);
-                           if c = #10 then state := normal;
-                           // switch to whitesapce, maybe?
-                      end;
-          end;
+                  end;
+           whitespace:
+                  begin
+                       if (c = #13) or (c = #10) or (c = #9) or (c = ' ') then Continue;
 
+                       // if reached non-whitespace, i.e. new token
+                       Seek(readFile, FilePos(readFile) - 1);
+                       state := normal;
+                  end;
+           quote:
+                  begin
+                       if c = '"' then
+                       begin
+                          state := normal;
+                          Continue;
+                       end;
 
+                       token += c;
+                  end;
+           comment:
+                  begin
+                       if c = #10 then state := whitespace;
+                  end;
+      end;
 
+  end;
 
-          //writeln('Text read from file: ', line);
-          if EOF(readFile) then break;
-     end;
+  // if last row is empty, yeet it
+  if Length(data[rowIndex]) = 0 then rowCount -= 1;
 
+  CloseFile(readFile);
 
-     // TODO: replace this with a more robust parser
-
-     (*while True do
-     begin
-          ReadLn(readFile, line);
-
-          line := StringReplace(line, #9, ' ', [rfReplaceAll]);
-          splitLine := SplitString(line, ' ');
-
-          for token in splitLine do
-          begin
-               writeln('Token: "', token, '"');
-          end;
-
-          //writeln('Text read from file: ', line);
-          if EOF(readFile) then break;
-     end;*)
-  //finally
-     CloseFile(readFile);
-  //end;
-
-  for splitLine in data do
+  (*for splitLine in data do
   begin
        for token in splitLine do
        begin
             Write('(', token, ') ');
        end;
        Write(#10);
-  end;
+  end;*)
 
   self.opened := True;
 end;
 
 destructor TAssetParser.Destroy();
 begin
-  // TODO: do whatever
+  SetLength(data, 0);
   Inherited;
 end;
 
@@ -172,12 +192,12 @@ end;
 
 function TAssetParser.GetColCount(const row: Integer): Integer;
 begin
-  Result := colCount;
+  Result := Length(data[row]);
 end;
 
-function TAssetParser.GetValue(const col: Integer; const row: Integer): string;
+function TAssetParser.GetValue(const row: Integer; const col: Integer): string;
 begin
-
+  Result := data[row][col];
 end;
 
 
