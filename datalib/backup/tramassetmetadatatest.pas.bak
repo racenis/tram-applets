@@ -1,0 +1,30 @@
+unit TramAssetMetadataTest;
+
+{$mode objfpc}{$H+}
+
+interface
+
+uses
+  Classes, SysUtils, fpcunit, testutils, testregistry;
+
+type
+
+  TramAssetMetadataTest= class(TTestCase)
+  published
+    procedure TestHookUp;
+  end;
+
+implementation
+
+procedure TramAssetMetadataTest.TestHookUp;
+begin
+  Fail('Write your own test');
+end;
+
+
+
+initialization
+
+  RegisterTest(TramAssetMetadataTest);
+end.
+
