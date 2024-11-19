@@ -41,6 +41,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="TestCase1"/>
       </Unit>
+      <Unit>
+        <Filename Value="tramassetcollection.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="TramAssetCollection"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

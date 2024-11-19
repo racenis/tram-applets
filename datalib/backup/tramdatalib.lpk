@@ -22,7 +22,15 @@
       </Item>
       <Item>
         <Filename Value="tramassetmetadatatest.pas"/>
-        <UnitName Value="tramassetmetadatatest"/>
+        <UnitName Value="TramAssetMetadataTest"/>
+      </Item>
+      <Item>
+        <Filename Value="tramassetparsertest.pas"/>
+        <UnitName Value="tramassetparsertest"/>
+      </Item>
+      <Item>
+        <Filename Value="tramassetcollection.pas"/>
+        <UnitName Value="TramAssetCollection"/>
       </Item>
     </Files>
     <RequiredPkgs>

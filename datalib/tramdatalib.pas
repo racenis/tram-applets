@@ -9,7 +9,8 @@ interface
 
 uses
   TramAssetParser, TramAssetMetadata, TramAssetMetadataTest, 
-  TramAssetParserTest, LazarusPackageIntf;
+  TramAssetParserTest, TramAssetCollection, Tram3DModelAsset, 
+  LazarusPackageIntf;
 
 implementation
 
