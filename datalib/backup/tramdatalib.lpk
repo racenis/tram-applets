@@ -36,6 +36,22 @@
         <Filename Value="tram3dmodelasset.pas"/>
         <UnitName Value="Tram3DModelAsset"/>
       </Item>
+      <Item>
+        <Filename Value="tramassetdatabase.pas"/>
+        <UnitName Value="TramAssetDatabase"/>
+      </Item>
+      <Item>
+        <Filename Value="tramassetwriter.pas"/>
+        <UnitName Value="TramAssetWriter"/>
+      </Item>
+      <Item>
+        <Filename Value="testcase2.pas"/>
+        <UnitName Value="TestCase2"/>
+      </Item>
+      <Item>
+        <Filename Value="tramassetwritertest.pas"/>
+        <UnitName Value="tramassetwritertest"/>
+      </Item>
     </Files>
     <RequiredPkgs>
       <Item>

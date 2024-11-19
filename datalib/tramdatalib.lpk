@@ -38,7 +38,15 @@
       </Item>
       <Item>
         <Filename Value="tramassetdatabase.pas"/>
-        <UnitName Value="tramassetdatabase"/>
+        <UnitName Value="TramAssetDatabase"/>
+      </Item>
+      <Item>
+        <Filename Value="tramassetwriter.pas"/>
+        <UnitName Value="TramAssetWriter"/>
+      </Item>
+      <Item>
+        <Filename Value="tramassetwritertest.pas"/>
+        <UnitName Value="TramAssetWriterTest"/>
       </Item>
     </Files>
     <RequiredPkgs>
