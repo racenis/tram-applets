@@ -111,6 +111,7 @@ object MainForm: TMainForm
       end
       object SaveDB: TMenuItem
         Caption = 'SaveDB'
+        OnClick = SaveDBClick
       end
       object Import: TMenuItem
         Caption = 'Import'

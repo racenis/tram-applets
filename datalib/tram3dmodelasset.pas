@@ -140,6 +140,7 @@ procedure T3DModelCollection.InsertFromDB(name: string; date: Integer);
 var
   model: T3DModel;
   model_candidate: T3DModel;
+  modelType: T3DModelType;
 begin
   model := nil;
 
@@ -156,8 +157,14 @@ begin
     Exit;
   end;
 
-  // TODO: pass in the correct type!!
-  model := T3DModel.Create(type3DModelGeneric, name);
+  modelType := type3DModelGeneric;
+
+  if FileExists('data/models/' + name + '.mdmdl') then modelType := type3DModelModification;
+  if FileExists('data/models/' + name + '.dymdl') then modelType := type3DModelDynamic;
+  if FileExists('data/models/' + name + '.stmdl') then modelType := type3DModelStatic;
+
+  model := T3DModel.Create(modelType, name);
+  model.SetDateInDB(date);
 
   SetLength(self.models, Length(self.models) + 1);
   self.models[High(self.models)] := model;

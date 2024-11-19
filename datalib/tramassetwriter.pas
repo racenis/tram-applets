@@ -9,11 +9,13 @@ uses
 
 type
   TAssetWriterData = array of array of string;
+  TAssetWriterLine = array of string;
   TAssetWriter = class
      constructor Create(const path: string);
      destructor Destroy(); override;
 
      procedure SetData(data: TAssetWriterData);
+     procedure Append(line: TAssetWriterLine);
 
      function TryWrite(): Boolean;
   private
@@ -43,6 +45,12 @@ end;
 procedure TAssetWriter.SetData(data: TAssetWriterData);
 begin
   self.data := data;
+end;
+
+procedure TAssetWriter.Append(line: TAssetWriterLine);
+begin
+  SetLength(self.data, Length(self.data) + 1);
+  self.data[High(self.data)] := line;
 end;
 
 function TAssetWriter.TryWrite(): Boolean;
@@ -95,7 +103,7 @@ begin
             // maybe in the future we will automatically add quotes, instead of
             // replacing spaces, but currently the C++ runtime doesn't know what
             // to do with quotes if we are writing what is supposed to be a name
-            if not token.StartsWith('"') then
+            if (not token.StartsWith('"')) and (not token.StartsWith('#')) then
                token := token.Replace(' ', '-');
 
             token := token.PadRight(colWidth[col] + 1);

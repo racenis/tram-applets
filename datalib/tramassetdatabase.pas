@@ -17,6 +17,8 @@ type
 
      function GetAssets: TAssetMetadataArray;
 
+     procedure InsertFromDB(assetType: string; name: string; date: Integer);
+
      protected
         collection3Dmodel: T3DModelCollection;
   end;
@@ -46,6 +48,13 @@ end;
 function TAssetDatabase.GetAssets: TAssetMetadataArray;
 begin
   Result := collection3Dmodel.GetAssets;
+end;
+
+procedure TAssetDatabase.InsertFromDB(assetType: string; name: string; date: Integer);
+begin
+  case assetType of
+       'STMDL', 'DYMDL', 'MDMDL': collection3Dmodel.InsertFromDB(name, date);
+  end;
 end;
 
 end.

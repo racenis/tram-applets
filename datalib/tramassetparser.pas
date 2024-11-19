@@ -8,6 +8,7 @@ uses
   Classes, SysUtils, StrUtils;
 
 type
+  TAssetParserData = array of array of string;
   TAssetParser = class
      constructor Create(const path: string);
      destructor Destroy(); override;
@@ -15,6 +16,8 @@ type
      function GetRowCount: Integer;
      function GetColCount(const row: Integer): Integer;
      function GetValue(const row: Integer; const col: Integer): string;
+
+     function GetData: TAssetParserData;
 
      function IsOpen(): Boolean;
   private
@@ -198,6 +201,11 @@ end;
 function TAssetParser.GetValue(const row: Integer; const col: Integer): string;
 begin
   Result := data[row][col];
+end;
+
+function TAssetParser.GetData: TAssetParserData;
+begin
+  Result := data;
 end;
 
 
