@@ -5,7 +5,7 @@ unit Tram3DModelAsset;
 interface
 
 uses
-  Classes, SysUtils, TramAssetMetadata, TramAssetCollection;
+  Classes, SysUtils, TramAssetMetadata, TramAssetCollection, FileUtil;
 
 // TODO: add model type enum
 // TODO: have constructor take in model type enum
@@ -80,13 +80,42 @@ begin
 end;
 
 procedure T3DModelCollection.ScanFromDisk;
+var
+  files: TStringList;
+  modelFile: string;
+  modelName: string;
+  model: T3DModel;
+  modelCandidate: T3DModel;
 begin
-  // start at /data/models/ directory
-  // recursively process it:
-  //   for each .stmdl or .dymdl
-  //     find it in model array
-  //     if not exist, append
-  //     if exist, add date
+  files := FindAllFiles('data/models', '*.stmdl;*.dymdl;*.mdmdl', true);
+
+  for model in models do
+      model.SetDateOnDisk(0);
+
+  for modelFile in files do
+  begin
+    model := nil;
+    modelName := modelFile; // TODO: pepper this
+
+    for modelCandidate in models do
+      if modelCandidate.GetName() = modelName then
+      begin
+        model := modelCandidate;
+        Break;
+      end;
+
+    if model <> nil then
+    begin
+      model.SetDateOnDisk(1234); // TODO: insert actual date
+      Continue;
+    end;
+
+    // TODO: pass in the correct type!!
+    model := T3DModel.Create(type3DModelGeneric, modelName);
+
+    SetLength(self.models, Length(self.models) + 1);
+    self.models[High(self.models)] := model;
+  end;
 end;
 
 procedure T3DModelCollection.InsertFromDB(name: string; date: Integer);

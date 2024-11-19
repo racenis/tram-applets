@@ -10,7 +10,7 @@ interface
 uses
   TramAssetParser, TramAssetMetadata, TramAssetMetadataTest, 
   TramAssetParserTest, TramAssetCollection, Tram3DModelAsset, 
-  LazarusPackageIntf;
+  tramassetdatabase, LazarusPackageIntf;
 
 implementation
 

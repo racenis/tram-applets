@@ -34,10 +34,17 @@
       </Item>
       <Item>
         <Filename Value="tram3dmodelasset.pas"/>
-        <UnitName Value="tram3dmodelasset"/>
+        <UnitName Value="Tram3DModelAsset"/>
+      </Item>
+      <Item>
+        <Filename Value="tramassetdatabase.pas"/>
+        <UnitName Value="tramassetdatabase"/>
       </Item>
     </Files>
     <RequiredPkgs>
+      <Item>
+        <PackageName Value="LazUtils"/>
+      </Item>
       <Item>
         <PackageName Value="FCL"/>
       </Item>

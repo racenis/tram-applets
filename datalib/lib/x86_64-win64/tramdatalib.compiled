@@ -2,5 +2,5 @@
 <CONFIG>
   <Lazarus Version="3.0"/>
   <Compiler Value="C:\lazarus\fpc\3.2.2\bin\x86_64-win64\fpc.exe" Date="1469148810"/>
-  <Params Value=" -MObjFPC -Scghi -O1 -g -gl -l -vewnhibq -FuC:\lazarus\packager\units\x86_64-win64 -FuC:\Users\Poga\Desktop\painis\tram-applets\datalib\ -FUC:\Users\Poga\Desktop\painis\tram-applets\datalib\lib\x86_64-win64\ tramdatalib.pas"/>
+  <Params Value=" -MObjFPC -Scghi -O1 -g -gl -l -vewnhibq -FuC:\lazarus\packager\units\x86_64-win64 -FuC:\lazarus\components\lazutils\lib\x86_64-win64 -FuC:\Users\Poga\Desktop\painis\tram-applets\datalib\ -FUC:\Users\Poga\Desktop\painis\tram-applets\datalib\lib\x86_64-win64\ tramdatalib.pas"/>
 </CONFIG>

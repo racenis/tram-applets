@@ -26,14 +26,21 @@
       </Item>
       <Item>
         <Filename Value="tramassetparsertest.pas"/>
-        <UnitName Value="tramassetparsertest"/>
+        <UnitName Value="TramAssetParserTest"/>
       </Item>
       <Item>
         <Filename Value="tramassetcollection.pas"/>
         <UnitName Value="TramAssetCollection"/>
       </Item>
+      <Item>
+        <Filename Value="tram3dmodelasset.pas"/>
+        <UnitName Value="Tram3DModelAsset"/>
+      </Item>
     </Files>
     <RequiredPkgs>
+      <Item>
+        <PackageName Value="LazUtils"/>
+      </Item>
       <Item>
         <PackageName Value="FCL"/>
       </Item>
