@@ -28,6 +28,7 @@ type
      dateOnDisk: Integer;
      dateInSource: Integer;
   end;
+  TAssetMetadataArray = array of TAssetMetadata;
 
 implementation
 

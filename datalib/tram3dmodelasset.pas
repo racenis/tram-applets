@@ -86,6 +86,7 @@ var
   modelName: string;
   model: T3DModel;
   modelCandidate: T3DModel;
+  modelType: T3DModelType;
 begin
   files := FindAllFiles('data/models', '*.stmdl;*.dymdl;*.mdmdl', true);
 
@@ -95,8 +96,23 @@ begin
   for modelFile in files do
   begin
     model := nil;
-    modelName := modelFile; // TODO: pepper this
 
+    // find the model type from filename
+    modelType := type3DModelGeneric;
+
+    if modelFile.EndsWith('.stmdl') then modelType := type3DModelStatic;
+    if modelFile.EndsWith('.dymdl') then modelType := type3DModelDynamic;
+    if modelFile.EndsWith('.mdmdl') then modelType := type3DModelModification;
+
+    // extract asset name from path
+    modelName := modelFile.Replace('\', '/');
+    modelName := modelName.Replace('data/models/', '');
+
+    modelName := modelName.Replace('.stmdl', '');
+    modelName := modelName.Replace('.dymdl', '');
+    modelName := modelName.Replace('.mdmdl', '');
+
+    // check if model already exists in database
     for modelCandidate in models do
       if modelCandidate.GetName() = modelName then
       begin
@@ -104,14 +120,16 @@ begin
         Break;
       end;
 
+    // if exists, update date on disk
     if model <> nil then
     begin
-      model.SetDateOnDisk(1234); // TODO: insert actual date
+      model.SetDateOnDisk(FileAge(modelFile));
       Continue;
     end;
 
-    // TODO: pass in the correct type!!
-    model := T3DModel.Create(type3DModelGeneric, modelName);
+    // otherwise add it to database
+    model := T3DModel.Create(modelType, modelName);
+    model.SetDateOnDisk(FileAge(modelFile));
 
     SetLength(self.models, Length(self.models) + 1);
     self.models[High(self.models)] := model;

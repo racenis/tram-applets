@@ -1,0 +1,123 @@
+object MainForm: TMainForm
+  Left = 389
+  Height = 581
+  Top = 141
+  Width = 800
+  BorderStyle = bsSingle
+  Caption = 'MainForm'
+  ClientHeight = 581
+  ClientWidth = 800
+  Menu = MainMenu
+  OnCreate = FormCreate
+  LCLVersion = '3.0.0.3'
+  object StatusBar: TStatusBar
+    Left = 0
+    Height = 20
+    Top = 561
+    Width = 800
+    Panels = <>
+    SimpleText = 'Hello!'
+  end
+  object GroupBox1: TGroupBox
+    Left = 632
+    Height = 244
+    Top = 312
+    Width = 162
+    Caption = 'GroupBox1'
+    TabOrder = 1
+  end
+  object StringGrid: TStringGrid
+    Left = 0
+    Height = 528
+    Top = 32
+    Width = 616
+    ColCount = 3
+    FadeUnfocusedSelection = True
+    FixedCols = 0
+    MouseWheelOption = mwGrid
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goRowSelect, goSmoothScroll, goSelectionActive]
+    RowCount = 1
+    ScrollBars = ssVertical
+    TabOrder = 2
+    TitleStyle = tsNative
+    ColWidths = (
+      64
+      226
+      122
+    )
+    Cells = (
+      3
+      0
+      0
+      'Type'
+      1
+      0
+      'Name'
+      2
+      0
+      'Last Modified'
+    )
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 32
+    Top = 0
+    Width = 800
+    Caption = 'Panel1'
+    ClientHeight = 32
+    ClientWidth = 800
+    TabOrder = 3
+    object FilterType: TComboBox
+      Left = 8
+      Height = 21
+      Top = 4
+      Width = 100
+      ItemHeight = 13
+      TabOrder = 0
+      Text = 'FilterType'
+    end
+    object FilterName: TEdit
+      Left = 112
+      Height = 21
+      Top = 4
+      Width = 80
+      TabOrder = 1
+      Text = 'FilterName'
+    end
+    object FilterButton: TButton
+      Left = 280
+      Height = 21
+      Top = 4
+      Width = 75
+      Caption = 'FilterButton'
+      TabOrder = 2
+    end
+    object FilterClear: TButton
+      Left = 200
+      Height = 20
+      Top = 4
+      Width = 75
+      Caption = 'FilterClear'
+      TabOrder = 3
+    end
+  end
+  object MainMenu: TMainMenu
+    Left = 624
+    Top = 32
+    object FileMenu: TMenuItem
+      Caption = 'File'
+      object LoadDB: TMenuItem
+        Caption = 'LoadDB'
+      end
+      object SaveDB: TMenuItem
+        Caption = 'SaveDB'
+      end
+      object Import: TMenuItem
+        Caption = 'Import'
+      end
+    end
+    object AssetMenu: TMenuItem
+      Caption = 'AssetMenu'
+    end
+  end
+end

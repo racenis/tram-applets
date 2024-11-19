@@ -8,8 +8,6 @@ uses
   Classes, SysUtils, TramAssetMetadata;
 
 type
-  TAssetMetadataArray = array of TAssetMetadata;
-
   TAssetCollection = class
   public
      constructor Create();

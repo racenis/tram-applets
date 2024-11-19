@@ -1,11 +1,11 @@
-unit tramassetdatabase;
+unit TramAssetDatabase;
 
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  Classes, SysUtils, Tram3DModelAsset;
+  Classes, SysUtils, Tram3DModelAsset, TramAssetMetadata;
 
 type
   TAssetDatabase = class
@@ -15,6 +15,8 @@ type
      procedure ScanFromDisk;
      procedure SaveToDisk;
 
+     function GetAssets: TAssetMetadataArray;
+
      protected
         collection3Dmodel: T3DModelCollection;
   end;
@@ -23,7 +25,7 @@ implementation
 
 constructor TAssetDatabase.Create;
 begin
-  self.collection3Dmodel.Create;
+  collection3Dmodel := T3DModelCollection.Create;
 end;
 
 procedure TAssetDatabase.LoadFromDisk;
@@ -41,6 +43,10 @@ begin
   collection3Dmodel.ScanFromDisk;
 end;
 
+function TAssetDatabase.GetAssets: TAssetMetadataArray;
+begin
+  Result := collection3Dmodel.GetAssets;
+end;
 
 end.
 
