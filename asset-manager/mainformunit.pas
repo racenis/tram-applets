@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBGrids, Menus,
   ComCtrls, ExtCtrls, StdCtrls, Grids, TramAssetDatabase, TramAssetMetadata,
-  DateUtils, TramAssetWriter, TramAssetParser;
+  DateUtils, TramAssetWriter, TramAssetParser, RefreshNewFileDialogUnit;
 
 type
 
@@ -53,9 +53,16 @@ var
   asset: TAssetMetadata;
   date: string;
 
+  newAssets: array of TAssetMetadata;
+  modifiedAssets: array of TAssetMetadata;
+  removedAssets: array of TAssetMetadata;
+
   databaseFile: TAssetParser;
   databaseRecord: array of string;
 begin
+  newAssets := [];
+  modifiedAssets := [];
+  removedAssets := [];
 
   // load in database file
   databaseFile := TAssetParser.Create('asset.db');
@@ -74,8 +81,29 @@ begin
 
   // check which files have changed since database was saved
   for asset in database.GetAssets do
-      if asset.GetDateOnDisk <> asset.GetDateInDB then
-         ShowMessage('Not matvh up!! ' + asset.GetName);
+      if asset.GetDateInDB = 0 then
+         newAssets := Concat(newAssets, [asset])
+      else if asset.GetDateOnDisk = 0 then
+         removedAssets := Concat(removedAssets, [asset])
+      else if asset.GetDateInDB < asset.GetDateOnDisk then
+         modifiedAssets := Concat(modifiedAssets, [asset])
+      else if asset.GetDateInDB <> asset.GetDateOnDisk then
+         ShowMessage('Asset ' + asset.GetName + ' has a date of '
+                            + FormatDateTime('yyyy-mm-dd hh:nn:ss',
+                              FileDateToDateTime(asset.GetDateInDB))
+                            + ' in the database, but a date of '
+                            + FormatDateTime('yyyy-mm-dd hh:nn:ss',
+                              FileDateToDateTime(asset.GetDateInDB))
+                            + ' on disk. I think that this means'
+                            + ' something, but I do not really know'
+                            + ' what exactly.');
+
+  if Length(newAssets) > 0 then
+  begin
+    RefreshNewFileDialog := TRefreshNewFileDialog.Create(self, newAssets);
+    RefreshNewFileDialog.ShowModal;
+    FreeAndNil(RefreshNewFileDialog);
+  end;
 
 
   // populate asset list

@@ -50,6 +50,13 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="MainFormDB"/>
       </Unit>
+      <Unit>
+        <Filename Value="refreshnewfiledialogunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="RefreshNewFileDialog"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="RefreshNewFileDialogUnit"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

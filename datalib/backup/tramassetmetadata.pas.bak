@@ -18,6 +18,8 @@ type
      // TODO: yeet DateInSource
      // TODO: add source reference / setsource/getsource idk
 
+     procedure SetDateInDBAsOnDisk;
+
      function GetDateInDB: Integer;
      function GetDateOnDisk: Integer;
      function GetDateInSource: Integer;
@@ -28,6 +30,7 @@ type
      dateOnDisk: Integer;
      dateInSource: Integer;
   end;
+  TAssetMetadataArray = array of TAssetMetadata;
 
 implementation
 
@@ -38,6 +41,11 @@ begin
   self.dateInDB := 0;
   self.dateOnDisk := 0;
   self.dateInSource := 0;
+end;
+
+prodecure TAssetMetadata.SetDateInDBAsOnDisk;
+begin
+  self.dateInDB := self.dateOnDisk;
 end;
 
 function TAssetMetadata.GetName: string;

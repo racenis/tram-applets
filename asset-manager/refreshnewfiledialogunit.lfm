@@ -1,0 +1,61 @@
+object RefreshNewFileDialog: TRefreshNewFileDialog
+  Left = 594
+  Height = 420
+  Top = 244
+  Width = 320
+  BorderStyle = bsDialog
+  Caption = 'RefreshNewFileDialog'
+  ClientHeight = 420
+  ClientWidth = 320
+  LCLVersion = '3.0.0.3'
+  object Label1: TLabel
+    Left = 5
+    Height = 13
+    Top = 8
+    Width = 290
+    Caption = 'There were these new files detected in the data directiories:'
+  end
+  object FileChecklist: TCheckListBox
+    Left = 5
+    Height = 328
+    Top = 32
+    Width = 308
+    ItemHeight = 0
+    TabOrder = 0
+  end
+  object SelectAll: TCheckBox
+    Left = 8
+    Height = 17
+    Top = 399
+    Width = 63
+    Caption = 'Select All'
+    Checked = True
+    State = cbChecked
+    TabOrder = 1
+  end
+  object Ignore: TButton
+    Left = 238
+    Height = 25
+    Top = 391
+    Width = 75
+    Caption = 'Ignore All'
+    TabOrder = 2
+    OnClick = IgnoreClick
+  end
+  object Track: TButton
+    Left = 144
+    Height = 25
+    Top = 391
+    Width = 91
+    Caption = 'Track Selected'
+    TabOrder = 3
+    OnClick = TrackClick
+  end
+  object Label3: TLabel
+    Left = 8
+    Height = 13
+    Top = 368
+    Width = 216
+    Caption = 'What do you want us to do with them, chief?'
+  end
+end
