@@ -8,31 +8,42 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBGrids, Menus,
   ComCtrls, ExtCtrls, StdCtrls, Grids, TramAssetDatabase, TramAssetMetadata,
   DateUtils, TramAssetWriter, TramAssetParser, RefreshNewFileDialogUnit,
-  RefreshMissingFileDialogUnit, RefreshChangeFileDialogUnit;
+  RefreshMissingFileDialogUnit, RefreshChangeFileDialogUnit, LCLType;
 
 type
 
   { TMainForm }
 
   TMainForm = class(TForm)
+    CheckBox1: TCheckBox;
+    AssetType: TEdit;
+    AssetName: TEdit;
+    AssetAlwaysProcess: TCheckBox;
+    AssetIgnoreModified: TCheckBox;
     FilterButton: TButton;
     DBGrid: TDBGrid;
     FilterClear: TButton;
     FilterName: TEdit;
     FilterType: TComboBox;
-    GroupBox1: TGroupBox;
     MainMenu: TMainMenu;
     FileMenu: TMenuItem;
     AssetMenu: TMenuItem;
     LoadDB: TMenuItem;
     Import: TMenuItem;
     Panel1: TPanel;
+    SharedProperty: TPanel;
     SaveDB: TMenuItem;
     StatusBar: TStatusBar;
     StringGrid: TStringGrid;
+    procedure AssetAlwaysProcessChange(Sender: TObject);
+    procedure FilterButtonClick(Sender: TObject);
+    procedure FilterClearClick(Sender: TObject);
+    procedure FilterNameKeyDown(Sender: TObject; var Key: Word;
+      {%H-}Shift: TShiftState);
     procedure FormCreate(Sender: TObject);
     procedure LoadDBClick(Sender: TObject);
     procedure SaveDBClick(Sender: TObject);
+    procedure StringGridAfterSelection(Sender: TObject; aCol, aRow: Integer);
   private
 
   public
@@ -141,6 +152,8 @@ begin
     MainForm.StringGrid.InsertRowWithValues(row, [asset.GetType,
                                          asset.GetName,
                                          date]);
+    MainForm.StringGrid.Objects[0, row] := asset;
+
     row += 1;
   end;
 end;
@@ -156,6 +169,14 @@ begin
   row := 1;
     for asset in database.GetAssets do
     begin
+      if MainForm.FilterType.ItemIndex > 0 then
+         if MainForm.FilterType.Items.Strings[MainForm.FilterType.ItemIndex] <> asset.GetType then
+            Continue;//ShowMessage('need |' + MainForm.FilterType.Items.Strings[MainForm.FilterType.ItemIndex] + '| but has |' + asset.GetType + '|');
+      if MainForm.FilterName.Text <> '' then
+         if Pos(MainForm.FilterName.Text, asset.GetName) = 0 then
+            Continue;
+
+
       if asset.GetDateInDB <> 0 then
          date := FormatDateTime('yyyy-mm-dd hh:nn:ss',
                                 FileDateToDateTime(asset.GetDateInDB))
@@ -165,6 +186,8 @@ begin
       MainForm.StringGrid.InsertRowWithValues(row, [asset.GetType,
                                            asset.GetName,
                                            date]);
+      MainForm.StringGrid.Objects[0, row] := asset;
+
       row += 1;
     end;
 end;
@@ -173,6 +196,31 @@ procedure TMainForm.FormCreate(Sender: TObject);
 begin
   LoadDatabaseFromFile;
   PopulateAssetList;
+end;
+
+procedure TMainForm.FilterNameKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_RETURN then
+     FilterButton.Click;
+end;
+
+procedure TMainForm.FilterClearClick(Sender: TObject);
+begin
+  FilterType.ItemIndex := 0;
+  FilterName.Clear;
+
+  RefreshAssetList;
+end;
+
+procedure TMainForm.FilterButtonClick(Sender: TObject);
+begin
+  RefreshAssetList;
+end;
+
+procedure TMainForm.AssetAlwaysProcessChange(Sender: TObject);
+begin
+  MainForm.AssetIgnoreModified.Enabled := MainForm.AssetAlwaysProcess.Checked;
 end;
 
 procedure TMainForm.LoadDBClick(Sender: TObject);
@@ -198,6 +246,19 @@ begin
                              asset.GetName,
                              asset.GetDateOnDisk.ToString]);
   databaseFile.Free;
+end;
+
+procedure TMainForm.StringGridAfterSelection(Sender: TObject; aCol,
+  aRow: Integer);
+var
+  row: Integer;
+  asset: TAssetMetadata;
+begin
+  row := MainForm.StringGrid.Selection.Bottom;
+  asset := MainForm.StringGrid.Objects[0, row] as TAssetMetadata;
+
+  MainForm.AssetName.Text := asset.GetName;
+  MainForm.AssetType.Text := asset.GetType;
 end;
 
 initialization
