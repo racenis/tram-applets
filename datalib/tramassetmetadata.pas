@@ -13,7 +13,7 @@ type
   public
      constructor Create(const path: string; const name: string; parent: TAssetCollection = nil);
      function GetName: string;
-     function GetPath: string;
+     function GetPath: string; virtual;
      function GetType: string; virtual;
 
      // TODO: yeet DateInSource
@@ -26,6 +26,12 @@ type
      function GetDateInDB: Integer;
      function GetDateOnDisk: Integer;
      function GetDateInSource: Integer;
+
+     function GetAlwaysProcess: Boolean;
+     function GetIgnoreModified: Boolean;
+
+     procedure SetAlwaysProcess(value: Boolean);
+     procedure SetIgnoreModified(value: Boolean);
   protected
      name: string;
      path: string;
@@ -33,6 +39,8 @@ type
      dateOnDisk: Integer;
      dateInSource: Integer;
      parent: TAssetCollection;
+     alwaysProcess: Boolean;
+     ignoreModified: Boolean;
   end;
   TAssetMetadataArray = array of TAssetMetadata;
   TAssetCollection = class
@@ -97,6 +105,27 @@ end;
 function TAssetMetadata.GetDateInSource: Integer;
 begin
   Result := self.dateInSource;
+end;
+
+
+function TAssetMetadata.GetAlwaysProcess: Boolean;
+begin
+  Result := self.alwaysProcess;
+end;
+
+function TAssetMetadata.GetIgnoreModified: Boolean;
+begin
+  Result := self.ignoreModified;
+end;
+
+procedure TAssetMetadata.SetAlwaysProcess(value: Boolean);
+begin
+  self.alwaysProcess := value;
+end;
+
+procedure TAssetMetadata.SetIgnoreModified(value: Boolean);
+begin
+  self.ignoreModified := value;
 end;
 
 end.

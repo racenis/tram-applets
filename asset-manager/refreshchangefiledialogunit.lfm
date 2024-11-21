@@ -70,4 +70,12 @@ object RefreshChangeFileDialog: TRefreshChangeFileDialog
     TabOrder = 4
     OnClick = NoReprocessClick
   end
+  object Remember: TCheckBox
+    Left = 8
+    Height = 17
+    Top = 384
+    Width = 71
+    Caption = 'Remember'
+    TabOrder = 5
+  end
 end

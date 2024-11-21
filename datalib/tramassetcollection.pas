@@ -5,7 +5,7 @@ unit TramAssetCollection;
 interface
 
 uses
-  Classes, SysUtils, TramAssetMetadata;
+  Classes, SysUtils;//, TramAssetMetadata;
 
 (*type
   TAssetCollection = class

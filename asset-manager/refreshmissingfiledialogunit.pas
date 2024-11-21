@@ -39,7 +39,6 @@ implementation
 constructor TRefreshMissingFileDialog.Create(formOwner: TComponent; files: TAssetMetadataArray);
 var
   assetFile: TAssetMetadata;
-  i: Integer;
 begin
   inherited Create(formOwner);
 

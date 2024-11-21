@@ -11,7 +11,8 @@ uses
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, MainFormUnit, MainFormDB, RefreshNewFileDialogUnit,
-  RefreshChangeFileDialogUnit, RefreshMissingFileDialogUnit
+  RefreshChangeFileDialogUnit, RefreshMissingFileDialogUnit,
+  ImportFileDialogUnit
   { you can add units after this };
 
 {$R *.res}
@@ -24,6 +25,7 @@ begin
   Application.CreateForm(TRefreshNewFileDialog, RefreshNewFileDialog);
   Application.CreateForm(TRefreshChangeFileDialog, RefreshChangeFileDialog);
   Application.CreateForm(TRefreshMissingFileDialog, RefreshMissingFileDialog);
+  Application.CreateForm(TImportFileDialog, ImportFileDialog);
   Application.Run;
 end.
 

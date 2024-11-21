@@ -13,6 +13,7 @@ type
   { TRefreshChangeFileDialog }
 
   TRefreshChangeFileDialog = class(TForm)
+    Remember: TCheckBox;
     NoReprocess: TButton;
     Reprocess: TButton;
     IgnoreAll: TButton;
@@ -41,7 +42,6 @@ implementation
 constructor TRefreshChangeFileDialog.Create(formOwner: TComponent; files: TAssetMetadataArray);
 var
   assetFile: TAssetMetadata;
-  i: Integer;
 begin
   inherited Create(formOwner);
 

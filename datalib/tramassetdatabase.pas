@@ -49,8 +49,7 @@ end;
 
 procedure TAssetDatabase.Remove(asset: TAssetMetadata);
 begin
-  //collection3Dmodel.Remove(asset);
-  // TODO: oi
+  collection3Dmodel.Remove(asset);
 end;
 
 function TAssetDatabase.GetAssets: TAssetMetadataArray;

@@ -5,7 +5,7 @@ unit Tram3DModelAsset;
 interface
 
 uses
-  Classes, SysUtils, TramAssetMetadata, TramAssetCollection, FileUtil;
+  Classes, SysUtils, TramAssetMetadata, FileUtil;
 
 // TODO: add model type enum
 // TODO: have constructor take in model type enum
@@ -21,6 +21,7 @@ type
   public
       constructor Create(modelType: T3DModelType; modelName: string; collection: T3DModelCollection);
       function GetType: string; override;
+      function GetPath: string; override;
   protected
       procedure SetDateInDB(date: Integer);
       procedure SetDateOnDisk(date: Integer);
@@ -56,6 +57,16 @@ begin
        type3DModelStatic: Result := 'STMDL';
        type3DModelDynamic: Result := 'DYMDL';
        type3DModelModification: Result := 'MDMDL';
+  end;
+end;
+
+function T3DModel.GetPath: string;
+begin
+  case (self.modelType) of
+       type3DModelGeneric: Result := 'data/models/' + name + '.3dmdl';
+       type3DModelStatic: Result := 'data/models/' + name + '.stmdl';
+       type3DModelDynamic: Result := 'data/models/' + name + '.dymdl';
+       type3DModelModification: Result := 'data/models/' + name + '.mdmdl';
   end;
 end;
 

@@ -74,6 +74,14 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="RefreshMissingFileDialogUnit"/>
       </Unit>
+      <Unit>
+        <Filename Value="importfiledialogunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ImportFileDialog"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="ImportFileDialogUnit"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

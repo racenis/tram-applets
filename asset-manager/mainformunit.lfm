@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 455
+  Left = 440
   Height = 581
-  Top = 234
+  Top = 247
   Width = 800
   BorderStyle = bsSingle
   Caption = 'MainForm'
@@ -146,16 +146,47 @@ object MainForm: TMainForm
       Top = 40
       Width = 166
       Caption = 'Always process when modified'
+      Enabled = False
       TabOrder = 3
       OnChange = AssetAlwaysProcessChange
     end
     object AssetIgnoreModified: TCheckBox
-      Left = 7
+      Left = 8
       Height = 17
       Top = 64
       Width = 124
       Caption = 'Ignore when modified'
+      Enabled = False
       TabOrder = 4
+      OnChange = AssetIgnoreModifiedChange
+    end
+    object AssetShowDirectory: TButton
+      Left = 88
+      Height = 25
+      Top = 88
+      Width = 107
+      Caption = 'Show in Explorer'
+      Enabled = False
+      TabOrder = 5
+      OnClick = AssetShowDirectoryClick
+    end
+    object AssetEdit: TButton
+      Left = 8
+      Height = 25
+      Top = 88
+      Width = 75
+      Caption = 'Edit'
+      Enabled = False
+      TabOrder = 6
+      OnClick = AssetEditClick
+    end
+    object AssetProcess: TButton
+      Left = 8
+      Height = 25
+      Top = 120
+      Width = 75
+      Caption = 'Process'
+      TabOrder = 7
     end
   end
   object MainMenu: TMainMenu
@@ -173,6 +204,7 @@ object MainForm: TMainForm
       end
       object Import: TMenuItem
         Caption = 'Import'
+        OnClick = ImportClick
       end
     end
     object AssetMenu: TMenuItem

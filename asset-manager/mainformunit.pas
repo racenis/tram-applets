@@ -8,13 +8,17 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBGrids, Menus,
   ComCtrls, ExtCtrls, StdCtrls, Grids, TramAssetDatabase, TramAssetMetadata,
   DateUtils, TramAssetWriter, TramAssetParser, RefreshNewFileDialogUnit,
-  RefreshMissingFileDialogUnit, RefreshChangeFileDialogUnit, LCLType;
+  RefreshMissingFileDialogUnit, RefreshChangeFileDialogUnit, LCLType,
+  FileUtil, ImportFileDialogUnit;
 
 type
 
   { TMainForm }
 
   TMainForm = class(TForm)
+    AssetEdit: TButton;
+    AssetShowDirectory: TButton;
+    AssetProcess: TButton;
     CheckBox1: TCheckBox;
     AssetType: TEdit;
     AssetName: TEdit;
@@ -36,11 +40,15 @@ type
     StatusBar: TStatusBar;
     StringGrid: TStringGrid;
     procedure AssetAlwaysProcessChange(Sender: TObject);
+    procedure AssetEditClick(Sender: TObject);
+    procedure AssetIgnoreModifiedChange(Sender: TObject);
+    procedure AssetShowDirectoryClick(Sender: TObject);
     procedure FilterButtonClick(Sender: TObject);
     procedure FilterClearClick(Sender: TObject);
     procedure FilterNameKeyDown(Sender: TObject; var Key: Word;
       {%H-}Shift: TShiftState);
     procedure FormCreate(Sender: TObject);
+    procedure ImportClick(Sender: TObject);
     procedure LoadDBClick(Sender: TObject);
     procedure SaveDBClick(Sender: TObject);
     procedure StringGridAfterSelection(Sender: TObject; aCol, aRow: Integer);
@@ -53,6 +61,8 @@ type
 var
   MainForm: TMainForm;
   database: TAssetDatabase;
+  selectedAsset: TAssetMetadata;
+
 
 implementation
 
@@ -198,6 +208,72 @@ begin
   PopulateAssetList;
 end;
 
+function FindImportPaths: TStringList;
+var
+  assetFiles: TStringList;
+  dataFiles: TStringList;
+  allFiles: TStringList;
+  assetFile: string;
+  rebases: array of string;
+  rebase: string;
+begin
+  assetFiles := FindAllDirectories('assets');
+  dataFiles := FindAllDirectories('data');
+
+  allFiles := TStringList.Create;
+  allFiles.Sorted := True;
+  allFiles.Duplicates := dupIgnore;
+
+  rebases := ['data/animations', 'data\animations',
+              'data/audio',      'data\audio',
+              'data/models',     'data\models',
+              'data/navmeshes',  'data\navmeshes',
+              'data/paths',      'data\paths',
+              'data/sprites',    'data\sprites',
+              'data/textures',   'data\textures',
+              'data/worldcells', 'data\worldcells'];
+
+  for assetFile in assetFiles do
+    allFiles.Add(assetFile.Remove(0, 'assets/'.Length).Replace('\', '/'));
+
+  for assetFile in dataFiles do
+      for rebase in rebases do
+          if assetFile = rebase then
+             Break
+          else if assetFile.StartsWith(rebase) then
+             begin
+               allFiles.Add(assetFile.Remove(0, rebase.Length + 1).Replace('\', '/'));
+               Break;
+             end;
+
+  Result := allFiles;
+end;
+
+procedure TMainForm.ImportClick(Sender: TObject);
+var
+  allFiles: TStringList;
+begin
+  allFiles := FindImportPaths;
+
+  ImportFileDialog := TImportFileDialog.Create(MainForm, allFiles.ToStringArray);
+  ImportFileDialog.ShowModal;
+
+  if ImportFileDialog.IsSuccess then
+  begin
+
+    case ImportFileDialog.GetSelectedType of
+      importCopy: ShowMessage('Import copy not implemented!');
+      importMove: ShowMessage('Import move not implemented!');
+      importLink: ShowMessage('Import link not implemented!');
+    end;
+
+    ShowMessage('Selecte: ' + ImportFileDialog.GetSelectedPath);
+
+  end;
+
+  FreeAndNil(ImportFileDialog);
+end;
+
 procedure TMainForm.FilterNameKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
@@ -220,7 +296,34 @@ end;
 
 procedure TMainForm.AssetAlwaysProcessChange(Sender: TObject);
 begin
-  MainForm.AssetIgnoreModified.Enabled := MainForm.AssetAlwaysProcess.Checked;
+  MainForm.AssetIgnoreModified.Enabled := not MainForm.AssetAlwaysProcess.Checked;
+  if MainForm.AssetAlwaysProcess.Checked then
+     MainForm.AssetIgnoreModified.Checked := False;
+  selectedAsset.SetAlwaysProcess(MainForm.AssetAlwaysProcess.Checked);
+end;
+
+procedure TMainForm.AssetEditClick(Sender: TObject);
+var
+  path: string;
+begin
+  path := selectedAsset.GetPath;
+  path := path.Replace('/', '\');
+  ExecuteProcess('explorer.exe', path, []);
+end;
+
+procedure TMainForm.AssetShowDirectoryClick(Sender: TObject);
+var
+  path: string;
+begin
+  path := selectedAsset.GetPath;
+  //path := path.Substring(0, path.LastIndexOf('/'));
+  path := path.Replace('/', '\');
+  ExecuteProcess('explorer.exe', '/select,' + path, []);
+end;
+
+procedure TMainForm.AssetIgnoreModifiedChange(Sender: TObject);
+begin
+  selectedAsset.SetIgnoreModified(MainForm.AssetIgnoreModified.Checked);
 end;
 
 procedure TMainForm.LoadDBClick(Sender: TObject);
@@ -252,18 +355,29 @@ procedure TMainForm.StringGridAfterSelection(Sender: TObject; aCol,
   aRow: Integer);
 var
   row: Integer;
-  asset: TAssetMetadata;
 begin
   row := MainForm.StringGrid.Selection.Bottom;
-  asset := MainForm.StringGrid.Objects[0, row] as TAssetMetadata;
+  selectedAsset := MainForm.StringGrid.Objects[0, row] as TAssetMetadata;
 
-  MainForm.AssetName.Text := asset.GetName;
-  MainForm.AssetType.Text := asset.GetType;
+  MainForm.AssetName.Text := selectedAsset.GetName;
+  MainForm.AssetType.Text := selectedAsset.GetType;
+
+  MainForm.AssetAlwaysProcess.Checked := selectedAsset.GetAlwaysProcess;
+  MainForm.AssetIgnoreModified.Checked := selectedAsset.GetIgnoreModified;
+
+  MainForm.AssetAlwaysProcess.Enabled := True;
+  MainForm.AssetIgnoreModified.Enabled := not selectedAsset.GetAlwaysProcess;
+
+  MainForm.AssetShowDirectory.Enabled := True;
+  MainForm.AssetEdit.Enabled := True;
+  MainForm.AssetProcess.Enabled := True;
 end;
 
 initialization
 begin
   database := TAssetDatabase.Create;
+
+  selectedAsset := nil;
 end;
 
 end.
