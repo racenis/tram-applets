@@ -54,8 +54,25 @@
         <Filename Value="refreshnewfiledialogunit.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="RefreshNewFileDialog"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="RefreshNewFileDialogUnit"/>
+      </Unit>
+      <Unit>
+        <Filename Value="refreshchangefiledialogunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="RefreshChangeFileDialog"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="RefreshChangeFileDialogUnit"/>
+      </Unit>
+      <Unit>
+        <Filename Value="refreshmissingfiledialogunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="RefreshMissingFileDialog"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="RefreshMissingFileDialogUnit"/>
       </Unit>
     </Units>
   </ProjectOptions>

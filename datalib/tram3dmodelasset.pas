@@ -12,13 +12,14 @@ uses
 // TODO: set GetType to choose appropriate type from enum
 
 type
+  T3DModelCollection = class;
   T3DModelType = (type3DModelGeneric,
                   type3DModelStatic,
                   type3DModelDynamic,
                   type3DModelModification);
   T3DModel = class(TAssetMetadata)
   public
-      constructor Create(modelType: T3DModelType; modelName: string);
+      constructor Create(modelType: T3DModelType; modelName: string; collection: T3DModelCollection);
       function GetType: string; override;
   protected
       procedure SetDateInDB(date: Integer);
@@ -33,6 +34,7 @@ type
      procedure Clear; override;
      procedure ScanFromDisk; override;
      procedure InsertFromDB(name: string; date: Integer); override;
+     procedure Remove(asset: TAssetMetadata); override;
      function GetAssets: TAssetMetadataArray; override;
   protected
      models: array of T3DModel;
@@ -40,10 +42,11 @@ type
 
 implementation
 
-constructor T3DModel.Create(modelType: T3DModelType; modelName: string);
+constructor T3DModel.Create(modelType: T3DModelType; modelName: string; collection: T3DModelCollection);
 begin
   self.modelType := modelType;
   self.name := modelName;
+  self.parent := collection;
 end;
 
 function T3DModel.GetType: string;
@@ -69,6 +72,19 @@ end;
 constructor T3DModelCollection.Create;
 begin
 
+end;
+
+procedure T3DModelCollection.Remove(asset: TAssetMetadata);
+var
+   index: Integer;
+begin
+  // TODO: check if asset in models even
+  for index := 0 to High(models) do
+      if models[index] = asset then
+         Break;
+  for index := index to High(models) - 1 do
+      models[index] := models[index  + 1];
+  SetLength(models, Length(models) - 1);
 end;
 
 procedure T3DModelCollection.Clear;
@@ -128,7 +144,7 @@ begin
     end;
 
     // otherwise add it to database
-    model := T3DModel.Create(modelType, modelName);
+    model := T3DModel.Create(modelType, modelName, self);
     model.SetDateOnDisk(FileAge(modelFile));
 
     SetLength(self.models, Length(self.models) + 1);
@@ -163,7 +179,7 @@ begin
   if FileExists('data/models/' + name + '.dymdl') then modelType := type3DModelDynamic;
   if FileExists('data/models/' + name + '.stmdl') then modelType := type3DModelStatic;
 
-  model := T3DModel.Create(modelType, name);
+  model := T3DModel.Create(modelType, name, self);
   model.SetDateInDB(date);
 
   SetLength(self.models, Length(self.models) + 1);

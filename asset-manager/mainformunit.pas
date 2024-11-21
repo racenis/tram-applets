@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBGrids, Menus,
   ComCtrls, ExtCtrls, StdCtrls, Grids, TramAssetDatabase, TramAssetMetadata,
-  DateUtils, TramAssetWriter, TramAssetParser, RefreshNewFileDialogUnit;
+  DateUtils, TramAssetWriter, TramAssetParser, RefreshNewFileDialogUnit,
+  RefreshMissingFileDialogUnit, RefreshChangeFileDialogUnit;
 
 type
 
@@ -30,6 +31,7 @@ type
     StatusBar: TStatusBar;
     StringGrid: TStringGrid;
     procedure FormCreate(Sender: TObject);
+    procedure LoadDBClick(Sender: TObject);
     procedure SaveDBClick(Sender: TObject);
   private
 
@@ -47,11 +49,9 @@ implementation
 
 { TMainForm }
 
-procedure TMainForm.FormCreate(Sender: TObject);
+procedure LoadDatabaseFromFile;
 var
-  row: Integer;
   asset: TAssetMetadata;
-  date: string;
 
   newAssets: array of TAssetMetadata;
   modifiedAssets: array of TAssetMetadata;
@@ -100,13 +100,35 @@ begin
 
   if Length(newAssets) > 0 then
   begin
-    RefreshNewFileDialog := TRefreshNewFileDialog.Create(self, newAssets);
+    RefreshNewFileDialog := TRefreshNewFileDialog.Create(MainForm, newAssets);
     RefreshNewFileDialog.ShowModal;
     FreeAndNil(RefreshNewFileDialog);
   end;
 
+  if Length(removedAssets) > 0 then
+  begin
+    RefreshMissingFileDialog := TRefreshMissingFileDialog.Create(MainForm, removedAssets);
+    RefreshMissingFileDialog.ShowModal;
+    FreeAndNil(RefreshMissingFileDialog);
+  end;
 
-  // populate asset list
+  if Length(modifiedAssets) > 0 then
+  begin
+    // TODO: check which assets are set to auto-convert
+    // - those that can auto-convert should be queued for conversion and removed
+    // - those that are ignored for conversion should be just removed from list
+    RefreshChangeFileDialog := TRefreshChangeFileDialog.Create(MainForm, modifiedAssets);
+    RefreshChangeFileDialog.ShowModal;
+    FreeAndNil(RefreshChangeFileDialog);
+  end;
+end;
+
+procedure PopulateAssetList;
+var
+  row: Integer;
+  asset: TAssetMetadata;
+  date: string;
+begin
   row := 1;
   for asset in database.GetAssets do
   begin
@@ -116,11 +138,47 @@ begin
     else
        date := 'N/A';
 
-    StringGrid.InsertRowWithValues(row, [asset.GetType,
+    MainForm.StringGrid.InsertRowWithValues(row, [asset.GetType,
                                          asset.GetName,
                                          date]);
     row += 1;
   end;
+end;
+
+procedure RefreshAssetList;
+var
+  row: Integer;
+  asset: TAssetMetadata;
+  date: string;
+begin
+  MainForm.StringGrid.RowCount := 1;
+
+  row := 1;
+    for asset in database.GetAssets do
+    begin
+      if asset.GetDateInDB <> 0 then
+         date := FormatDateTime('yyyy-mm-dd hh:nn:ss',
+                                FileDateToDateTime(asset.GetDateInDB))
+      else
+         date := 'N/A';
+
+      MainForm.StringGrid.InsertRowWithValues(row, [asset.GetType,
+                                           asset.GetName,
+                                           date]);
+      row += 1;
+    end;
+end;
+
+procedure TMainForm.FormCreate(Sender: TObject);
+begin
+  LoadDatabaseFromFile;
+  PopulateAssetList;
+end;
+
+procedure TMainForm.LoadDBClick(Sender: TObject);
+begin
+  LoadDatabaseFromFile;
+  RefreshAssetList;
 end;
 
 procedure TMainForm.SaveDBClick(Sender: TObject);
@@ -135,9 +193,10 @@ begin
   databaseFile.Append(nil);
 
   for asset in database.GetAssets do
-      databaseFile.Append([asset.GetType,
-                           asset.GetName,
-                           asset.GetDateOnDisk.ToString]);
+      if asset.GetDateInDB <> 0 then
+        databaseFile.Append([asset.GetType,
+                             asset.GetName,
+                             asset.GetDateOnDisk.ToString]);
   databaseFile.Free;
 end;
 

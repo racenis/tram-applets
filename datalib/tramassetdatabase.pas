@@ -15,6 +15,8 @@ type
      procedure ScanFromDisk;
      procedure SaveToDisk;
 
+     procedure Remove(asset: TAssetMetadata);
+
      function GetAssets: TAssetMetadataArray;
 
      procedure InsertFromDB(assetType: string; name: string; date: Integer);
@@ -43,6 +45,12 @@ end;
 procedure TAssetDatabase.ScanFromDisk;
 begin
   collection3Dmodel.ScanFromDisk;
+end;
+
+procedure TAssetDatabase.Remove(asset: TAssetMetadata);
+begin
+  //collection3Dmodel.Remove(asset);
+  // TODO: oi
 end;
 
 function TAssetDatabase.GetAssets: TAssetMetadataArray;

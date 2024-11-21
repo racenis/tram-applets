@@ -1,11 +1,11 @@
-object RefreshNewFileDialog: TRefreshNewFileDialog
-  Left = 1088
+object RefreshMissingFileDialog: TRefreshMissingFileDialog
+  Left = 750
   Height = 420
   Top = 157
   Width = 320
   BorderIcons = [biMinimize]
   BorderStyle = bsDialog
-  Caption = 'RefreshNewFileDialog'
+  Caption = 'RefreshMissingFileDialog'
   ClientHeight = 420
   ClientWidth = 320
   Position = poMainFormCenter
@@ -14,16 +14,23 @@ object RefreshNewFileDialog: TRefreshNewFileDialog
     Left = 8
     Height = 13
     Top = 8
-    Width = 290
-    Caption = 'There were these new files detected in the data directiories:'
+    Width = 187
+    Caption = 'These tracked files couldn''t be located:'
   end
   object FileChecklist: TCheckListBox
     Left = 8
     Height = 328
     Top = 32
-    Width = 305
+    Width = 308
     ItemHeight = 0
     TabOrder = 0
+  end
+  object Label2: TLabel
+    Left = 8
+    Height = 13
+    Top = 368
+    Width = 144
+    Caption = 'Think they''ll come back, chief?'
   end
   object SelectAll: TCheckBox
     Left = 8
@@ -36,29 +43,22 @@ object RefreshNewFileDialog: TRefreshNewFileDialog
     TabOrder = 1
     OnChange = SelectAllChange
   end
-  object Ignore: TButton
-    Left = 238
+  object IgnoreAll: TButton
+    Left = 184
     Height = 25
     Top = 392
-    Width = 75
-    Caption = 'Ignore All'
+    Width = 132
+    Caption = 'They''ll Come Back Fr Fr'
     TabOrder = 2
-    OnClick = IgnoreClick
+    OnClick = IgnoreAllClick
   end
-  object Track: TButton
-    Left = 144
+  object Remove: TButton
+    Left = 96
     Height = 25
     Top = 392
-    Width = 91
-    Caption = 'Track Selected'
+    Width = 83
+    Caption = 'Yeet Selected'
     TabOrder = 3
-    OnClick = TrackClick
-  end
-  object Label3: TLabel
-    Left = 8
-    Height = 13
-    Top = 368
-    Width = 216
-    Caption = 'What do you want us to do with them, chief?'
+    OnClick = RemoveClick
   end
 end

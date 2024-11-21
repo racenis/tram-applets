@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 382
+  Left = 455
   Height = 581
-  Top = 352
+  Top = 234
   Width = 800
   BorderStyle = bsSingle
   Caption = 'MainForm'
@@ -9,6 +9,7 @@ object MainForm: TMainForm
   ClientWidth = 800
   Menu = MainMenu
   OnCreate = FormCreate
+  Position = poScreenCenter
   LCLVersion = '3.0.0.3'
   object StatusBar: TStatusBar
     Left = 0
@@ -108,6 +109,7 @@ object MainForm: TMainForm
       Caption = 'File'
       object LoadDB: TMenuItem
         Caption = 'LoadDB'
+        OnClick = LoadDBClick
       end
       object SaveDB: TMenuItem
         Caption = 'SaveDB'

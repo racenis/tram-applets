@@ -1,4 +1,4 @@
-unit RefreshNewFileDialogUnit;
+unit RefreshMissingFileDialogUnit;
 
 {$mode ObjFPC}{$H+}
 
@@ -10,19 +10,19 @@ uses
 
 type
 
-  { TRefreshNewFileDialog }
+  { TRefreshMissingFileDialog }
 
-  TRefreshNewFileDialog = class(TForm)
-    Label3: TLabel;
-    Track: TButton;
-    Ignore: TButton;
+  TRefreshMissingFileDialog = class(TForm)
+    Remove: TButton;
+    IgnoreAll: TButton;
     SelectAll: TCheckBox;
     FileChecklist: TCheckListBox;
     Label1: TLabel;
+    Label2: TLabel;
+    procedure RemoveClick(Sender: TObject);
     constructor Create(formOwner: TComponent; files: TAssetMetadataArray); overload;
-    procedure IgnoreClick(Sender: TObject);
+    procedure IgnoreAllClick(Sender: TObject);
     procedure SelectAllChange(Sender: TObject);
-    procedure TrackClick(Sender: TObject);
   private
 
   public
@@ -30,15 +30,13 @@ type
   end;
 
 var
-  RefreshNewFileDialog: TRefreshNewFileDialog;
+  RefreshMissingFileDialog: TRefreshMissingFileDialog;
 
 implementation
 
 {$R *.lfm}
 
-{ TRefreshNewFileDialog }
-
-constructor TRefreshNewFileDialog.Create(formOwner: TComponent; files: TAssetMetadataArray);
+constructor TRefreshMissingFileDialog.Create(formOwner: TComponent; files: TAssetMetadataArray);
 var
   assetFile: TAssetMetadata;
   i: Integer;
@@ -55,27 +53,27 @@ begin
   FileCheckList.CheckAll(cbChecked);
 end;
 
-procedure TRefreshNewFileDialog.IgnoreClick(Sender: TObject);
+procedure TRefreshMissingFileDialog.RemoveClick(Sender: TObject);
+var
+  i: Integer;
+begin
+ for i := 0 to FileChecklist.Count - 1 do
+   (FileChecklist.Items.Objects[i] as TAssetMetadata).Remove;
+
+ self.Close;
+end;
+
+procedure TRefreshMissingFileDialog.IgnoreAllClick(Sender: TObject);
 begin
   self.Close;
 end;
 
-procedure TRefreshNewFileDialog.SelectAllChange(Sender: TObject);
+procedure TRefreshMissingFileDialog.SelectAllChange(Sender: TObject);
 begin
   if SelectAll.Checked then
      FileCheckList.CheckAll(cbChecked)
   else
      FileCheckList.CheckAll(cbUnchecked);
-end;
-
-procedure TRefreshNewFileDialog.TrackClick(Sender: TObject);
-var
-  i: Integer;
-begin
- for i := 0 to FileChecklist.Count - 1 do
-   (FileChecklist.Items.Objects[i] as TAssetMetadata).SetDateInDBAsOnDisk;
-
- self.Close;
 end;
 
 end.

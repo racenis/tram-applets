@@ -7,22 +7,23 @@ interface
 uses
   Classes, SysUtils, TramAssetMetadata;
 
-type
+(*type
   TAssetCollection = class
   public
      constructor Create();
      procedure Clear; virtual; abstract;
      procedure ScanFromDisk; virtual; abstract;
      procedure InsertFromDB(name: string; date: Integer); virtual; abstract;
+     procedure Remove(asset: TAssetMetadata); virtual; override;
      function GetAssets: TAssetMetadataArray; virtual; abstract;
-  end;
+  end;*)
 
 implementation
 
-constructor TAssetCollection.Create();
+(*constructor TAssetCollection.Create();
 begin
   ;
-end;
+end;*)
 
 
 
