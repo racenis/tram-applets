@@ -3,12 +3,14 @@ object MainForm: TMainForm
   Height = 581
   Top = 247
   Width = 800
+  AllowDropFiles = True
   BorderStyle = bsSingle
   Caption = 'MainForm'
   ClientHeight = 581
   ClientWidth = 800
   Menu = MainMenu
   OnCreate = FormCreate
+  OnDropFiles = FormDropFiles
   Position = poScreenCenter
   LCLVersion = '3.0.0.3'
   object StatusBar: TStatusBar
@@ -210,5 +212,10 @@ object MainForm: TMainForm
     object AssetMenu: TMenuItem
       Caption = 'AssetMenu'
     end
+  end
+  object OpenDialog: TOpenDialog
+    Options = [ofAllowMultiSelect, ofEnableSizing, ofViewDetail]
+    Left = 416
+    Top = 80
   end
 end

@@ -34,6 +34,7 @@ type
     AssetMenu: TMenuItem;
     LoadDB: TMenuItem;
     Import: TMenuItem;
+    OpenDialog: TOpenDialog;
     Panel1: TPanel;
     SharedProperty: TPanel;
     SaveDB: TMenuItem;
@@ -48,6 +49,7 @@ type
     procedure FilterNameKeyDown(Sender: TObject; var Key: Word;
       {%H-}Shift: TShiftState);
     procedure FormCreate(Sender: TObject);
+    procedure FormDropFiles(Sender: TObject; const FileNames: array of string);
     procedure ImportClick(Sender: TObject);
     procedure LoadDBClick(Sender: TObject);
     procedure SaveDBClick(Sender: TObject);
@@ -249,29 +251,68 @@ begin
   Result := allFiles;
 end;
 
-procedure TMainForm.ImportClick(Sender: TObject);
+procedure ImportFiles(files: array of string);
 var
-  allFiles: TStringList;
+  importPaths: TStringList;
+  filePath: string;
+  fileName: string;
+  fileExt: string;
+  fileNewPath: string;
 begin
-  allFiles := FindImportPaths;
+  importPaths := FindImportPaths;
 
-  ImportFileDialog := TImportFileDialog.Create(MainForm, allFiles.ToStringArray);
+  ImportFileDialog := TImportFileDialog.Create(MainForm, importPaths.ToStringArray);
   ImportFileDialog.ShowModal;
 
   if ImportFileDialog.IsSuccess then
   begin
+    for filePath in files do
+    begin
+      fileName := ExtractFileName(filePath);
+      fileExt := ExtractFileExt(filePath);
+      fileName := fileName.Remove(Length(fileName) - Length(fileExt));
 
-    case ImportFileDialog.GetSelectedType of
-      importCopy: ShowMessage('Import copy not implemented!');
-      importMove: ShowMessage('Import move not implemented!');
-      importLink: ShowMessage('Import link not implemented!');
+      case fileExt of
+        '.stmdl', '.dymdl', '.mdmdl': fileNewPath := 'data/models/';
+        else
+          begin
+            ShowMessage('File ' + filePath + ' unknown extension: ' + fileExt);
+            Continue;
+          end;
+      end;
+
+      if ImportFileDialog.GetSelectedPath <> '' then
+         fileNewPath += ImportFileDialog.GetSelectedPath + '/';
+
+      if not DirectoryExists(fileNewPath) then
+         ForceDirectories(fileNewPath);
+
+      fileNewPath += fileName + fileExt;
+
+      ShowMessage('Import destination: ' + fileNewPath);
+
+      case ImportFileDialog.GetSelectedType of
+        importCopy: ShowMessage('Import copy not implemented!');
+        importMove: ShowMessage('Import move not implemented!');
+        importLink: ShowMessage('Import link not implemented!');
+      end;
     end;
-
-    ShowMessage('Selecte: ' + ImportFileDialog.GetSelectedPath);
 
   end;
 
   FreeAndNil(ImportFileDialog);
+end;
+
+procedure TMainForm.ImportClick(Sender: TObject);
+begin
+  if not OpenDialog.Execute then Exit;
+  ImportFiles(OpenDialog.Files.ToStringArray);
+end;
+
+procedure TMainForm.FormDropFiles(Sender: TObject;
+  const FileNames: array of string);
+begin
+  ImportFiles(FileNames);
 end;
 
 procedure TMainForm.FilterNameKeyDown(Sender: TObject; var Key: Word;
