@@ -104,7 +104,7 @@ begin
          state := whitespace;
 
          // check if reached line limit
-         if (size <> 0) and (rowCount > limit) then Break;
+         if (limit <> 0) and (rowCount > limit) then Break;
       end;
 
       case state of
@@ -159,6 +159,15 @@ begin
                   end;
       end;
 
+  end;
+
+  // append final token if it was being parsed when file ended
+  if token <> '' then
+  begin
+    SetLength(data[rowIndex], colIndex + 1);
+    data[rowIndex][colIndex] := token;
+    token := '';
+    colIndex += 1;
   end;
 
   // if last row is empty, yeet it

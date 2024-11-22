@@ -29,6 +29,7 @@ type
     Label4: TLabel;
     Label5: TLabel;
     Materials: TListBox;
+    procedure CalculateLayoutClick(Sender: TObject);
     constructor Create(TheOwner: TComponent; asset: TAssetMetadata); overload;
     procedure LightmapHeightChange(Sender: TObject);
     procedure LightmapWidthChange(Sender: TObject);
@@ -69,6 +70,11 @@ begin
       Materials.AddItem(asset.GetMetadata('MATERIAL' + material.ToString), nil);
 
 
+end;
+
+procedure TMetadataStaticModel.CalculateLayoutClick(Sender: TObject);
+begin
+  ShowMessage('Not implemented yet.')
 end;
 
 procedure TMetadataStaticModel.LightmapHeightChange(Sender: TObject);

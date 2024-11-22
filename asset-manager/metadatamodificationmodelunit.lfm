@@ -1,18 +1,72 @@
 object MetadataModificationModel: TMetadataModificationModel
   Left = 0
-  Height = 240
+  Height = 300
   Top = 0
   Width = 200
-  ClientHeight = 240
+  ClientHeight = 300
   ClientWidth = 200
   TabOrder = 0
-  DesignLeft = 305
-  DesignTop = 132
+  DesignLeft = 1029
+  DesignTop = 227
+  object ModelHeader: TEdit
+    Left = 8
+    Height = 21
+    Top = 8
+    Width = 80
+    TabOrder = 0
+    Text = 'ModelHeader'
+  end
+  object ApproximateSize: TEdit
+    Left = 112
+    Height = 21
+    Top = 8
+    Width = 80
+    TabOrder = 1
+    Text = 'ApproximateSize'
+  end
   object Label1: TLabel
-    Left = 47
+    Left = 8
     Height = 13
-    Top = 52
-    Width = 57
-    Caption = 'modificaiton'
+    Top = 32
+    Width = 54
+    Caption = 'Base model'
+  end
+  object BaseModel: TEdit
+    Left = 8
+    Height = 21
+    Top = 48
+    Width = 184
+    TabOrder = 2
+    Text = 'BaseModel'
+  end
+  object GroupBox1: TGroupBox
+    Left = 8
+    Height = 208
+    Top = 80
+    Width = 185
+    Caption = 'Mappings'
+    ClientHeight = 190
+    ClientWidth = 181
+    TabOrder = 3
+    object Mappings: TListView
+      Left = 8
+      Height = 176
+      Top = 8
+      Width = 162
+      Columns = <      
+        item
+          Caption = 'Material'
+          Width = 78
+        end      
+        item
+          Caption = 'Replacement'
+          Width = 80
+        end>
+      GridLines = True
+      ReadOnly = True
+      RowSelect = True
+      TabOrder = 0
+      ViewStyle = vsReport
+    end
   end
 end

@@ -1,18 +1,150 @@
 object MetadataDynamicModel: TMetadataDynamicModel
   Left = 0
-  Height = 240
+  Height = 300
   Top = 0
   Width = 200
-  ClientHeight = 240
+  ClientHeight = 300
   ClientWidth = 200
   TabOrder = 0
-  DesignLeft = 305
-  DesignTop = 132
+  DesignLeft = 451
+  DesignTop = 182
+  object ModelHeader: TEdit
+    Left = 8
+    Height = 21
+    Top = 8
+    Width = 80
+    ReadOnly = True
+    TabOrder = 0
+    Text = 'ModelHeader'
+  end
+  object ApproximateSize: TEdit
+    Left = 112
+    Height = 21
+    Top = 8
+    Width = 80
+    ReadOnly = True
+    TabOrder = 1
+    Text = 'ApproximateSize'
+  end
+  object VertexCount: TEdit
+    Left = 8
+    Height = 21
+    Top = 56
+    Width = 64
+    ReadOnly = True
+    TabOrder = 2
+    Text = 'VertexCount'
+  end
+  object TriangleCount: TEdit
+    Left = 80
+    Height = 21
+    Top = 56
+    Width = 64
+    ReadOnly = True
+    TabOrder = 3
+    Text = 'TriangleCount'
+  end
+  object MaterialCount: TEdit
+    Left = 152
+    Height = 21
+    Top = 56
+    Width = 40
+    ReadOnly = True
+    TabOrder = 4
+    Text = 'MaterialCount'
+  end
   object Label1: TLabel
-    Left = 100
+    Left = 8
     Height = 13
-    Top = 94
-    Width = 74
-    Caption = 'dynamic modde'
+    Top = 40
+    Width = 38
+    Caption = 'Vertices'
+  end
+  object Label2: TLabel
+    Left = 80
+    Height = 13
+    Top = 40
+    Width = 43
+    Caption = 'Triangles'
+  end
+  object Label3: TLabel
+    Left = 152
+    Height = 13
+    Top = 40
+    Width = 43
+    Caption = 'Materials'
+  end
+  object Label4: TLabel
+    Left = 96
+    Height = 13
+    Top = 80
+    Width = 69
+    Caption = 'Vertex Groups'
+  end
+  object BoneCount: TEdit
+    Left = 8
+    Height = 21
+    Top = 96
+    Width = 80
+    ReadOnly = True
+    TabOrder = 5
+    Text = 'BoneCount'
+  end
+  object VertexGroupCount: TEdit
+    Left = 96
+    Height = 21
+    Top = 96
+    Width = 96
+    ReadOnly = True
+    TabOrder = 6
+    Text = 'VertexGroupCount'
+  end
+  object Label5: TLabel
+    Left = 8
+    Height = 13
+    Top = 80
+    Width = 29
+    Caption = 'Bones'
+  end
+  object GroupBox1: TGroupBox
+    Left = 8
+    Height = 80
+    Top = 120
+    Width = 186
+    Caption = 'Vertex Groups'
+    ClientHeight = 62
+    ClientWidth = 182
+    TabOrder = 7
+    object VertexGroups: TListBox
+      Left = 8
+      Height = 48
+      Top = 8
+      Width = 164
+      Enabled = False
+      Items.Strings = (
+        'Not available for DYMDLv1.'
+      )
+      ItemHeight = 13
+      TabOrder = 0
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 7
+    Height = 97
+    Top = 200
+    Width = 187
+    Caption = 'Materials'
+    ClientHeight = 79
+    ClientWidth = 183
+    TabOrder = 8
+    object Materials: TListBox
+      Left = 9
+      Height = 64
+      Top = 8
+      Width = 164
+      ItemHeight = 0
+      TabOrder = 0
+      OnSelectionChange = MaterialsSelectionChange
+    end
   end
 end

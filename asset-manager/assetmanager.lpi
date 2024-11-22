@@ -102,6 +102,7 @@
         <Filename Value="metadatamodificationmodelunit.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="MetadataModificationModel"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="MetadataModificationModelUnit"/>
       </Unit>

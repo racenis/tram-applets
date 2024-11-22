@@ -161,6 +161,13 @@ begin
 
   end;
 
+  // append final token if it was being parsed when file ended
+  if token <> '' then
+  begin
+    SetLength(data[rowIndex], colIndex + 1);
+    data[rowIndex][colIndex] := token;
+  end;
+
   // if last row is empty, yeet it
   if Length(data[rowIndex]) = 0 then rowCount -= 1;
 
