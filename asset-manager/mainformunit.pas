@@ -19,6 +19,8 @@ type
     AssetEdit: TButton;
     AssetShowDirectory: TButton;
     AssetProcess: TButton;
+    AssetDelete: TButton;
+    AssetMove: TButton;
     CheckBox1: TCheckBox;
     AssetType: TEdit;
     AssetName: TEdit;
@@ -41,6 +43,7 @@ type
     StatusBar: TStatusBar;
     StringGrid: TStringGrid;
     procedure AssetAlwaysProcessChange(Sender: TObject);
+    procedure AssetDeleteClick(Sender: TObject);
     procedure AssetEditClick(Sender: TObject);
     procedure AssetIgnoreModifiedChange(Sender: TObject);
     procedure AssetShowDirectoryClick(Sender: TObject);
@@ -365,12 +368,15 @@ begin
   FilterType.ItemIndex := 0;
   FilterName.Clear;
 
-  RefreshAssetList;
+  FilterButton.Click;
 end;
 
 procedure TMainForm.FilterButtonClick(Sender: TObject);
 begin
   RefreshAssetList;
+
+  SharedProperty.Enabled := False;
+  StringGrid.ClearSelections;
 end;
 
 procedure TMainForm.AssetAlwaysProcessChange(Sender: TObject);
@@ -379,6 +385,28 @@ begin
   if MainForm.AssetAlwaysProcess.Checked then
      MainForm.AssetIgnoreModified.Checked := False;
   selectedAsset.SetAlwaysProcess(MainForm.AssetAlwaysProcess.Checked);
+end;
+
+procedure TMainForm.AssetDeleteClick(Sender: TObject);
+var
+  dialogResult: TModalResult;
+begin
+  dialogResult := MessageDlg('We will delete this asset.',
+                             'The asset "' + selectedAsset.GetName
+                             + '" will be removed from the database. Do you'
+                             + ' want us to remove its file from the disk too?',
+                             mtConfirmation,
+                             [mbYes, mbNo, mbCancel], 0);
+  case dialogResult of
+      mrYes: DeleteFile(selectedAsset.GetPath);
+      mrNo: ;
+      mrCancel: Exit;
+  end;
+
+  selectedAsset.Remove;
+  selectedAsset := nil;
+  SharedProperty.Enabled := False;
+  FilterButton.Click;
 end;
 
 procedure TMainForm.AssetEditClick(Sender: TObject);
@@ -447,9 +475,12 @@ begin
   MainForm.AssetAlwaysProcess.Enabled := True;
   MainForm.AssetIgnoreModified.Enabled := not selectedAsset.GetAlwaysProcess;
 
+  // TODO: check which can be deleted
   MainForm.AssetShowDirectory.Enabled := True;
   MainForm.AssetEdit.Enabled := True;
   MainForm.AssetProcess.Enabled := True;
+
+  Mainform.SharedProperty.Enabled := True;
 end;
 
 initialization

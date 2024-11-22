@@ -116,6 +116,7 @@ object MainForm: TMainForm
     Width = 200
     ClientHeight = 184
     ClientWidth = 200
+    Enabled = False
     TabOrder = 3
     object CheckBox1: TCheckBox
       Left = 80
@@ -130,7 +131,7 @@ object MainForm: TMainForm
       Height = 21
       Top = 8
       Width = 112
-      Enabled = False
+      ReadOnly = True
       TabOrder = 1
       TextHint = 'Nothing selected'
     end
@@ -139,7 +140,7 @@ object MainForm: TMainForm
       Height = 21
       Top = 8
       Width = 63
-      Enabled = False
+      ReadOnly = True
       TabOrder = 2
     end
     object AssetAlwaysProcess: TCheckBox
@@ -183,12 +184,29 @@ object MainForm: TMainForm
       OnClick = AssetEditClick
     end
     object AssetProcess: TButton
+      Left = 88
+      Height = 25
+      Top = 120
+      Width = 107
+      Caption = 'Process'
+      TabOrder = 7
+    end
+    object AssetMove: TButton
       Left = 8
       Height = 25
       Top = 120
       Width = 75
-      Caption = 'Process'
-      TabOrder = 7
+      Caption = 'Move'
+      TabOrder = 8
+    end
+    object AssetDelete: TButton
+      Left = 8
+      Height = 25
+      Top = 152
+      Width = 75
+      Caption = 'Delete'
+      TabOrder = 9
+      OnClick = AssetDeleteClick
     end
   end
   object MainMenu: TMainMenu
