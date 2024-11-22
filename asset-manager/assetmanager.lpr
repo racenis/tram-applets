@@ -12,7 +12,8 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms, MainFormUnit, MainFormDB, RefreshNewFileDialogUnit,
   RefreshChangeFileDialogUnit, RefreshMissingFileDialogUnit,
-  ImportFileDialogUnit
+  ImportFileDialogUnit, MetadataStaticModelUnit, MetadataDynamicModelUnit,
+  MetadataModificationModelUnit
   { you can add units after this };
 
 {$R *.res}

@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 440
+  Left = 432
   Height = 581
-  Top = 247
+  Top = 249
   Width = 800
   AllowDropFiles = True
   BorderStyle = bsSingle
@@ -208,6 +208,13 @@ object MainForm: TMainForm
       TabOrder = 9
       OnClick = AssetDeleteClick
     end
+  end
+  object MetadataProperty: TPanel
+    Left = 600
+    Height = 304
+    Top = 216
+    Width = 200
+    TabOrder = 4
   end
   object MainMenu: TMainMenu
     Left = 480

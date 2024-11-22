@@ -9,7 +9,8 @@ uses
   ComCtrls, ExtCtrls, StdCtrls, Grids, TramAssetDatabase, TramAssetMetadata,
   DateUtils, TramAssetWriter, TramAssetParser, RefreshNewFileDialogUnit,
   RefreshMissingFileDialogUnit, RefreshChangeFileDialogUnit, LCLType,
-  FileUtil, ImportFileDialogUnit, Process;
+  FileUtil, ImportFileDialogUnit, MetadataStaticModelUnit,
+  MetadataDynamicModelUnit, MetadataModificationModelUnit;
 
 type
 
@@ -38,6 +39,7 @@ type
     Import: TMenuItem;
     OpenDialog: TOpenDialog;
     Panel1: TPanel;
+    MetadataProperty: TPanel;
     SharedProperty: TPanel;
     SaveDB: TMenuItem;
     StatusBar: TStatusBar;
@@ -56,9 +58,10 @@ type
     procedure ImportClick(Sender: TObject);
     procedure LoadDBClick(Sender: TObject);
     procedure SaveDBClick(Sender: TObject);
-    procedure StringGridAfterSelection(Sender: TObject; aCol, aRow: Integer);
+    procedure StringGridAfterSelection(Sender: TObject; {%H-}aCol, {%H-}aRow: Integer);
+    procedure SetSelectedAsset(asset: TAssetMetadata);
   private
-
+    metadataPropertyFrame: TFrame;
   public
 
   end;
@@ -74,6 +77,12 @@ implementation
 {$R *.lfm}
 
 { TMainForm }
+
+// ************************************************************************** //
+// *                                                                        * //
+// *                        DATABASE INITIALIZATION                         * //
+// *                                                                        * //
+// ************************************************************************** //
 
 procedure LoadDatabaseFromFile;
 var
@@ -207,8 +216,46 @@ begin
     end;
 end;
 
+// ************************************************************************** //
+// *                                                                        * //
+// *                             EVERYTHING ELSE                            * //
+// *                                                                        * //
+// ************************************************************************** //
+
+// TODO: bring in the other logics in here
+procedure TMainForm.SetSelectedAsset(asset: TAssetMetadata);
+begin
+  if asset = nil then
+  begin
+    MainForm.SharedProperty.Enabled := False;
+    if metadataPropertyFrame <> nil then metadataPropertyFrame.Enabled := False;
+  end
+  else
+  begin
+    MainForm.SharedProperty.Enabled := True;
+
+    if metadataPropertyFrame <> nil then FreeAndNil(metadataPropertyFrame);
+
+
+    //metadataPropertyFrame := TMetadataStaticModel.Create(MetadataProperty);
+
+    case asset.GetType of
+        'STMDL': metadataPropertyFrame := TMetadataStaticModel.Create(MetadataProperty, asset);
+        'DYMDL': metadataPropertyFrame := TMetadataDynamicModel.Create(MetadataProperty, asset);
+        'MDMDL': metadataPropertyFrame := TMetadataModificationModel.Create(MetadataProperty, asset);
+    end;
+
+    if metadataPropertyFrame <> nil then metadataPropertyFrame.Parent := MetadataProperty;
+
+  end;
+
+  selectedAsset := asset;
+end;
+
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
+  metadataPropertyFrame := nil;
+
   LoadDatabaseFromFile;
   PopulateAssetList;
 end;
@@ -404,7 +451,8 @@ begin
   end;
 
   selectedAsset.Remove;
-  selectedAsset := nil;
+  //selectedAsset := nil;
+  SetSelectedAsset(nil);
   SharedProperty.Enabled := False;
   FilterButton.Click;
 end;
@@ -464,7 +512,8 @@ var
   row: Integer;
 begin
   row := MainForm.StringGrid.Selection.Bottom;
-  selectedAsset := MainForm.StringGrid.Objects[0, row] as TAssetMetadata;
+  //selectedAsset := MainForm.StringGrid.Objects[0, row] as TAssetMetadata;
+  SetSelectedAsset(MainForm.StringGrid.Objects[0, row] as TAssetMetadata);
 
   MainForm.AssetName.Text := selectedAsset.GetName;
   MainForm.AssetType.Text := selectedAsset.GetType;

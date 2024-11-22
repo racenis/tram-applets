@@ -82,6 +82,29 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="ImportFileDialogUnit"/>
       </Unit>
+      <Unit>
+        <Filename Value="metadatastaticmodelunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="MetadataStaticModel"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="MetadataStaticModelUnit"/>
+      </Unit>
+      <Unit>
+        <Filename Value="metadatadynamicmodelunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="MetadataDynamicModel"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="MetadataDynamicModelUnit"/>
+      </Unit>
+      <Unit>
+        <Filename Value="metadatamodificationmodelunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="MetadataModificationModel"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="MetadataModificationModelUnit"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -16,6 +16,11 @@ type
      function GetPath: string; virtual;
      function GetType: string; virtual;
 
+     procedure SetMetadata(const {%H-}prop: string; {%H-}value: Variant); virtual;
+     function GetMetadata(const {%H-}prop: string): Variant; virtual;
+
+     procedure LoadMetadata(); virtual;
+     procedure LoadFromDisk(); virtual;
      // TODO: yeet DateInSource
      // TODO: add source reference / setsource/getsource idk
 
@@ -90,6 +95,26 @@ begin
   Result := 'NONE';
 end;
 
+
+procedure TAssetMetadata.SetMetadata(const prop: string; value: Variant);
+begin
+  ;
+end;
+
+function TAssetMetadata.GetMetadata(const prop: string): Variant;
+begin
+  Result := nil;
+end;
+
+procedure TAssetMetadata.LoadMetadata();
+begin
+  ;
+end;
+
+procedure TAssetMetadata.LoadFromDisk();
+begin
+  ;
+end;
 
 
 function TAssetMetadata.GetDateInDB: Integer;

@@ -1,11 +1,11 @@
 unit Tram3DModelAsset;
 
 {$mode objfpc}{$H+}
-
+{$WARN 6058 off : Call to subroutine "$1" marked as inline is not inlined}
 interface
 
 uses
-  Classes, SysUtils, TramAssetMetadata, FileUtil;
+  Classes, SysUtils, TramAssetMetadata, FileUtil, TramAssetParser;
 
 // TODO: add model type enum
 // TODO: have constructor take in model type enum
@@ -22,11 +22,26 @@ type
       constructor Create(modelType: T3DModelType; modelName: string; collection: T3DModelCollection);
       function GetType: string; override;
       function GetPath: string; override;
+
+      procedure SetMetadata(const prop: string; value: Variant); override;
+      function GetMetadata(const prop: string): Variant; override;
+
+      procedure LoadMetadata(); override;
   protected
       procedure SetDateInDB(date: Integer);
       procedure SetDateOnDisk(date: Integer);
   protected
+      modelHeader: string;
       modelType: T3DModelType;
+      materials: array of string;
+      vertexCount: Integer;
+      triangleCount: Integer;
+      boneCount: Integer;
+      vertexGroupCount: Integer;
+      lightmapWidth: Integer;
+      lightmapHeight: Integer;
+      baseModel: string;
+      mappings: array of array[0..1] of string;
   end;
 
   T3DModelCollection = class(TAssetCollection)
@@ -48,6 +63,17 @@ begin
   self.modelType := modelType;
   self.name := modelName;
   self.parent := collection;
+
+  self.modelHeader := 'N/A';
+  self.materials := nil;
+  self.vertexCount := 0;
+  self.triangleCount := 0;
+  self.boneCount := 0;
+  self.vertexGroupCount := 0;
+  self.lightmapWidth := 0;
+  self.lightmapHeight := 0;
+  self.baseModel := 'none';
+  self.mappings := nil;
 end;
 
 function T3DModel.GetType: string;
@@ -79,6 +105,111 @@ procedure T3DModel.SetDateOnDisk(date: Integer);
 begin
   self.dateOnDisk := date;
 end;
+
+procedure T3DModel.SetMetadata(const prop: string; value: Variant);
+begin
+  case prop of
+       'LIGHTMAP_WIDTH': lightmapWidth := value;
+       'LIGHTMAP_HEIGHT': lightmapHeight := value;
+  end;
+end;
+function T3DModel.GetMetadata(const prop: string): Variant;
+begin
+  case prop of
+       'MODEL_HEADER': Result := modelHeader;
+       'LIGHTMAP_WIDTH': Result := lightmapWidth;
+       'LIGHTMAP_HEIGHT': Result := lightmapHeight;
+       'VERTICES': Result := vertexCount;
+       'TRIANGLES': Result := triangleCount;
+       'MATERIALS': Result := Length(materials);
+       'BONES': Result := boneCount;
+       'VERTEX_GROUPS': Result := vertexGroupCount;
+       'BASE_MODEL': Result := baseModel;
+       'MAPPINGS': Result := Length(mappings);
+       'APPROX_SIZE': begin
+         case (self.modelType) of
+              type3DModelGeneric: Result := 'N/A';
+              type3DModelStatic: Result := (vertexCount * 1 + triangleCount * 12).ToString + ' KB';
+              type3DModelDynamic: Result := (vertexCount * 1 + triangleCount * 12).ToString + ' KB';
+              type3DModelModification: Result := 'Check Source Mdl';
+         end;
+       end else begin
+         if prop.StartsWith('MATERIAL') then
+           Result := materials[prop.Remove(0, Length('MATERIAL')).ToInteger]
+         else if prop.StartsWith('MAPPING_FROM') then
+           Result := mappings[prop.Remove(0, Length('MAPPING_FROM')).ToInteger][0]
+         else if prop.StartsWith('MAPPING_TO') then
+           Result := mappings[prop.Remove(0, Length('MAPPING_TO')).ToInteger][1]
+         else Result := nil;
+       end;
+  end;
+end;
+
+procedure T3DModel.LoadMetadata();
+var
+  modelFile: TAssetParser;
+  materialCount: Integer;
+  mat: Integer;
+begin
+  modelFile := TAssetParser.Create(self.GetPath, 30);
+
+  if not modelFile.IsOpen then
+  begin
+       Exit;
+  end;
+
+  if modelFile.GetValue(0, 0) = 'DYMDLv1' then begin
+    modelHeader := 'DYMDLv1';
+
+    vertexCount := modelFile.GetValue(0, 1).ToInteger;
+    triangleCount := modelFile.GetValue(0, 2).ToInteger;
+    materialCount := modelFile.GetValue(0, 3).ToInteger;
+    boneCount := modelFile.GetValue(0, 4).ToInteger;
+    vertexGroupCount := modelFile.GetValue(0, 5).ToInteger;
+
+    SetLength(materials, materialCount);
+
+    for mat := 0 to materialCount - 1 do
+        materials[mat] := modelFile.GetValue(mat + 1, 0);
+
+    // if we ever change the DYMDL format around, so that vertex groups and bone
+    // names start at the very beginning, then we could read them in just like
+    // with materials
+
+  end else if modelFile.GetValue(0, 0) = 'MDMDLv1' then begin
+    modelHeader := 'MDMDLv1';
+
+    baseModel := modelFile.GetValue(0, 1);
+
+    SetLength(mappings, modelFile.GetRowCount - 1);
+
+    for mat := 0 to High(mappings) do begin
+      mappings[mat][0] := modelFile.GetValue(mat + 1, 0);
+      mappings[mat][1] := modelFile.GetValue(mat + 1, 1);
+    end;
+
+
+  end else begin
+    // here we will assume that if there is no header, then the model is a
+    // static model. if we ever add a header to static models, we could check
+    // here for STMDLv1 or whatever and then we could have another case where
+    // we don't parse anything else, but only save the header, whatever that is
+
+    vertexCount := modelFile.GetValue(0, 0).ToInteger;
+    triangleCount := modelFile.GetValue(0, 1).ToInteger;
+    materialCount := modelFile.GetValue(0, 2).ToInteger;
+
+    if materialCount > modelFile.GetRowCount - 1 then materialCount := 0;
+
+    SetLength(materials, materialCount);
+
+    for mat := 0 to materialCount - 1 do
+        materials[mat] := modelFile.GetValue(mat + 1, 0);
+  end;
+
+
+end;
+
 
 constructor T3DModelCollection.Create;
 begin

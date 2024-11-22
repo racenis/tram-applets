@@ -10,7 +10,7 @@ uses
 type
   TAssetParserData = array of array of string;
   TAssetParser = class
-     constructor Create(const path: string);
+     constructor Create(const path: string; const limit: Integer = 0);
      destructor Destroy(); override;
 
      function GetRowCount: Integer;
@@ -31,13 +31,11 @@ type
 
 implementation
 
-constructor TAssetParser.Create(const path: string);
+constructor TAssetParser.Create(const path: string; const limit: Integer);
 type
   ParseState = (normal, whitespace, quote, comment);
 var
   readFile: File of Char;
-  line: string;
-  splitLine: array of string;
   token: string;
   state: ParseState;
   c: Char;
@@ -56,7 +54,7 @@ begin
     Exit();
   end;
 
-  // open gile
+  // open file
   Assign(readFile, path);
   Reset(readFile);
 
@@ -68,7 +66,7 @@ begin
   begin
 
       // check if end of file
-      if EOF(readFile) then break;
+      if EOF(readFile) then Break;
 
       // read in next char
       Read(readFile, c);
@@ -104,6 +102,9 @@ begin
          colIndex := 0;
 
          state := whitespace;
+
+         // check if reached line limit
+         if (limit <> 0) and (rowCount > limit) then Break;
       end;
 
       case state of
