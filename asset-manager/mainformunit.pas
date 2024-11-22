@@ -9,7 +9,7 @@ uses
   ComCtrls, ExtCtrls, StdCtrls, Grids, TramAssetDatabase, TramAssetMetadata,
   DateUtils, TramAssetWriter, TramAssetParser, RefreshNewFileDialogUnit,
   RefreshMissingFileDialogUnit, RefreshChangeFileDialogUnit, LCLType,
-  FileUtil, ImportFileDialogUnit;
+  FileUtil, ImportFileDialogUnit, Process;
 
 type
 
@@ -251,6 +251,40 @@ begin
   Result := allFiles;
 end;
 
+{$IFDEF WINDOWS}
+function CreateSymbolicLinkA(
+  lpSymlinkFileName: PAnsiChar;
+  lpTargetFileName: PAnsiChar;
+  dwFlags: DWORD
+): Boolean; stdcall; external 'kernel32';
+
+procedure CreateSymlink(target: string; source: string);
+var
+  targetAnsi: PAnsiChar;
+  sourceAnsi: PAnsiChar;
+begin
+  source := source.Replace('/', '\');
+  target := (GetCurrentDir() + '/' + target).Replace('/', '\');
+
+  sourceAnsi := StrAlloc(Length(source) + 1);
+  targetAnsi := StrAlloc(Length(target) + 1);
+
+  StrPCopy(sourceAnsi, source);
+  StrPCopy(targetAnsi, target);
+
+  WriteLn(targetAnsi);
+    WriteLn(sourceAnsi);
+
+
+  if CreateSymbolicLinkA(targetAnsi, sourceAnsi, 0) = False then
+     ShowMessage('Error creating a symlink from ' + sourceAnsi + ' to ' + targetAnsi);
+
+  StrDispose(sourceAnsi);
+  StrDispose(targetAnsi);
+end;
+
+{$ENDIF}
+
 procedure ImportFiles(files: array of string);
 var
   importPaths: TStringList;
@@ -292,12 +326,16 @@ begin
       ShowMessage('Import destination: ' + fileNewPath);
 
       case ImportFileDialog.GetSelectedType of
-        importCopy: ShowMessage('Import copy not implemented!');
-        importMove: ShowMessage('Import move not implemented!');
-        importLink: ShowMessage('Import link not implemented!');
+        importCopy: CopyFile(filePath, fileNewPath);
+        importMove: RenameFile(filePath, fileNewPath);
+        importLink:
+          {$IFDEF WINDOWS}
+          CreateSymlink(fileNewPath, filePath);
+          {$ELSE}
+          ShowMessage('Import link not implemented!');
+          {$ENDIF}
       end;
     end;
-
   end;
 
   FreeAndNil(ImportFileDialog);
