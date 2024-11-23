@@ -1,0 +1,83 @@
+object PreferencesDialog: TPreferencesDialog
+  Left = 305
+  Height = 240
+  Top = 132
+  Width = 320
+  BorderIcons = [biMinimize, biMaximize]
+  BorderStyle = bsDialog
+  Caption = 'Preferences'
+  ClientHeight = 240
+  ClientWidth = 320
+  OnCreate = FormCreate
+  OnShow = FormShow
+  Position = poMainFormCenter
+  LCLVersion = '3.0.0.3'
+  object Save: TButton
+    Left = 8
+    Height = 25
+    Top = 208
+    Width = 75
+    Caption = 'Save'
+    TabOrder = 0
+    OnClick = SaveClick
+  end
+  object Reset: TButton
+    Left = 88
+    Height = 25
+    Top = 208
+    Width = 75
+    Caption = 'Cancel'
+    TabOrder = 1
+    OnClick = ResetClick
+  end
+  object PageControl1: TPageControl
+    Left = 8
+    Height = 192
+    Top = 8
+    Width = 304
+    ActivePage = TabSheet2
+    TabIndex = 0
+    TabOrder = 2
+    object TabSheet2: TTabSheet
+      Caption = 'TabSheet2'
+      ClientHeight = 166
+      ClientWidth = 296
+      object ShowInDirectory: TLabeledEdit
+        Left = 8
+        Height = 21
+        Top = 24
+        Width = 208
+        EditLabel.Height = 13
+        EditLabel.Width = 208
+        EditLabel.Caption = 'ShowInDirectory'
+        TabOrder = 0
+        Text = 'ShowInDirectory'
+      end
+      object OpenDirectory: TLabeledEdit
+        Left = 8
+        Height = 21
+        Top = 64
+        Width = 208
+        EditLabel.Height = 13
+        EditLabel.Width = 208
+        EditLabel.Caption = 'OpenDirectory'
+        TabOrder = 1
+        Text = 'OpenDirectory'
+      end
+      object OpenFile: TLabeledEdit
+        Left = 8
+        Height = 21
+        Top = 104
+        Width = 208
+        EditLabel.Height = 13
+        EditLabel.Width = 208
+        EditLabel.Caption = 'OpenFile'
+        TabOrder = 2
+        Text = 'OpenFile'
+      end
+    end
+    object TabSheet1: TTabSheet
+      Caption = 'TabSheet1'
+    end
+  end
+end

@@ -1,5 +1,5 @@
 object MainForm: TMainForm
-  Left = 432
+  Left = 431
   Height = 581
   Top = 249
   Width = 800
@@ -9,6 +9,7 @@ object MainForm: TMainForm
   ClientHeight = 581
   ClientWidth = 800
   Menu = MainMenu
+  OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDropFiles = FormDropFiles
   Position = poScreenCenter
@@ -222,20 +223,86 @@ object MainForm: TMainForm
     object FileMenu: TMenuItem
       Caption = 'File'
       object LoadDB: TMenuItem
-        Caption = 'LoadDB'
+        Caption = 'Refresh Database'
+        ShortCut = 116
         OnClick = LoadDBClick
       end
       object SaveDB: TMenuItem
-        Caption = 'SaveDB'
+        Caption = 'Save Database'
+        ShortCut = 16467
         OnClick = SaveDBClick
       end
-      object Import: TMenuItem
-        Caption = 'Import'
-        OnClick = ImportClick
+      object Separator3: TMenuItem
+        Caption = '-'
+      end
+      object Preferences: TMenuItem
+        Caption = 'Preferences'
+        OnClick = PreferencesClick
+      end
+      object Separator2: TMenuItem
+        Caption = '-'
+      end
+      object Quit: TMenuItem
+        Caption = 'Quit'
+        ShortCut = 112
+        OnClick = QuitClick
       end
     end
     object AssetMenu: TMenuItem
-      Caption = 'AssetMenu'
+      Caption = 'Asset'
+      object ImportAsset: TMenuItem
+        Caption = 'Import'
+        ShortCut = 16463
+        OnClick = ImportAssetClick
+      end
+    end
+    object Project: TMenuItem
+      Caption = 'Project'
+      object RunExecutable: TMenuItem
+        Caption = 'Run'
+      end
+      object Compile: TMenuItem
+        Caption = 'Compile'
+      end
+      object Separator4: TMenuItem
+        Caption = '-'
+      end
+      object ShowDirectory: TMenuItem
+        Caption = 'Show in Explorer'
+      end
+      object Separator5: TMenuItem
+        Caption = '-'
+      end
+      object OpenLevelEditor: TMenuItem
+        Caption = 'Level Editor'
+      end
+      object OpenMaterialEditor: TMenuItem
+        Caption = 'Material Editor'
+      end
+      object OpenLanguageEditor: TMenuItem
+        Caption = 'Language Editor'
+      end
+      object Separator6: TMenuItem
+        Caption = '-'
+      end
+      object ProjectSettings: TMenuItem
+        Caption = 'Project Settings'
+        OnClick = ProjectSettingsClick
+      end
+    end
+    object Help: TMenuItem
+      Caption = 'Help'
+      object GetHelp: TMenuItem
+        Caption = 'Get Help'
+        OnClick = GetHelpClick
+      end
+      object Separator1: TMenuItem
+        Caption = '-'
+      end
+      object About: TMenuItem
+        Caption = 'About'
+        OnClick = AboutClick
+      end
     end
   end
   object OpenDialog: TOpenDialog

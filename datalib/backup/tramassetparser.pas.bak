@@ -166,8 +166,6 @@ begin
   begin
     SetLength(data[rowIndex], colIndex + 1);
     data[rowIndex][colIndex] := token;
-    token := '';
-    colIndex += 1;
   end;
 
   // if last row is empty, yeet it

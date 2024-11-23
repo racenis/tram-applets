@@ -1,0 +1,73 @@
+object AboutDialog: TAboutDialog
+  Left = 305
+  Height = 240
+  Top = 132
+  Width = 320
+  BorderIcons = [biMinimize, biMaximize]
+  BorderStyle = bsDialog
+  Caption = 'About'
+  ClientHeight = 240
+  ClientWidth = 320
+  Position = poMainFormCenter
+  LCLVersion = '3.0.0.3'
+  object Label1: TLabel
+    Left = 8
+    Height = 45
+    Top = 8
+    Width = 247
+    Alignment = taCenter
+    Caption = 'Tramway SDK'
+    Font.CharSet = BALTIC_CHARSET
+    Font.Height = -32
+    Font.Name = 'Arial Black'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 88
+    Height = 24
+    Top = 48
+    Width = 225
+    Caption = 'Asset Manager Applet'
+    Font.CharSet = BALTIC_CHARSET
+    Font.Height = -21
+    Font.Name = 'Arial'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold, fsItalic]
+    ParentFont = False
+  end
+  object Label3: TLabel
+    Left = 104
+    Height = 16
+    Top = 88
+    Width = 104
+    Caption = 'Version 0.0.9'
+    Font.CharSet = BALTIC_CHARSET
+    Font.Height = -13
+    Font.Name = 'Courier New'
+    Font.Pitch = fpFixed
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label4: TLabel
+    Left = 64
+    Height = 78
+    Top = 112
+    Width = 183
+    Alignment = taCenter
+    Caption = 'Tramway SDK © racenis 2022 — 2024'#13#10'Asset Manager Applet © racenis 2024'#13#10#13#10'Available under GPL license'#13#10#13#10'https://racenis.github.io/tram-sdk/'
+  end
+  object CloseDialog: TButton
+    Left = 120
+    Height = 25
+    Top = 208
+    Width = 75
+    Caption = 'Close'
+    TabOrder = 0
+    OnClick = CloseDialogClick
+  end
+end

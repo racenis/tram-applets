@@ -7,10 +7,12 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBGrids, Menus,
   ComCtrls, ExtCtrls, StdCtrls, Grids, TramAssetDatabase, TramAssetMetadata,
-  DateUtils, TramAssetWriter, TramAssetParser, RefreshNewFileDialogUnit,
-  RefreshMissingFileDialogUnit, RefreshChangeFileDialogUnit, LCLType,
-  FileUtil, ImportFileDialogUnit, MetadataStaticModelUnit,
-  MetadataDynamicModelUnit, MetadataModificationModelUnit;
+  DateUtils, XMLConf, TramAssetWriter, TramAssetParser,
+  RefreshNewFileDialogUnit, RefreshMissingFileDialogUnit,
+  RefreshChangeFileDialogUnit, LCLType, LCLIntf, IniPropStorage, FileUtil,
+  ImportFileDialogUnit, MetadataStaticModelUnit, AboutDialogUnit,
+  MetadataDynamicModelUnit, MetadataModificationModelUnit,
+  PreferencesDialogUnit, ProjectSettingsDialogUnit;
 
 type
 
@@ -36,14 +38,34 @@ type
     FileMenu: TMenuItem;
     AssetMenu: TMenuItem;
     LoadDB: TMenuItem;
-    Import: TMenuItem;
+    Help: TMenuItem;
+    GetHelp: TMenuItem;
+    About: TMenuItem;
+    ImportAsset: TMenuItem;
+    Compile: TMenuItem;
+    OpenLanguageEditor: TMenuItem;
+    OpenMaterialEditor: TMenuItem;
+    ProjectSettings: TMenuItem;
+    Separator4: TMenuItem;
+    Separator5: TMenuItem;
+    Separator6: TMenuItem;
+    ShowDirectory: TMenuItem;
+    OpenLevelEditor: TMenuItem;
+    RunExecutable: TMenuItem;
+    Project: TMenuItem;
+    Preferences: TMenuItem;
+    Quit: TMenuItem;
     OpenDialog: TOpenDialog;
     Panel1: TPanel;
     MetadataProperty: TPanel;
+    Separator1: TMenuItem;
+    Separator2: TMenuItem;
+    Separator3: TMenuItem;
     SharedProperty: TPanel;
     SaveDB: TMenuItem;
     StatusBar: TStatusBar;
     StringGrid: TStringGrid;
+    procedure AboutClick(Sender: TObject);
     procedure AssetAlwaysProcessChange(Sender: TObject);
     procedure AssetDeleteClick(Sender: TObject);
     procedure AssetEditClick(Sender: TObject);
@@ -53,10 +75,16 @@ type
     procedure FilterClearClick(Sender: TObject);
     procedure FilterNameKeyDown(Sender: TObject; var Key: Word;
       {%H-}Shift: TShiftState);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormDropFiles(Sender: TObject; const FileNames: array of string);
+    procedure GetHelpClick(Sender: TObject);
+    procedure ImportAssetClick(Sender: TObject);
     procedure ImportClick(Sender: TObject);
     procedure LoadDBClick(Sender: TObject);
+    procedure PreferencesClick(Sender: TObject);
+    procedure ProjectSettingsClick(Sender: TObject);
+    procedure QuitClick(Sender: TObject);
     procedure SaveDBClick(Sender: TObject);
     procedure StringGridAfterSelection(Sender: TObject; {%H-}aCol, {%H-}aRow: Integer);
     procedure SetSelectedAsset(asset: TAssetMetadata);
@@ -258,6 +286,11 @@ begin
 
   LoadDatabaseFromFile;
   PopulateAssetList;
+
+  Caption := GetSetting('PROJECT_NAME');
+  if Caption = '' then
+     Caption := 'Untitled';
+  Caption := Caption + ' - Tramway SDK Asset Manager';
 end;
 
 function FindImportPaths: TStringList;
@@ -393,8 +426,7 @@ end;
 
 procedure TMainForm.ImportClick(Sender: TObject);
 begin
-  if not OpenDialog.Execute then Exit;
-  ImportFiles(OpenDialog.Files.ToStringArray);
+
 end;
 
 procedure TMainForm.FormDropFiles(Sender: TObject;
@@ -403,11 +435,43 @@ begin
   ImportFiles(FileNames);
 end;
 
+procedure TMainForm.GetHelpClick(Sender: TObject);
+begin
+  OpenURL('https://racenis.github.io/tram-sdk/documentation.html');
+end;
+
+procedure TMainForm.ImportAssetClick(Sender: TObject);
+begin
+  if not OpenDialog.Execute then Exit;
+  ImportFiles(OpenDialog.Files.ToStringArray);
+end;
+
 procedure TMainForm.FilterNameKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if Key = VK_RETURN then
      FilterButton.Click;
+end;
+
+function IsDebuggerPresent(): integer stdcall; external 'kernel32.dll';
+
+procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+var
+  dialogResult: TModalResult;
+begin
+  if IsDebuggerPresent > 0 then
+  begin
+    CanClose := True;
+    Exit;
+  end;
+
+  dialogResult := MessageDlg('Save asset database before shitting quitting?',
+                             mtConfirmation,
+                             [mbYes, mbNo, mbCancel], 0);
+  case dialogResult of
+      mrYes: SaveDB.Click;
+      mrCancel: CanClose := False;
+  end;
 end;
 
 procedure TMainForm.FilterClearClick(Sender: TObject);
@@ -432,6 +496,13 @@ begin
   if MainForm.AssetAlwaysProcess.Checked then
      MainForm.AssetIgnoreModified.Checked := False;
   selectedAsset.SetAlwaysProcess(MainForm.AssetAlwaysProcess.Checked);
+end;
+
+procedure TMainForm.AboutClick(Sender: TObject);
+begin
+  AboutDialog := TAboutDialog.Create(self);
+  AboutDialog.ShowModal;
+  FreeAndNil(AboutDialog);
 end;
 
 procedure TMainForm.AssetDeleteClick(Sender: TObject);
@@ -485,6 +556,23 @@ procedure TMainForm.LoadDBClick(Sender: TObject);
 begin
   LoadDatabaseFromFile;
   RefreshAssetList;
+end;
+
+procedure TMainForm.PreferencesClick(Sender: TObject);
+begin
+  PreferencesDialog.ShowModal;
+end;
+
+procedure TMainForm.ProjectSettingsClick(Sender: TObject);
+begin
+  //ProjectSettingsDialog := TProjectSettingsDialog.Create(self);
+  ProjectSettingsDialog.ShowModal;
+  //FreeAndNil(ProjectSettingsDialog);
+end;
+
+procedure TMainForm.QuitClick(Sender: TObject);
+begin
+  self.Close;
 end;
 
 procedure TMainForm.SaveDBClick(Sender: TObject);

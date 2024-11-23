@@ -11,6 +11,8 @@
       <UseXPManifest Value="True"/>
       <XPManifest>
         <DpiAware Value="True"/>
+        <TextName Value="racenis.TramwaySDK.AssetManager"/>
+        <TextDesc Value="Asset manager applet for the Tramway SDK."/>
       </XPManifest>
       <Icon Value="0"/>
     </General>
@@ -25,6 +27,9 @@
       <FormatVersion Value="2"/>
     </RunParams>
     <RequiredPackages>
+      <Item>
+        <PackageName Value="FCL"/>
+      </Item>
       <Item>
         <PackageName Value="tramdatalib"/>
       </Item>
@@ -106,6 +111,28 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="MetadataModificationModelUnit"/>
       </Unit>
+      <Unit>
+        <Filename Value="aboutdialogunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="AboutDialog"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="AboutDialogUnit"/>
+      </Unit>
+      <Unit>
+        <Filename Value="preferencesdialogunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="PreferencesDialog"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="PreferencesDialogUnit"/>
+      </Unit>
+      <Unit>
+        <Filename Value="projectsettingsdialogunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ProjectSettingsDialog"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="ProjectSettingsDialogUnit"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -123,6 +150,11 @@
         <DebugInfoType Value="dsDwarf3"/>
       </Debugging>
     </Linking>
+    <Other>
+      <CompilerMessages>
+        <IgnoredMessages idx6058="True" idx3124="True" idx3123="True"/>
+      </CompilerMessages>
+    </Other>
   </CompilerOptions>
   <Debugging>
     <Exceptions>

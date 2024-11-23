@@ -60,6 +60,7 @@ begin
 
   // init first token
   token := '';
+  state := whitespace;
 
   // start the parse, char by char
   while True do

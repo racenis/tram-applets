@@ -1,0 +1,134 @@
+object ProjectSettingsDialog: TProjectSettingsDialog
+  Left = 550
+  Height = 360
+  Top = 180
+  Width = 480
+  BorderIcons = [biMinimize, biMaximize]
+  BorderStyle = bsDialog
+  Caption = 'ProjectSettingsDialog'
+  ClientHeight = 360
+  ClientWidth = 480
+  OnCreate = FormCreate
+  OnShow = FormCreate
+  Position = poMainFormCenter
+  LCLVersion = '3.0.0.3'
+  object Save: TButton
+    Left = 8
+    Height = 25
+    Top = 328
+    Width = 75
+    Caption = 'Save'
+    TabOrder = 0
+    OnClick = SaveClick
+  end
+  object Cancel: TButton
+    Left = 88
+    Height = 25
+    Top = 328
+    Width = 75
+    Caption = 'Cancel'
+    TabOrder = 1
+    OnClick = CancelClick
+  end
+  object PageControl1: TPageControl
+    Left = 8
+    Height = 312
+    Top = 8
+    Width = 464
+    ActivePage = TabSheet1
+    TabIndex = 0
+    TabOrder = 2
+    object TabSheet1: TTabSheet
+      Caption = 'Project'
+      ClientHeight = 286
+      ClientWidth = 456
+      object ProjectPath: TLabeledEdit
+        Left = 8
+        Height = 21
+        Top = 24
+        Width = 352
+        EditLabel.Height = 13
+        EditLabel.Width = 352
+        EditLabel.Caption = 'ProjectPath'
+        ReadOnly = True
+        TabOrder = 0
+        Text = 'ProjectPath'
+      end
+      object RunCommand: TLabeledEdit
+        Left = 8
+        Height = 21
+        Top = 216
+        Width = 200
+        EditLabel.Height = 13
+        EditLabel.Width = 200
+        EditLabel.Caption = 'RunCommand'
+        TabOrder = 1
+        Text = 'RunCommand'
+      end
+      object CompileCommand: TLabeledEdit
+        Left = 8
+        Height = 21
+        Top = 256
+        Width = 200
+        EditLabel.Height = 13
+        EditLabel.Width = 200
+        EditLabel.Caption = 'CompileCommand'
+        TabOrder = 2
+        Text = 'CompileCommand'
+      end
+      object SDKVersion: TLabeledEdit
+        Left = 368
+        Height = 21
+        Top = 24
+        Width = 80
+        EditLabel.Height = 13
+        EditLabel.Width = 80
+        EditLabel.Caption = 'SDKVersion'
+        ReadOnly = True
+        TabOrder = 3
+        Text = 'SDKVersion'
+      end
+      object ProjectName: TLabeledEdit
+        Left = 8
+        Height = 21
+        Top = 64
+        Width = 200
+        EditLabel.Height = 13
+        EditLabel.Width = 200
+        EditLabel.Caption = 'ProjectName'
+        TabOrder = 4
+        TextHint = 'Example: My Epic Project'
+      end
+      object ProjectVersion: TLabeledEdit
+        Left = 8
+        Height = 21
+        Top = 104
+        Width = 200
+        EditLabel.Height = 13
+        EditLabel.Width = 200
+        EditLabel.Caption = 'ProjectVersion'
+        TabOrder = 5
+        TextHint = 'Example: version 1.0.0'
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Tramway SDK'
+    end
+    object TabSheet3: TTabSheet
+      Caption = 'Editors'
+      ClientHeight = 286
+      ClientWidth = 456
+      object LabeledEdit1: TLabeledEdit
+        Left = 8
+        Height = 21
+        Top = 16
+        Width = 200
+        EditLabel.Height = 13
+        EditLabel.Width = 200
+        EditLabel.Caption = 'LabeledEdit1'
+        TabOrder = 0
+        Text = 'LabeledEdit1'
+      end
+    end
+  end
+end

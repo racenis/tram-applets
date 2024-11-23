@@ -13,7 +13,8 @@ uses
   Forms, MainFormUnit, MainFormDB, RefreshNewFileDialogUnit,
   RefreshChangeFileDialogUnit, RefreshMissingFileDialogUnit,
   ImportFileDialogUnit, MetadataStaticModelUnit, MetadataDynamicModelUnit,
-  MetadataModificationModelUnit
+  MetadataModificationModelUnit, AboutDialogUnit, PreferencesDialogUnit,
+  ProjectSettingsDialogUnit
   { you can add units after this };
 
 {$R *.res}
@@ -27,6 +28,9 @@ begin
   Application.CreateForm(TRefreshChangeFileDialog, RefreshChangeFileDialog);
   Application.CreateForm(TRefreshMissingFileDialog, RefreshMissingFileDialog);
   Application.CreateForm(TImportFileDialog, ImportFileDialog);
+  Application.CreateForm(TAboutDialog, AboutDialog);
+  Application.CreateForm(TPreferencesDialog, PreferencesDialog);
+  Application.CreateForm(TProjectSettingsDialog, ProjectSettingsDialog);
   Application.Run;
 end.
 
