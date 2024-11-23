@@ -129,9 +129,9 @@ begin
        'APPROX_SIZE': begin
          case (self.modelType) of
               type3DModelGeneric: Result := 'N/A';
-              type3DModelStatic: Result := (vertexCount * 1 + triangleCount * 12).ToString + ' KB';
-              type3DModelDynamic: Result := (vertexCount * 1 + triangleCount * 12).ToString + ' KB';
-              type3DModelModification: Result := 'Check Source Mdl';
+              type3DModelStatic: Result := ((vertexCount * 44 + triangleCount * 12) div 1024).ToString + ' KB';
+              type3DModelDynamic: Result := ((vertexCount * 68 + triangleCount * 12) div 1024).ToString + ' KB';
+              type3DModelModification: Result := 'Same As Base';
          end;
        end else begin
          if prop.StartsWith('MATERIAL') then

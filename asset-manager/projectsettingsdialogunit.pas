@@ -97,7 +97,7 @@ begin
   end;
   for row := 0 to fileLoader.GetRowCount - 1 do
       //ProjectSettings.Add(fileLoader.GetValue(row, 0), fileLoader.GetValue(row, 1));
-      SetSetting(fileLoader.GetValue(row, 0), fileLoader.GetValue(row, 1));
+      SetSetting(fileLoader.GetValue(row, 0), fileLoader.GetValue(row, 1).Replace('''''', '"'));
   fileLoader.Free;
 end;
 

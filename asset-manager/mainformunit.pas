@@ -2,6 +2,14 @@ unit MainFormUnit;
 
 {$mode objfpc}{$H+}
 
+
+// List of stuff to do:
+// - Move database saving and loading
+//   - Either into a seperate file or into data library
+// - Add asset source tracking
+// - Add asset author tracking
+// - Move settings and parameters into datalib
+
 interface
 
 uses
@@ -11,7 +19,7 @@ uses
   RefreshNewFileDialogUnit, RefreshMissingFileDialogUnit,
   RefreshChangeFileDialogUnit, LCLType, LCLIntf, IniPropStorage, FileUtil,
   ImportFileDialogUnit, MetadataStaticModelUnit, AboutDialogUnit,
-  MetadataDynamicModelUnit, MetadataModificationModelUnit,
+  MetadataDynamicModelUnit, MetadataModificationModelUnit, ProcessQueue,
   PreferencesDialogUnit, ProjectSettingsDialogUnit;
 
 type
@@ -43,6 +51,7 @@ type
     About: TMenuItem;
     ImportAsset: TMenuItem;
     Compile: TMenuItem;
+    StartProcessQueue: TMenuItem;
     OpenLanguageEditor: TMenuItem;
     OpenMaterialEditor: TMenuItem;
     ProjectSettings: TMenuItem;
@@ -70,6 +79,7 @@ type
     procedure AssetDeleteClick(Sender: TObject);
     procedure AssetEditClick(Sender: TObject);
     procedure AssetIgnoreModifiedChange(Sender: TObject);
+    procedure AssetProcessClick(Sender: TObject);
     procedure AssetShowDirectoryClick(Sender: TObject);
     procedure FilterButtonClick(Sender: TObject);
     procedure FilterClearClick(Sender: TObject);
@@ -86,6 +96,8 @@ type
     procedure ProjectSettingsClick(Sender: TObject);
     procedure QuitClick(Sender: TObject);
     procedure SaveDBClick(Sender: TObject);
+    procedure ShowDirectoryClick(Sender: TObject);
+    procedure StartProcessQueueClick(Sender: TObject);
     procedure StringGridAfterSelection(Sender: TObject; {%H-}aCol, {%H-}aRow: Integer);
     procedure SetSelectedAsset(asset: TAssetMetadata);
   private
@@ -528,28 +540,59 @@ begin
   FilterButton.Click;
 end;
 
+procedure ExtractCommandline(path : string; out command: string; out params : string);
+begin
+  command := path.Trim(' ');
+  if command.StartsWith('"') then begin
+    command := command.Substring(1);
+    params := command.Substring(command.IndexOf('"') + 1);
+    command := command.Substring(0, command.IndexOf('"'));
+  end else begin
+    params := command.Substring(command.IndexOf(' '));
+    command := command.Substring(0, command.IndexOf(' '));
+  end;
+end;
+
 procedure TMainForm.AssetEditClick(Sender: TObject);
 var
   path: string;
+  command: string;
+  parameters: string;
 begin
   path := selectedAsset.GetPath;
+  // TODO: add windows check
   path := path.Replace('/', '\');
-  ExecuteProcess('explorer.exe', path, []);
+
+  ExtractCommandline(GetPreference('OPEN_FILE'), command, parameters);
+  parameters := parameters.Replace('%path', path);
+
+  ExecuteProcess(command, parameters, []);
 end;
 
 procedure TMainForm.AssetShowDirectoryClick(Sender: TObject);
 var
   path: string;
+  command: string;
+  parameters: string;
 begin
   path := selectedAsset.GetPath;
-  //path := path.Substring(0, path.LastIndexOf('/'));
+  // TODO: add windows check
   path := path.Replace('/', '\');
-  ExecuteProcess('explorer.exe', '/select,' + path, []);
+
+  ExtractCommandline(GetPreference('SHOW_IN_DIRECTORY'), command, parameters);
+  parameters := parameters.Replace('%path', path);
+
+  ExecuteProcess(command, parameters, []);
 end;
 
 procedure TMainForm.AssetIgnoreModifiedChange(Sender: TObject);
 begin
   selectedAsset.SetIgnoreModified(MainForm.AssetIgnoreModified.Checked);
+end;
+
+procedure TMainForm.AssetProcessClick(Sender: TObject);
+begin
+  if selectedAsset <> nil then AddToQueue(selectedAsset);
 end;
 
 procedure TMainForm.LoadDBClick(Sender: TObject);
@@ -592,6 +635,23 @@ begin
                              asset.GetName,
                              asset.GetDateOnDisk.ToString]);
   databaseFile.Free;
+end;
+
+procedure TMainForm.ShowDirectoryClick(Sender: TObject);
+var
+  command: string;
+  parameters: string;
+begin
+  ExtractCommandline(GetPreference('OPEN_DIRECTORY'), command, parameters);
+  // TODO: add windows check
+  parameters := parameters.Replace('%path', '.\');
+
+  ExecuteProcess(command, parameters, []);
+end;
+
+procedure TMainForm.StartProcessQueueClick(Sender: TObject);
+begin
+  ProcessQueueSync;
 end;
 
 procedure TMainForm.StringGridAfterSelection(Sender: TObject; aCol,

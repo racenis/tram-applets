@@ -14,7 +14,7 @@ uses
   RefreshChangeFileDialogUnit, RefreshMissingFileDialogUnit,
   ImportFileDialogUnit, MetadataStaticModelUnit, MetadataDynamicModelUnit,
   MetadataModificationModelUnit, AboutDialogUnit, PreferencesDialogUnit,
-  ProjectSettingsDialogUnit
+  ProjectSettingsDialogUnit, ProcessQueue, AssetQueueDialogUnit
   { you can add units after this };
 
 {$R *.res}
@@ -31,6 +31,7 @@ begin
   Application.CreateForm(TAboutDialog, AboutDialog);
   Application.CreateForm(TPreferencesDialog, PreferencesDialog);
   Application.CreateForm(TProjectSettingsDialog, ProjectSettingsDialog);
+  Application.CreateForm(TAssetQueueDialog, AssetQueueDialog);
   Application.Run;
 end.
 

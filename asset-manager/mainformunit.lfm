@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 431
+  Left = 82
   Height = 581
-  Top = 249
+  Top = 459
   Width = 800
   AllowDropFiles = True
   BorderStyle = bsSingle
@@ -191,6 +191,7 @@ object MainForm: TMainForm
       Width = 107
       Caption = 'Process'
       TabOrder = 7
+      OnClick = AssetProcessClick
     end
     object AssetMove: TButton
       Left = 8
@@ -255,6 +256,10 @@ object MainForm: TMainForm
         ShortCut = 16463
         OnClick = ImportAssetClick
       end
+      object StartProcessQueue: TMenuItem
+        Caption = 'StartProcessQueue'
+        OnClick = StartProcessQueueClick
+      end
     end
     object Project: TMenuItem
       Caption = 'Project'
@@ -269,6 +274,7 @@ object MainForm: TMainForm
       end
       object ShowDirectory: TMenuItem
         Caption = 'Show in Explorer'
+        OnClick = ShowDirectoryClick
       end
       object Separator5: TMenuItem
         Caption = '-'

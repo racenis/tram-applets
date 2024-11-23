@@ -53,8 +53,6 @@ begin
   ShowInDirectory.Text := GetPreference('SHOW_IN_DIRECTORY');
   OpenDirectory.Text := GetPreference('OPEN_DIRECTORY');
   OpenFile.Text := GetPreference('OPEN_FILE');
-
-  // set in defaults
 end;
 
 procedure TPreferencesDialog.Depopulate;
@@ -83,6 +81,19 @@ begin
   Result := GetPreferenceDirectory + 'asset-manager.cfg';
 end;
 
+procedure SetDefault(pref: string; val: string);
+begin
+  if GetPreference(pref) = '' then SetPreference(pref, val);
+end;
+
+// TODO: figure out what defaults should be for UNIX
+procedure SetDefaults;
+begin
+  SetDefault('SHOW_IN_DIRECTORY', 'explorer.exe /select,%path');
+  SetDefault('OPEN_DIRECTORY', 'explorer.exe %path');
+  SetDefault('OPEN_FILE', 'explorer.exe %path');
+end;
+
 procedure LoadPreferences;
 var
   fileLoader: TAssetParser;
@@ -97,7 +108,7 @@ begin
     Exit;
   end;
   for row := 0 to fileLoader.GetRowCount - 1 do
-      SetPreference(fileLoader.GetValue(row, 0), fileLoader.GetValue(row, 1));
+      SetPreference(fileLoader.GetValue(row, 0), fileLoader.GetValue(row, 1).Replace('''''', '"'));
   fileLoader.Free;
 end;
 
@@ -126,6 +137,7 @@ end;
 procedure TPreferencesDialog.SaveClick(Sender: TObject);
 begin
   Depopulate;
+  SetDefaults;
   SavePreferences;
   self.Close;
 end;
@@ -158,6 +170,7 @@ end;
 initialization
 begin
   LoadPreferences;
+  SetDefaults;
 end;
 
 end.

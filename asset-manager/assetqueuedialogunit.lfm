@@ -1,0 +1,74 @@
+object AssetQueueDialog: TAssetQueueDialog
+  Left = 466
+  Height = 140
+  Top = 253
+  Width = 320
+  BorderIcons = [biMinimize, biMaximize]
+  BorderStyle = bsDialog
+  Caption = 'Processing...'
+  ClientHeight = 140
+  ClientWidth = 320
+  OnShow = FormShow
+  LCLVersion = '3.0.0.3'
+  object ProgressBar: TProgressBar
+    Left = 8
+    Height = 20
+    Top = 112
+    Width = 300
+    TabOrder = 0
+  end
+  object AssetName: TLabel
+    Left = 8
+    Height = 14
+    Top = 8
+    Width = 147
+    Caption = 'Waiting to process...'
+    Font.CharSet = BALTIC_CHARSET
+    Font.Name = 'Courier New'
+    Font.Pitch = fpFixed
+    Font.Quality = fqDraft
+    ParentFont = False
+  end
+  object OutputText: TMemo
+    Left = 8
+    Height = 72
+    Top = 32
+    Width = 300
+    Font.CharSet = BALTIC_CHARSET
+    Font.Name = 'Courier New'
+    Font.Pitch = fpFixed
+    Font.Quality = fqDraft
+    ParentFont = False
+    ReadOnly = True
+    ScrollBars = ssVertical
+    TabOrder = 1
+  end
+  object CloseDialog: TButton
+    Left = 233
+    Height = 17
+    Top = 8
+    Width = 75
+    Caption = 'Close'
+    TabOrder = 2
+    Visible = False
+    OnClick = CloseDialogClick
+  end
+  object AssetProcessor: TAsyncProcess
+    Active = False
+    Options = []
+    Priority = ppNormal
+    StartupOptions = []
+    ShowWindow = swoNone
+    WindowColumns = 0
+    WindowHeight = 0
+    WindowLeft = 0
+    WindowRows = 0
+    WindowTop = 0
+    WindowWidth = 0
+    FillAttribute = 0
+    OnReadData = AssetProcessorReadData
+    OnTerminate = AssetProcessorTerminate
+    Left = 32
+    Top = 48
+  end
+end

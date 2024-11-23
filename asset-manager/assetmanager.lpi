@@ -130,8 +130,21 @@
         <Filename Value="projectsettingsdialogunit.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ProjectSettingsDialog"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="ProjectSettingsDialogUnit"/>
+      </Unit>
+      <Unit>
+        <Filename Value="processqueue.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ProcessQueue"/>
+      </Unit>
+      <Unit>
+        <Filename Value="assetqueuedialogunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="AssetQueueDialog"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="AssetQueueDialogUnit"/>
       </Unit>
     </Units>
   </ProjectOptions>
