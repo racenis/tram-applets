@@ -19,8 +19,15 @@ object MainForm: TMainForm
     Height = 20
     Top = 561
     Width = 800
-    Panels = <>
+    Panels = <    
+      item
+        Width = 600
+      end    
+      item
+        Width = 100
+      end>
     SimpleText = 'Hello!'
+    SimplePanel = False
   end
   object StringGrid: TStringGrid
     Left = 0
@@ -256,8 +263,52 @@ object MainForm: TMainForm
         ShortCut = 16463
         OnClick = ImportAssetClick
       end
+      object ExportAsset: TMenuItem
+        Caption = 'Export'
+        Enabled = False
+      end
+      object Separator7: TMenuItem
+        Caption = '-'
+      end
+      object ShowInExplorer: TMenuItem
+        Caption = 'Show In Explorer'
+        OnClick = ShowInExplorerClick
+      end
+      object Separator10: TMenuItem
+        Caption = '-'
+      end
+      object AddToQueue: TMenuItem
+        Caption = 'Add to Queue'
+        OnClick = AddToQueueClick
+      end
+      object AddToAsyncQueue: TMenuItem
+        Caption = 'Process Now'
+        Enabled = False
+      end
+      object Separator8: TMenuItem
+        Caption = '-'
+      end
+      object ViewAsset: TMenuItem
+        Caption = 'View'
+        OnClick = ViewAssetClick
+      end
+      object EditAsset: TMenuItem
+        Caption = 'Edit'
+        OnClick = EditAssetClick
+      end
+      object MoveAsset: TMenuItem
+        Caption = 'Move'
+        OnClick = MoveAssetClick
+      end
+      object RemoveAsset: TMenuItem
+        Caption = 'Delete'
+        OnClick = RemoveAssetClick
+      end
+      object Separator9: TMenuItem
+        Caption = '-'
+      end
       object StartProcessQueue: TMenuItem
-        Caption = 'StartProcessQueue'
+        Caption = 'Process Queue'
         OnClick = StartProcessQueueClick
       end
     end

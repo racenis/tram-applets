@@ -51,6 +51,18 @@ type
     About: TMenuItem;
     ImportAsset: TMenuItem;
     Compile: TMenuItem;
+    ExportAsset: TMenuItem;
+    EditAsset: TMenuItem;
+    AddToQueue: TMenuItem;
+    AddToAsyncQueue: TMenuItem;
+    Separator10: TMenuItem;
+    ShowInExplorer: TMenuItem;
+    RemoveAsset: TMenuItem;
+    MoveAsset: TMenuItem;
+    Separator7: TMenuItem;
+    Separator8: TMenuItem;
+    Separator9: TMenuItem;
+    ViewAsset: TMenuItem;
     StartProcessQueue: TMenuItem;
     OpenLanguageEditor: TMenuItem;
     OpenMaterialEditor: TMenuItem;
@@ -75,12 +87,14 @@ type
     StatusBar: TStatusBar;
     StringGrid: TStringGrid;
     procedure AboutClick(Sender: TObject);
+    procedure AddToQueueClick(Sender: TObject);
     procedure AssetAlwaysProcessChange(Sender: TObject);
     procedure AssetDeleteClick(Sender: TObject);
     procedure AssetEditClick(Sender: TObject);
     procedure AssetIgnoreModifiedChange(Sender: TObject);
     procedure AssetProcessClick(Sender: TObject);
     procedure AssetShowDirectoryClick(Sender: TObject);
+    procedure EditAssetClick(Sender: TObject);
     procedure FilterButtonClick(Sender: TObject);
     procedure FilterClearClick(Sender: TObject);
     procedure FilterNameKeyDown(Sender: TObject; var Key: Word;
@@ -92,14 +106,19 @@ type
     procedure ImportAssetClick(Sender: TObject);
     procedure ImportClick(Sender: TObject);
     procedure LoadDBClick(Sender: TObject);
+    procedure MoveAssetClick(Sender: TObject);
     procedure PreferencesClick(Sender: TObject);
     procedure ProjectSettingsClick(Sender: TObject);
     procedure QuitClick(Sender: TObject);
+    procedure RemoveAssetClick(Sender: TObject);
     procedure SaveDBClick(Sender: TObject);
     procedure ShowDirectoryClick(Sender: TObject);
+    procedure ShowInExplorerClick(Sender: TObject);
     procedure StartProcessQueueClick(Sender: TObject);
     procedure StringGridAfterSelection(Sender: TObject; {%H-}aCol, {%H-}aRow: Integer);
     procedure SetSelectedAsset(asset: TAssetMetadata);
+    procedure ResetStatusBar;
+    procedure ViewAssetClick(Sender: TObject);
   private
     metadataPropertyFrame: TFrame;
   public
@@ -126,23 +145,14 @@ implementation
 
 procedure LoadDatabaseFromFile;
 var
-  asset: TAssetMetadata;
-
-  newAssets: array of TAssetMetadata;
-  modifiedAssets: array of TAssetMetadata;
-  removedAssets: array of TAssetMetadata;
-
   databaseFile: TAssetParser;
   databaseRecord: array of string;
-begin
-  newAssets := [];
-  modifiedAssets := [];
-  removedAssets := [];
 
+  asset: TAssetMetadata;
+begin
+  databaseFile := TAssetParser.Create('asset.db');
   asset := nil;
 
-  // load in database file
-  databaseFile := TAssetParser.Create('asset.db');
   if not databaseFile.IsOpen then
      ShowMessage('Database file not found!')
   else
@@ -155,6 +165,21 @@ begin
                                               databaseRecord[1],
                                               databaseRecord[2].ToInteger);
   databaseFile.Free;
+end;
+
+procedure RefreshDatabase;
+var
+  asset: TAssetMetadata;
+
+  newAssets: array of TAssetMetadata;
+  modifiedAssets: array of TAssetMetadata;
+  removedAssets: array of TAssetMetadata;
+begin
+  newAssets := [];
+  modifiedAssets := [];
+  removedAssets := [];
+
+  asset := nil;
 
   // check what files exist on disk
   database.ScanFromDisk;
@@ -297,17 +322,40 @@ begin
   selectedAsset := asset;
 end;
 
+procedure TMainForm.ResetStatusBar;
+begin
+  WriteLn('This is from callback.');
+  WriteLn(GetQueueLength);
+
+  if GetQueueLength > 0 then
+     StatusBar.Panels[0].Text := 'Items waiting in queue.'
+  else
+     StatusBar.Panels[0].Text := 'Ready.';
+
+  StatusBar.Panels[1].Text := 'Asset processing queue length: ' + GetQueueLength.ToString;
+end;
+
+procedure TMainForm.ViewAssetClick(Sender: TObject);
+begin
+  AssetEdit.Click;
+end;
+
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   metadataPropertyFrame := nil;
 
+  SetQueueCallback(@ResetStatusBar);
+
   LoadDatabaseFromFile;
+  RefreshDatabase;
   PopulateAssetList;
 
   Caption := GetSetting('PROJECT_NAME');
   if Caption = '' then
      Caption := 'Untitled';
   Caption := Caption + ' - Tramway SDK Asset Manager';
+
+  ResetStatusBar;
 end;
 
 function FindImportPaths: TStringList;
@@ -522,27 +570,15 @@ begin
   FreeAndNil(AboutDialog);
 end;
 
-procedure TMainForm.AssetDeleteClick(Sender: TObject);
-var
-  dialogResult: TModalResult;
+procedure TMainForm.AddToQueueClick(Sender: TObject);
 begin
-  dialogResult := MessageDlg('We will delete this asset.',
-                             'The asset "' + selectedAsset.GetName
-                             + '" will be removed from the database. Do you'
-                             + ' want us to remove its file from the disk too?',
-                             mtConfirmation,
-                             [mbYes, mbNo, mbCancel], 0);
-  case dialogResult of
-      mrYes: DeleteFile(selectedAsset.GetPath);
-      mrNo: ;
-      mrCancel: Exit;
-  end;
 
-  selectedAsset.Remove;
-  //selectedAsset := nil;
-  SetSelectedAsset(nil);
-  SharedProperty.Enabled := False;
-  FilterButton.Click;
+end;
+
+procedure TMainForm.AssetDeleteClick(Sender: TObject);
+
+begin
+
 end;
 
 procedure ExtractCommandline(path : string; out command: string; out params : string);
@@ -580,6 +616,12 @@ var
   command: string;
   parameters: string;
 begin
+  if selectedAsset = nil then begin
+    StatusBar.Panels[0].Text := 'No asset selected. Please select an asset.';
+    Exit;
+  end else
+    self.ResetStatusBar;
+
   path := selectedAsset.GetPath;
   // TODO: add windows check
   path := path.Replace('/', '\');
@@ -590,6 +632,11 @@ begin
   ExecuteProcess(command, parameters, []);
 end;
 
+procedure TMainForm.EditAssetClick(Sender: TObject);
+begin
+  AssetEdit.Click;
+end;
+
 procedure TMainForm.AssetIgnoreModifiedChange(Sender: TObject);
 begin
   selectedAsset.SetIgnoreModified(MainForm.AssetIgnoreModified.Checked);
@@ -597,13 +644,19 @@ end;
 
 procedure TMainForm.AssetProcessClick(Sender: TObject);
 begin
-  if selectedAsset <> nil then AddToQueue(selectedAsset);
+  //if selectedAsset <> nil then AddToQueue(selectedAsset);
 end;
 
 procedure TMainForm.LoadDBClick(Sender: TObject);
 begin
-  LoadDatabaseFromFile;
+  //LoadDatabaseFromFile;
+  RefreshDatabase;
   RefreshAssetList;
+end;
+
+procedure TMainForm.MoveAssetClick(Sender: TObject);
+begin
+  AssetShowDirectory.Click;
 end;
 
 procedure TMainForm.PreferencesClick(Sender: TObject);
@@ -621,6 +674,29 @@ end;
 procedure TMainForm.QuitClick(Sender: TObject);
 begin
   self.Close;
+end;
+
+procedure TMainForm.RemoveAssetClick(Sender: TObject);
+var
+  dialogResult: TModalResult;
+begin
+  dialogResult := MessageDlg('We will delete this asset.',
+                             'The asset "' + selectedAsset.GetName
+                             + '" will be removed from the database. Do you'
+                             + ' want us to remove its file from the disk too?',
+                             mtConfirmation,
+                             [mbYes, mbNo, mbCancel], 0);
+  case dialogResult of
+      mrYes: DeleteFile(selectedAsset.GetPath);
+      mrNo: ;
+      mrCancel: Exit;
+  end;
+
+  selectedAsset.Remove;
+  //selectedAsset := nil;
+  SetSelectedAsset(nil);
+  SharedProperty.Enabled := False;
+  FilterButton.Click;
 end;
 
 procedure TMainForm.SaveDBClick(Sender: TObject);
@@ -656,6 +732,11 @@ begin
   parameters := parameters.Replace('%path', '.\');
 
   ExecuteProcess(command, parameters, []);
+end;
+
+procedure TMainForm.ShowInExplorerClick(Sender: TObject);
+begin
+  AssetShowDirectory.Click;
 end;
 
 procedure TMainForm.StartProcessQueueClick(Sender: TObject);

@@ -8,24 +8,39 @@ uses
   Classes, SysUtils, Dialogs, Process, TramAssetMetadata, AssetQueueDialogUnit,
   ProjectSettingsDialogUnit, Character;
 
+type
+  TQueueCallback = Procedure of object;
+
 procedure AddToQueue(asset: TAssetMetadata);
 procedure ProcessQueueSync();
 function GetQueueLength: Integer;
+procedure SetQueueCallback(callback: TQueueCallback);
+
 
 implementation
 
 var
    assetQueue: array of TAssetMetadata = nil;
+   assetQueueCallback: TQueueCallback = nil;
+
 
 procedure AddToQueue(asset: TAssetMetadata);
 begin
   SetLength(assetQueue, Length(assetQueue) + 1);
   assetQueue[High(assetQueue)] := asset;
+
+  if assetQueueCallback <> nil then
+     assetQueueCallback;
 end;
 
 function GetQueueLength: Integer;
 begin
   Result := Length(assetQueue);
+end;
+
+procedure SetQueueCallback(callback: TQueueCallback);
+begin
+  assetQueueCallback := callback;
 end;
 
 type
@@ -102,6 +117,29 @@ begin
   end;
 
 end;
+
+// TODO: thread safety
+
+// calling widget functions, like appending text and progressbar setting is not
+// very good. they should only happen from main thread.
+// look into using SendMessage()/PostMessage() functions.
+// also writing and reading from database assets is not that safe
+// basically, what what we should do is:
+// 1. generate a list of commands to call
+// 2. start a new thread and give it these commands
+// 3. listen for messages and events from the thread
+// 4. update widgets as progress messages come in
+// 5. receive a report from the thread containing failed/successful commands
+// 6. update the database from this report
+
+// TODO: alternative background processing
+
+// we could create a seperate async queue. it would be possible to add stuff to
+// the async queue. after stuff is added to the queue, it would start up and
+// it would process similarly to normal queue, except there would be no dialog.
+// also all outputs could be saved in case there is an error.
+// when all processing completes, a message box would pop up. if there were
+// errors in processing, outputs from those programs would be displayed
 
 procedure TAssetProcessThread.Execute;
 const
@@ -211,6 +249,8 @@ begin
   AssetQueueDialog.ShowModal;
 
   SetLength(assetQueue, 0);
+
+  assetQueueCallback;
 end;
 
 initialization
