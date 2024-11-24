@@ -98,7 +98,6 @@ begin
       if IsWhiteSpace(path[index]) then begin
          if state = stateNormal then begin
            state := stateWhitespace;
-           WriteLn('Parsed off: ', token);
            SetLength(Result, Length(Result) + 1);
            Result[High(Result)] := token;
            token := '';
@@ -150,29 +149,30 @@ var
   byteBuffer: array[1..BUF_SIZE] of Byte;
   outputString: string;
   asset: TAssetMetadata;
-  progressIncrement: Integer;
   currentProgress: Integer;
   targetProgress: Integer;
   failures: Integer;
+  processed: Integer;
 
   executionFailed: Boolean;
   command: string;
   splitCommand: TStringArray;
   parm: Integer;
 begin
-  progressIncrement := 100 div Length(assetQueue);
   currentProgress := 0;
   targetProgress := 0;
 
   failures := 0;
+  processed := 0;
 
   for asset in assetQueue do
   begin
     process := TProcess.Create(nil);
 
     // update progress bar value
+    processed := processed + 1;
     currentProgress := targetProgress;
-    targetProgress := targetProgress + progressIncrement;
+    targetProgress := (100 * processed) div Length(assetQueue);
 
     // update dialog caption
     AssetQueueDialog.Caption := 'Processing... ' + asset.GetName;

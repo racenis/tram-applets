@@ -1,7 +1,7 @@
 object AssetQueueDialog: TAssetQueueDialog
   Left = 319
   Height = 240
-  Top = 110
+  Top = 111
   Width = 480
   BorderIcons = [biMinimize, biMaximize]
   BorderStyle = bsDialog
@@ -9,6 +9,7 @@ object AssetQueueDialog: TAssetQueueDialog
   ClientHeight = 240
   ClientWidth = 480
   OnShow = FormShow
+  Position = poMainFormCenter
   LCLVersion = '3.0.0.3'
   object ProgressBar: TProgressBar
     Left = 8
