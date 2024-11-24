@@ -155,6 +155,7 @@ var
   targetProgress: Integer;
   failures: Integer;
 
+  executionFailed: Boolean;
   command: string;
   splitCommand: TStringArray;
   parm: Integer;
@@ -169,10 +170,15 @@ begin
   begin
     process := TProcess.Create(nil);
 
+    // update progress bar value
+    currentProgress := targetProgress;
+    targetProgress := targetProgress + progressIncrement;
 
+    // update dialog caption
     AssetQueueDialog.Caption := 'Processing... ' + asset.GetName;
     AssetQueueDialog.AssetName.Caption := 'Processing... ' + asset.GetName;
 
+    // prepare the command
     case asset.GetType of
          'STMDL': command := GetSetting('TMAP_COMMAND')
                                .Replace('%model', asset.GetName)
@@ -200,23 +206,29 @@ begin
 
     process.Options := [poUsePipes];
 
-    process.Execute;
+    // try running the command
+    executionFailed := True;
+    try
+      process.Execute;
 
-    currentProgress := targetProgress;
-    targetProgress := targetProgress + progressIncrement;
+      repeat
+        bytesRead := process.Output.Read(byteBuffer, BUF_SIZE);
+        SetString(outputString, PAnsiChar(@byteBuffer[1]), bytesRead);
+        AssetQueueDialog.AppendText(outputString.Trim);
 
-    repeat
-      bytesRead := process.Output.Read(byteBuffer, BUF_SIZE);
-      SetString(outputString, PAnsiChar(@byteBuffer[1]), bytesRead);
-      AssetQueueDialog.AppendText(outputString.Trim);
+        if currentProgress < targetProgress then
+           currentProgress := currentProgress + 1;
+        AssetQueueDialog.SetProgressBar(currentProgress);
+      until bytesRead = 0;
 
-      if currentProgress < targetProgress then
-         currentProgress := currentProgress + 1;
-      AssetQueueDialog.SetProgressBar(currentProgress);
+      executionFailed := False;
+    except
+      on E : Exception do ShowMessage('An error occured when trying to convert'
+                       + ' asset ' + asset.GetPath + ', with a message of:'
+                       + #10#10 + E.ToString);
+    end;
 
-    until bytesRead = 0;
-
-    if process.ExitCode <> 0 then
+    if executionFailed or (process.ExitCode <> 0) then
        failures := failures + 1
     else
       asset.ResetBothDates;

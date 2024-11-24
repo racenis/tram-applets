@@ -29,9 +29,6 @@ type
   TMainForm = class(TForm)
     AssetEdit: TButton;
     AssetShowDirectory: TButton;
-    AssetProcess: TButton;
-    AssetDelete: TButton;
-    AssetMove: TButton;
     CheckBox1: TCheckBox;
     AssetType: TEdit;
     AssetName: TEdit;
@@ -53,8 +50,16 @@ type
     Compile: TMenuItem;
     ExportAsset: TMenuItem;
     EditAsset: TMenuItem;
-    AddToQueue: TMenuItem;
+    AddAssetToQueue: TMenuItem;
     AddToAsyncQueue: TMenuItem;
+    PopupProcess: TMenuItem;
+    PopUpQueue: TMenuItem;
+    PopupMove: TMenuItem;
+    PopupRemove: TMenuItem;
+    Separator11: TMenuItem;
+    PopupView: TMenuItem;
+    PopupEdit: TMenuItem;
+    StringGridPopupMenu: TPopupMenu;
     Separator10: TMenuItem;
     ShowInExplorer: TMenuItem;
     RemoveAsset: TMenuItem;
@@ -87,12 +92,11 @@ type
     StatusBar: TStatusBar;
     StringGrid: TStringGrid;
     procedure AboutClick(Sender: TObject);
-    procedure AddToQueueClick(Sender: TObject);
+    procedure AddAssetToQueueClick(Sender: TObject);
     procedure AssetAlwaysProcessChange(Sender: TObject);
     procedure AssetDeleteClick(Sender: TObject);
     procedure AssetEditClick(Sender: TObject);
     procedure AssetIgnoreModifiedChange(Sender: TObject);
-    procedure AssetProcessClick(Sender: TObject);
     procedure AssetShowDirectoryClick(Sender: TObject);
     procedure EditAssetClick(Sender: TObject);
     procedure FilterButtonClick(Sender: TObject);
@@ -107,6 +111,12 @@ type
     procedure ImportClick(Sender: TObject);
     procedure LoadDBClick(Sender: TObject);
     procedure MoveAssetClick(Sender: TObject);
+    procedure PopupEditClick(Sender: TObject);
+    procedure PopupMoveClick(Sender: TObject);
+    procedure PopupProcessClick(Sender: TObject);
+    procedure PopUpQueueClick(Sender: TObject);
+    procedure PopupRemoveClick(Sender: TObject);
+    procedure PopupViewClick(Sender: TObject);
     procedure PreferencesClick(Sender: TObject);
     procedure ProjectSettingsClick(Sender: TObject);
     procedure QuitClick(Sender: TObject);
@@ -119,6 +129,7 @@ type
     procedure SetSelectedAsset(asset: TAssetMetadata);
     procedure ResetStatusBar;
     procedure ViewAssetClick(Sender: TObject);
+    function AssetSelected: Boolean;
   private
     metadataPropertyFrame: TFrame;
   public
@@ -163,7 +174,14 @@ begin
             else
                asset := database.InsertFromDB(databaseRecord[0],
                                               databaseRecord[1],
-                                              databaseRecord[2].ToInteger);
+                                              databaseRecord[2].ToInteger)
+         else if Length(databaseRecord) = 2 then
+              if databaseRecord[0] = 'FLAG' then
+                 if databaseRecord[1] = 'ALWAYS_PROCESS' then
+                    asset.SetAlwaysProcess(True)
+                 else if databaseRecord[1] = 'IGNORE_MODIFIED' then
+                    asset.SetIgnoreModified(True);
+
   databaseFile.Free;
 end;
 
@@ -191,7 +209,10 @@ begin
       else if asset.GetDateOnDisk = 0 then
          removedAssets := Concat(removedAssets, [asset])
       else if asset.GetDateInDB < asset.GetDateOnDisk then
-         modifiedAssets := Concat(modifiedAssets, [asset])
+         if asset.GetAlwaysProcess then
+            AddToQueue(asset)
+         else if not asset.GetIgnoreModified then
+            modifiedAssets := Concat(modifiedAssets, [asset])
       else if asset.GetDateInDB <> asset.GetDateOnDisk then
          ShowMessage('Asset ' + asset.GetName + ' has a date of '
                             + FormatDateTime('yyyy-mm-dd hh:nn:ss',
@@ -219,9 +240,6 @@ begin
 
   if Length(modifiedAssets) > 0 then
   begin
-    // TODO: check which assets are set to auto-convert
-    // - those that can auto-convert should be queued for conversion and removed
-    // - those that are ignored for conversion should be just removed from list
     RefreshChangeFileDialog := TRefreshChangeFileDialog.Create(MainForm, modifiedAssets);
     RefreshChangeFileDialog.ShowModal;
     FreeAndNil(RefreshChangeFileDialog);
@@ -324,9 +342,6 @@ end;
 
 procedure TMainForm.ResetStatusBar;
 begin
-  WriteLn('This is from callback.');
-  WriteLn(GetQueueLength);
-
   if GetQueueLength > 0 then
      StatusBar.Panels[0].Text := 'Items waiting in queue.'
   else
@@ -338,6 +353,18 @@ end;
 procedure TMainForm.ViewAssetClick(Sender: TObject);
 begin
   AssetEdit.Click;
+end;
+
+function TMainForm.AssetSelected: Boolean;
+begin
+  if selectedAsset = nil then begin
+    StatusBar.Panels[0].Text := 'No asset selected. Please select an asset.';
+    Exit(False);
+  end;
+
+  ResetStatusBar;
+
+  Result := True;
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
@@ -419,10 +446,6 @@ begin
 
   StrPCopy(sourceAnsi, source);
   StrPCopy(targetAnsi, target);
-
-  WriteLn(targetAnsi);
-    WriteLn(sourceAnsi);
-
 
   if CreateSymbolicLinkA(targetAnsi, sourceAnsi, 0) = False then
      ShowMessage('Error creating a symlink from ' + sourceAnsi + ' to ' + targetAnsi);
@@ -563,6 +586,11 @@ begin
   selectedAsset.SetAlwaysProcess(MainForm.AssetAlwaysProcess.Checked);
 end;
 
+procedure TMainForm.AssetDeleteClick(Sender: TObject);
+begin
+
+end;
+
 procedure TMainForm.AboutClick(Sender: TObject);
 begin
   AboutDialog := TAboutDialog.Create(self);
@@ -570,16 +598,13 @@ begin
   FreeAndNil(AboutDialog);
 end;
 
-procedure TMainForm.AddToQueueClick(Sender: TObject);
+procedure TMainForm.AddAssetToQueueClick(Sender: TObject);
 begin
-
+  if not AssetSelected then Exit;
+  AddToQueue(selectedAsset);
 end;
 
-procedure TMainForm.AssetDeleteClick(Sender: TObject);
 
-begin
-
-end;
 
 procedure ExtractCommandline(path : string; out command: string; out params : string);
 begin
@@ -616,11 +641,7 @@ var
   command: string;
   parameters: string;
 begin
-  if selectedAsset = nil then begin
-    StatusBar.Panels[0].Text := 'No asset selected. Please select an asset.';
-    Exit;
-  end else
-    self.ResetStatusBar;
+  if not AssetSelected then Exit;
 
   path := selectedAsset.GetPath;
   // TODO: add windows check
@@ -642,10 +663,9 @@ begin
   selectedAsset.SetIgnoreModified(MainForm.AssetIgnoreModified.Checked);
 end;
 
-procedure TMainForm.AssetProcessClick(Sender: TObject);
-begin
-  //if selectedAsset <> nil then AddToQueue(selectedAsset);
-end;
+
+
+
 
 procedure TMainForm.LoadDBClick(Sender: TObject);
 begin
@@ -657,6 +677,36 @@ end;
 procedure TMainForm.MoveAssetClick(Sender: TObject);
 begin
   AssetShowDirectory.Click;
+end;
+
+procedure TMainForm.PopupEditClick(Sender: TObject);
+begin
+  EditAsset.Click;
+end;
+
+procedure TMainForm.PopupMoveClick(Sender: TObject);
+begin
+  MoveAsset.Click;
+end;
+
+procedure TMainForm.PopupProcessClick(Sender: TObject);
+begin
+  AddToAsyncQueue.Click;
+end;
+
+procedure TMainForm.PopUpQueueClick(Sender: TObject);
+begin
+  AddAssetToQueue.Click;
+end;
+
+procedure TMainForm.PopupRemoveClick(Sender: TObject);
+begin
+  RemoveAsset.Click;
+end;
+
+procedure TMainForm.PopupViewClick(Sender: TObject);
+begin
+  ViewAsset.Click;
 end;
 
 procedure TMainForm.PreferencesClick(Sender: TObject);
@@ -750,7 +800,7 @@ var
   row: Integer;
 begin
   row := MainForm.StringGrid.Selection.Bottom;
-  //selectedAsset := MainForm.StringGrid.Objects[0, row] as TAssetMetadata;
+
   SetSelectedAsset(MainForm.StringGrid.Objects[0, row] as TAssetMetadata);
 
   MainForm.AssetName.Text := selectedAsset.GetName;
@@ -759,13 +809,7 @@ begin
   MainForm.AssetAlwaysProcess.Checked := selectedAsset.GetAlwaysProcess;
   MainForm.AssetIgnoreModified.Checked := selectedAsset.GetIgnoreModified;
 
-  MainForm.AssetAlwaysProcess.Enabled := True;
   MainForm.AssetIgnoreModified.Enabled := not selectedAsset.GetAlwaysProcess;
-
-  // TODO: check which can be deleted
-  MainForm.AssetShowDirectory.Enabled := True;
-  MainForm.AssetEdit.Enabled := True;
-  MainForm.AssetProcess.Enabled := True;
 
   Mainform.SharedProperty.Enabled := True;
 end;

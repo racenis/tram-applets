@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 319
+  Left = 375
   Height = 581
-  Top = 286
+  Top = 214
   Width = 800
   AllowDropFiles = True
   BorderStyle = bsSingle
@@ -40,6 +40,7 @@ object MainForm: TMainForm
     FixedCols = 0
     MouseWheelOption = mwGrid
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowSelect, goSmoothScroll]
+    PopupMenu = StringGridPopupMenu
     RowCount = 1
     ScrollBars = ssVertical
     TabOrder = 1
@@ -157,7 +158,6 @@ object MainForm: TMainForm
       Top = 40
       Width = 166
       Caption = 'Always process when modified'
-      Enabled = False
       TabOrder = 3
       OnChange = AssetAlwaysProcessChange
     end
@@ -167,7 +167,6 @@ object MainForm: TMainForm
       Top = 64
       Width = 124
       Caption = 'Ignore when modified'
-      Enabled = False
       TabOrder = 4
       OnChange = AssetIgnoreModifiedChange
     end
@@ -177,7 +176,6 @@ object MainForm: TMainForm
       Top = 88
       Width = 107
       Caption = 'Show in Explorer'
-      Enabled = False
       TabOrder = 5
       OnClick = AssetShowDirectoryClick
     end
@@ -187,35 +185,8 @@ object MainForm: TMainForm
       Top = 88
       Width = 75
       Caption = 'Edit'
-      Enabled = False
       TabOrder = 6
       OnClick = AssetEditClick
-    end
-    object AssetProcess: TButton
-      Left = 88
-      Height = 25
-      Top = 120
-      Width = 107
-      Caption = 'Process'
-      TabOrder = 7
-      OnClick = AssetProcessClick
-    end
-    object AssetMove: TButton
-      Left = 8
-      Height = 25
-      Top = 120
-      Width = 75
-      Caption = 'Move'
-      TabOrder = 8
-    end
-    object AssetDelete: TButton
-      Left = 8
-      Height = 25
-      Top = 152
-      Width = 75
-      Caption = 'Delete'
-      TabOrder = 9
-      OnClick = AssetDeleteClick
     end
   end
   object MetadataProperty: TPanel
@@ -277,9 +248,9 @@ object MainForm: TMainForm
       object Separator10: TMenuItem
         Caption = '-'
       end
-      object AddToQueue: TMenuItem
+      object AddAssetToQueue: TMenuItem
         Caption = 'Add to Queue'
-        OnClick = AddToQueueClick
+        OnClick = AddAssetToQueueClick
       end
       object AddToAsyncQueue: TMenuItem
         Caption = 'Process Now'
@@ -366,5 +337,36 @@ object MainForm: TMainForm
     Options = [ofAllowMultiSelect, ofEnableSizing, ofViewDetail]
     Left = 416
     Top = 80
+  end
+  object StringGridPopupMenu: TPopupMenu
+    Left = 328
+    Top = 80
+    object PopUpQueue: TMenuItem
+      Caption = 'Add To Queue'
+      OnClick = PopUpQueueClick
+    end
+    object PopupProcess: TMenuItem
+      Caption = 'Process Now'
+      OnClick = PopupProcessClick
+    end
+    object Separator11: TMenuItem
+      Caption = '-'
+    end
+    object PopupView: TMenuItem
+      Caption = 'View'
+      OnClick = PopupViewClick
+    end
+    object PopupEdit: TMenuItem
+      Caption = 'Edit'
+      OnClick = PopupEditClick
+    end
+    object PopupMove: TMenuItem
+      Caption = 'Move'
+      OnClick = PopupMoveClick
+    end
+    object PopupRemove: TMenuItem
+      Caption = 'Remove'
+      OnClick = PopupRemoveClick
+    end
   end
 end
