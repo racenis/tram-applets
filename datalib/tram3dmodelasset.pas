@@ -26,6 +26,8 @@ type
       procedure SetMetadata(const prop: string; value: Variant); override;
       function GetMetadata(const prop: string): Variant; override;
 
+      function GetPropertyList: TAssetPropertyList; override;
+
       procedure LoadMetadata(); override;
   protected
       procedure SetDateInDB(date: Integer);
@@ -49,7 +51,7 @@ type
      constructor Create();
      procedure Clear; override;
      procedure ScanFromDisk; override;
-     procedure InsertFromDB(name: string; date: Integer); override;
+     function InsertFromDB(name: string; date: Integer): TAssetMetadata; override;
      procedure Remove(asset: TAssetMetadata); override;
      function GetAssets: TAssetMetadataArray; override;
   protected
@@ -142,6 +144,16 @@ begin
            Result := mappings[prop.Remove(0, Length('MAPPING_TO')).ToInteger][1]
          else Result := nil;
        end;
+  end;
+end;
+
+function T3DModel.GetPropertyList: TAssetPropertyList;
+begin
+  case (self.modelType) of
+       type3DModelGeneric: Result := [];
+       type3DModelStatic: Result := ['LIGHTMAP_WIDTH', 'LIGHTMAP_HEIGHT'];
+       type3DModelDynamic: Result := [];
+       type3DModelModification: Result := [];
   end;
 end;
 
@@ -294,7 +306,7 @@ begin
   end;
 end;
 
-procedure T3DModelCollection.InsertFromDB(name: string; date: Integer);
+function T3DModelCollection.InsertFromDB(name: string; date: Integer): TAssetMetadata;
 var
   model: T3DModel;
   model_candidate: T3DModel;
@@ -312,7 +324,7 @@ begin
   if model <> nil then
   begin
     model.SetDateInDB(date);
-    Exit;
+    Exit(model);
   end;
 
   modelType := type3DModelGeneric;
@@ -327,6 +339,7 @@ begin
   SetLength(self.models, Length(self.models) + 1);
   self.models[High(self.models)] := model;
 
+  Result := model;
 end;
 
 function T3DModelCollection.GetAssets: TAssetMetadataArray;

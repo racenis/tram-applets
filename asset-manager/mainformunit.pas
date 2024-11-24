@@ -139,6 +139,8 @@ begin
   modifiedAssets := [];
   removedAssets := [];
 
+  asset := nil;
+
   // load in database file
   databaseFile := TAssetParser.Create('asset.db');
   if not databaseFile.IsOpen then
@@ -146,9 +148,12 @@ begin
   else
      for databaseRecord in databaseFile.GetData do
          if Length(databaseRecord) = 3 then
-            database.InsertFromDB(databaseRecord[0],
-                                  databaseRecord[1],
-                                  databaseRecord[2].ToInteger);
+            if databaseRecord[0] = 'PROPERTY' then
+               asset.SetMetadata(databaseRecord[1], databaseRecord[2])
+            else
+               asset := database.InsertFromDB(databaseRecord[0],
+                                              databaseRecord[1],
+                                              databaseRecord[2].ToInteger);
   databaseFile.Free;
 
   // check what files exist on disk
@@ -622,6 +627,7 @@ procedure TMainForm.SaveDBClick(Sender: TObject);
 var
   databaseFile: TAssetWriter;
   asset: TAssetMetadata;
+  prop: string;
 begin
   databaseFile := TAssetWriter.Create('asset.db');
 
@@ -630,10 +636,13 @@ begin
   databaseFile.Append(nil);
 
   for asset in database.GetAssets do
-      if asset.GetDateInDB <> 0 then
+      if asset.GetDateInDB <> 0 then begin
         databaseFile.Append([asset.GetType,
                              asset.GetName,
                              asset.GetDateOnDisk.ToString]);
+        for prop in asset.GetPropertyList do
+            databaseFile.Append(['PROPERTY', prop, asset.GetMetadata(prop)]);
+      end;
   databaseFile.Free;
 end;
 

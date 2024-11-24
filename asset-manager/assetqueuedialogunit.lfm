@@ -1,7 +1,7 @@
 object AssetQueueDialog: TAssetQueueDialog
-  Left = 466
+  Left = 319
   Height = 140
-  Top = 253
+  Top = 110
   Width = 320
   BorderIcons = [biMinimize, biMaximize]
   BorderStyle = bsDialog

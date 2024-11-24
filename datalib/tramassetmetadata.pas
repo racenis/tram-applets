@@ -9,6 +9,7 @@ uses
 
 type
   TAssetCollection = class;
+  TAssetPropertyList = array of string;
   TAssetMetadata = class
   public
      constructor Create(const path: string; const name: string; parent: TAssetCollection = nil);
@@ -18,6 +19,8 @@ type
 
      procedure SetMetadata(const {%H-}prop: string; {%H-}value: Variant); virtual;
      function GetMetadata(const {%H-}prop: string): Variant; virtual;
+
+     function GetPropertyList: TAssetPropertyList; virtual;
 
      procedure LoadMetadata(); virtual;
      procedure LoadFromDisk(); virtual;
@@ -53,7 +56,7 @@ type
      //constructor Create();
      procedure Clear; virtual; abstract;
      procedure ScanFromDisk; virtual; abstract;
-     procedure InsertFromDB(name: string; date: Integer); virtual; abstract;
+     function InsertFromDB(name: string; date: Integer): TAssetMetadata; virtual; abstract;
      procedure Remove(asset: TAssetMetadata); virtual; abstract;
      function GetAssets: TAssetMetadataArray; virtual; abstract;
   end;
@@ -104,6 +107,11 @@ end;
 function TAssetMetadata.GetMetadata(const prop: string): Variant;
 begin
   Result := nil;
+end;
+
+function TAssetMetadata.GetPropertyList: TAssetPropertyList;
+begin
+  Result := [];
 end;
 
 procedure TAssetMetadata.LoadMetadata();
