@@ -30,6 +30,7 @@ type
      procedure Remove;
 
      procedure SetDateInDBAsOnDisk;
+     procedure ResetBothDates;
 
      function GetDateInDB: Integer;
      function GetDateOnDisk: Integer;
@@ -76,6 +77,12 @@ end;
 procedure TAssetMetadata.SetDateInDBAsOnDisk;
 begin
   self.dateInDB := self.dateOnDisk;
+end;
+
+procedure TAssetMetadata.ResetBothDates;
+begin
+  self.dateOnDisk := FileAge(self.GetPath);
+  self.dateInDB := dateOnDisk;
 end;
 
 procedure TAssetMetadata.Remove;

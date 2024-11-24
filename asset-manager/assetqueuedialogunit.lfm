@@ -1,20 +1,20 @@
 object AssetQueueDialog: TAssetQueueDialog
   Left = 319
-  Height = 140
+  Height = 240
   Top = 110
-  Width = 320
+  Width = 480
   BorderIcons = [biMinimize, biMaximize]
   BorderStyle = bsDialog
   Caption = 'Processing...'
-  ClientHeight = 140
-  ClientWidth = 320
+  ClientHeight = 240
+  ClientWidth = 480
   OnShow = FormShow
   LCLVersion = '3.0.0.3'
   object ProgressBar: TProgressBar
     Left = 8
     Height = 20
-    Top = 112
-    Width = 300
+    Top = 208
+    Width = 464
     TabOrder = 0
   end
   object AssetName: TLabel
@@ -31,9 +31,9 @@ object AssetQueueDialog: TAssetQueueDialog
   end
   object OutputText: TMemo
     Left = 8
-    Height = 72
+    Height = 168
     Top = 32
-    Width = 300
+    Width = 464
     Font.CharSet = BALTIC_CHARSET
     Font.Name = 'Courier New'
     Font.Pitch = fpFixed
@@ -44,7 +44,7 @@ object AssetQueueDialog: TAssetQueueDialog
     TabOrder = 1
   end
   object CloseDialog: TButton
-    Left = 233
+    Left = 397
     Height = 17
     Top = 8
     Width = 75

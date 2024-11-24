@@ -21,6 +21,9 @@ type
     Cancel: TButton;
     CompileCommand: TLabeledEdit;
     LabeledEdit1: TLabeledEdit;
+    TMapCommand: TLabeledEdit;
+    TRadCommand: TLabeledEdit;
+    TBSPCommand: TLabeledEdit;
     ProjectVersion: TLabeledEdit;
     ProjectName: TLabeledEdit;
     SDKVersion: TLabeledEdit;
@@ -65,6 +68,10 @@ begin
 
   RunCommand.Text := GetSetting('RUN_COMMAND');
   CompileCommand.Text := GetSetting('COMPILE_COMMAND');
+
+  TBSPCommand.Text := GetSetting('TBSP_COMMAND');
+  TMAPCommand.Text := GetSetting('TMAP_COMMAND');
+  TRADCommand.Text := GetSetting('TRAD_COMMAND');
 end;
 
 procedure TProjectSettingsDialog.Dereset;
@@ -74,8 +81,26 @@ begin
 
   SetSetting('RUN_COMMAND', RunCommand.Text);
   SetSetting('COMPILE_COMMAND', CompileCommand.Text);
+
+  SetSetting('TBSP_COMMAND', TBSPCommand.Text);
+  SetSetting('TMAP_COMMAND', TMAPCommand.Text);
+  SetSetting('TRAD_COMMAND', TRADCommand.Text);
 end;
 
+procedure SetDefault(pref: string; val: string);
+begin
+  if GetSetting(pref) = '' then SetSetting(pref, val);
+end;
+
+procedure SetDefaults;
+begin
+  SetDefault('RUN_COMMAND', 'tram-template.exe');
+  SetDefault('COMPILE_COMMAND', 'make project');
+
+  SetDefault('TBSP_COMMAND', 'idk');
+  SetDefault('TMAP_COMMAND', '..\tram-template\tmap %model %size %padding');
+  SetDefault('TRAD_COMMAND', 'idk');
+end;
 
 procedure TProjectSettingsDialog.FormCreate(Sender: TObject);
 begin
@@ -133,6 +158,7 @@ end;
 procedure TProjectSettingsDialog.SaveClick(Sender: TObject);
 begin
   Dereset;
+  SetDefaults;
   SaveSettings;
   Close;
 end;
@@ -150,6 +176,7 @@ end;
 initialization
 begin
   LoadSettings;
+  SetDefaults;
 end;
 
 end.

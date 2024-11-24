@@ -143,6 +143,7 @@
         <Filename Value="assetqueuedialogunit.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="AssetQueueDialog"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="AssetQueueDialogUnit"/>
       </Unit>

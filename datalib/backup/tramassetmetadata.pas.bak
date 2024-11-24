@@ -30,6 +30,7 @@ type
      procedure Remove;
 
      procedure SetDateInDBAsOnDisk;
+     procedure ResetBothDates;
 
      function GetDateInDB: Integer;
      function GetDateOnDisk: Integer;
@@ -56,7 +57,7 @@ type
      //constructor Create();
      procedure Clear; virtual; abstract;
      procedure ScanFromDisk; virtual; abstract;
-     function InsertFromDB(name: string; date: Integer): : TAssetMetadata; virtual; abstract;
+     function InsertFromDB(name: string; date: Integer): TAssetMetadata; virtual; abstract;
      procedure Remove(asset: TAssetMetadata); virtual; abstract;
      function GetAssets: TAssetMetadataArray; virtual; abstract;
   end;
@@ -76,6 +77,11 @@ end;
 procedure TAssetMetadata.SetDateInDBAsOnDisk;
 begin
   self.dateInDB := self.dateOnDisk;
+end;
+
+procedure TAssetMetadata.ResetBothDates;
+begin
+
 end;
 
 procedure TAssetMetadata.Remove;

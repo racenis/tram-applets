@@ -113,6 +113,41 @@ object ProjectSettingsDialog: TProjectSettingsDialog
     end
     object TabSheet2: TTabSheet
       Caption = 'Tramway SDK'
+      ClientHeight = 286
+      ClientWidth = 456
+      object TBSPCommand: TLabeledEdit
+        Left = 8
+        Height = 21
+        Top = 24
+        Width = 200
+        EditLabel.Height = 13
+        EditLabel.Width = 200
+        EditLabel.Caption = 'TBSPCommand'
+        TabOrder = 0
+        Text = 'TBSPCommand'
+      end
+      object TMapCommand: TLabeledEdit
+        Left = 8
+        Height = 21
+        Top = 64
+        Width = 200
+        EditLabel.Height = 13
+        EditLabel.Width = 200
+        EditLabel.Caption = 'TMapCommand'
+        TabOrder = 1
+        Text = 'TMapCommand'
+      end
+      object TRadCommand: TLabeledEdit
+        Left = 8
+        Height = 21
+        Top = 104
+        Width = 200
+        EditLabel.Height = 13
+        EditLabel.Width = 200
+        EditLabel.Caption = 'TRadCommand'
+        TabOrder = 2
+        Text = 'TRadCommand'
+      end
     end
     object TabSheet3: TTabSheet
       Caption = 'Editors'

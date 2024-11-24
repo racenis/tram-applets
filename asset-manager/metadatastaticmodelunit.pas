@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, StdCtrls, ExtCtrls, TramAssetMetadata,
-  Dialogs;
+  Dialogs, ProcessQueue;
 
 type
 
@@ -74,7 +74,7 @@ end;
 
 procedure TMetadataStaticModel.CalculateLayoutClick(Sender: TObject);
 begin
-  ShowMessage('Not implemented yet.')
+  AddToQueue(self.asset);
 end;
 
 procedure TMetadataStaticModel.LightmapHeightChange(Sender: TObject);

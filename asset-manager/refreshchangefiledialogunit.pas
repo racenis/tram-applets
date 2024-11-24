@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, CheckLst,
-  TramAssetMetadata;
+  TramAssetMetadata, ProcessQueue;
 
 type
 
@@ -60,8 +60,7 @@ var
   i: Integer;
 begin
  for i := 0 to FileChecklist.Count - 1 do
-   (FileChecklist.Items.Objects[i] as TAssetMetadata).SetDateInDBAsOnDisk;
- // TODO: enqueue for conversion
+   AddToQueue(FileChecklist.Items.Objects[i] as TAssetMetadata);
 
  self.Close;
 end;

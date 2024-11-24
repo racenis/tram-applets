@@ -30,6 +30,7 @@ type
     procedure SetProgressBar(progress: Integer);
     procedure AppendText(appendable: string);
     procedure ClearText;
+    procedure Reset;
   end;
 var
   AssetQueueDialog: TAssetQueueDialog;
@@ -47,6 +48,7 @@ begin
     CloseDialog.Visible := True
   else
     self.Close;
+    //Exit;
 end;
 
 procedure TAssetQueueDialog.CloseDialogClick(Sender: TObject);
@@ -56,9 +58,7 @@ end;
 
 procedure TAssetQueueDialog.FormShow(Sender: TObject);
 begin
-  CloseDialog.Visible := False;
-  failureFlag := False;
-  OutputText.Clear;
+
 end;
 
 procedure TAssetQueueDialog.SetProgressBar(progress: Integer);
@@ -74,6 +74,13 @@ end;
 procedure TAssetQueueDialog.ClearText;
 begin
   AssetQueueDialog.OutputText.Clear;
+end;
+
+procedure TAssetQueueDialog.Reset;
+begin
+  CloseDialog.Visible := False;
+  failureFlag := False;
+  OutputText.Clear;
 end;
 
 {$R *.lfm}
