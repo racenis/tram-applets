@@ -147,6 +147,22 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="AssetQueueDialogUnit"/>
       </Unit>
+      <Unit>
+        <Filename Value="assetauthordialogunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="AssetAuthorDialog"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="AssetAuthorDialogUnit"/>
+      </Unit>
+      <Unit>
+        <Filename Value="assetsourcedialogunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="AssetSourceDialog"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="AssetSourceDialogUnit"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

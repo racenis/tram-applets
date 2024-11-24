@@ -20,7 +20,8 @@ uses
   RefreshChangeFileDialogUnit, LCLType, LCLIntf, IniPropStorage, FileUtil,
   ImportFileDialogUnit, MetadataStaticModelUnit, AboutDialogUnit,
   MetadataDynamicModelUnit, MetadataModificationModelUnit, ProcessQueue,
-  PreferencesDialogUnit, ProjectSettingsDialogUnit;
+  PreferencesDialogUnit, ProjectSettingsDialogUnit, AssetAuthorDialogUnit,
+  AssetSourceDialogUnit;
 
 type
 
@@ -34,6 +35,8 @@ type
     AssetName: TEdit;
     AssetAlwaysProcess: TCheckBox;
     AssetIgnoreModified: TCheckBox;
+    AssetAuthor: TEdit;
+    AssetSource: TEdit;
     FilterButton: TButton;
     DBGrid: TDBGrid;
     FilterClear: TButton;
@@ -52,6 +55,8 @@ type
     EditAsset: TMenuItem;
     AddAssetToQueue: TMenuItem;
     AddToAsyncQueue: TMenuItem;
+    AssetSources: TMenuItem;
+    AssetAuthors: TMenuItem;
     PopupProcess: TMenuItem;
     PopUpQueue: TMenuItem;
     PopupMove: TMenuItem;
@@ -59,6 +64,7 @@ type
     Separator11: TMenuItem;
     PopupView: TMenuItem;
     PopupEdit: TMenuItem;
+    Separator12: TMenuItem;
     StringGridPopupMenu: TPopupMenu;
     Separator10: TMenuItem;
     ShowInExplorer: TMenuItem;
@@ -94,10 +100,12 @@ type
     procedure AboutClick(Sender: TObject);
     procedure AddAssetToQueueClick(Sender: TObject);
     procedure AssetAlwaysProcessChange(Sender: TObject);
+    procedure AssetAuthorsClick(Sender: TObject);
     procedure AssetDeleteClick(Sender: TObject);
     procedure AssetEditClick(Sender: TObject);
     procedure AssetIgnoreModifiedChange(Sender: TObject);
     procedure AssetShowDirectoryClick(Sender: TObject);
+    procedure AssetSourcesClick(Sender: TObject);
     procedure EditAssetClick(Sender: TObject);
     procedure FilterButtonClick(Sender: TObject);
     procedure FilterClearClick(Sender: TObject);
@@ -586,6 +594,11 @@ begin
   selectedAsset.SetAlwaysProcess(MainForm.AssetAlwaysProcess.Checked);
 end;
 
+procedure TMainForm.AssetAuthorsClick(Sender: TObject);
+begin
+  AssetAuthorDialog.ShowModal;
+end;
+
 procedure TMainForm.AssetDeleteClick(Sender: TObject);
 begin
 
@@ -651,6 +664,11 @@ begin
   parameters := parameters.Replace('%path', path);
 
   ExecuteProcess(command, parameters, []);
+end;
+
+procedure TMainForm.AssetSourcesClick(Sender: TObject);
+begin
+  AssetSourceDialog.ShowModal;
 end;
 
 procedure TMainForm.EditAssetClick(Sender: TObject);

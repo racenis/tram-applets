@@ -1,0 +1,71 @@
+object AssetAuthorDialog: TAssetAuthorDialog
+  Left = 572
+  Height = 240
+  Top = 338
+  Width = 320
+  BorderStyle = bsDialog
+  Caption = 'AssetAuthorDialog'
+  ClientHeight = 240
+  ClientWidth = 320
+  OnCreate = FormCreate
+  Position = poMainFormCenter
+  LCLVersion = '3.0.0.3'
+  object CloseDialog: TButton
+    Left = 192
+    Height = 25
+    Top = 211
+    Width = 123
+    Caption = 'I Have Seen Enough'
+    TabOrder = 0
+  end
+  object AuthorList: TListBox
+    Left = 8
+    Height = 224
+    Top = 8
+    Width = 100
+    ItemHeight = 0
+    TabOrder = 1
+  end
+  object AuthorUsername: TEdit
+    Left = 112
+    Height = 21
+    Top = 8
+    Width = 200
+    TabOrder = 2
+    Text = 'AuthorUsername'
+  end
+  object AuthorName: TEdit
+    Left = 112
+    Height = 21
+    Top = 32
+    Width = 203
+    TabOrder = 3
+    Text = 'AuthorName'
+  end
+  object AuthorEmail: TEdit
+    Left = 112
+    Height = 21
+    Top = 56
+    Width = 200
+    TabOrder = 4
+    Text = 'AuthorEmail'
+  end
+  object AuthorRole: TEdit
+    Left = 112
+    Height = 21
+    Top = 80
+    Width = 200
+    TabOrder = 5
+    Text = 'AuthorRole'
+  end
+  object AuthorNotes: TMemo
+    Left = 112
+    Height = 96
+    Top = 104
+    Width = 200
+    Lines.Strings = (
+      'AuthorNotes'
+    )
+    TabOrder = 6
+  end
+end

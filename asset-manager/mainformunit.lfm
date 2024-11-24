@@ -188,6 +188,22 @@ object MainForm: TMainForm
       TabOrder = 6
       OnClick = AssetEditClick
     end
+    object AssetAuthor: TEdit
+      Left = 8
+      Height = 21
+      Top = 120
+      Width = 80
+      TabOrder = 7
+      TextHint = 'No author'
+    end
+    object AssetSource: TEdit
+      Left = 8
+      Height = 21
+      Top = 144
+      Width = 80
+      TabOrder = 8
+      TextHint = 'No source'
+    end
   end
   object MetadataProperty: TPanel
     Left = 600
@@ -275,6 +291,17 @@ object MainForm: TMainForm
       object RemoveAsset: TMenuItem
         Caption = 'Delete'
         OnClick = RemoveAssetClick
+      end
+      object Separator12: TMenuItem
+        Caption = '-'
+      end
+      object AssetAuthors: TMenuItem
+        Caption = 'Authors'
+        OnClick = AssetAuthorsClick
+      end
+      object AssetSources: TMenuItem
+        Caption = 'Sources'
+        OnClick = AssetSourcesClick
       end
       object Separator9: TMenuItem
         Caption = '-'
