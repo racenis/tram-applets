@@ -36,7 +36,7 @@ type
     AssetAlwaysProcess: TCheckBox;
     AssetIgnoreModified: TCheckBox;
     AssetAuthor: TEdit;
-    AssetSource: TEdit;
+    AssetSource: TComboBox;
     FilterButton: TButton;
     DBGrid: TDBGrid;
     FilterClear: TButton;
@@ -57,6 +57,7 @@ type
     AddToAsyncQueue: TMenuItem;
     AssetSources: TMenuItem;
     AssetAuthors: TMenuItem;
+    PopupShowInExplorer: TMenuItem;
     PopupProcess: TMenuItem;
     PopUpQueue: TMenuItem;
     PopupMove: TMenuItem;
@@ -65,6 +66,7 @@ type
     PopupView: TMenuItem;
     PopupEdit: TMenuItem;
     Separator12: TMenuItem;
+    Separator13: TMenuItem;
     StringGridPopupMenu: TPopupMenu;
     Separator10: TMenuItem;
     ShowInExplorer: TMenuItem;
@@ -105,6 +107,7 @@ type
     procedure AssetEditClick(Sender: TObject);
     procedure AssetIgnoreModifiedChange(Sender: TObject);
     procedure AssetShowDirectoryClick(Sender: TObject);
+    procedure AssetSourceChange(Sender: TObject);
     procedure AssetSourcesClick(Sender: TObject);
     procedure EditAssetClick(Sender: TObject);
     procedure FilterButtonClick(Sender: TObject);
@@ -124,6 +127,7 @@ type
     procedure PopupProcessClick(Sender: TObject);
     procedure PopUpQueueClick(Sender: TObject);
     procedure PopupRemoveClick(Sender: TObject);
+    procedure PopupShowInExplorerClick(Sender: TObject);
     procedure PopupViewClick(Sender: TObject);
     procedure PreferencesClick(Sender: TObject);
     procedure ProjectSettingsClick(Sender: TObject);
@@ -136,6 +140,7 @@ type
     procedure StringGridAfterSelection(Sender: TObject; {%H-}aCol, {%H-}aRow: Integer);
     procedure SetSelectedAsset(asset: TAssetMetadata);
     procedure ResetStatusBar;
+    procedure ResetSourceDropdown;
     procedure ViewAssetClick(Sender: TObject);
     function AssetSelected: Boolean;
   private
@@ -168,27 +173,58 @@ var
   databaseRecord: array of string;
 
   asset: TAssetMetadata;
+  source: TAssetSource;
+  author: TAssetAuthor;
 begin
   databaseFile := TAssetParser.Create('asset.db');
   asset := nil;
+  source := nil;
+  author := nil;
+
 
   if not databaseFile.IsOpen then
      ShowMessage('Database file not found!')
   else
      for databaseRecord in databaseFile.GetData do
-         if Length(databaseRecord) = 3 then
+         if Length(databaseRecord) = 3 then begin
             if databaseRecord[0] = 'PROPERTY' then
                asset.SetMetadata(databaseRecord[1], databaseRecord[2])
             else
                asset := database.InsertFromDB(databaseRecord[0],
                                               databaseRecord[1],
                                               databaseRecord[2].ToInteger)
-         else if Length(databaseRecord) = 2 then
-              if databaseRecord[0] = 'FLAG' then
+         end else if Length(databaseRecord) = 2 then begin
+              if databaseRecord[0] = 'FLAG' then begin
                  if databaseRecord[1] = 'ALWAYS_PROCESS' then
                     asset.SetAlwaysProcess(True)
                  else if databaseRecord[1] = 'IGNORE_MODIFIED' then
-                    asset.SetIgnoreModified(True);
+                    asset.SetIgnoreModified(True)
+              end else if databaseRecord[0] = 'AUTHOR' then
+                 asset.SetAuthor(databaseRecord[1])
+              else if databaseRecord[0] = 'SOURCE' then
+                 asset.SetSource(databaseRecord[1])
+         end else if Length(databaseRecord) = 4 then
+            if databaseRecord[0] = 'AUTHOR' then begin
+              author := FindAssetAuthor(databaseRecord[1]);
+              case databaseRecord[2] of
+                  'IDENTIFIER': author.Identifier := databaseRecord[3];
+                  'NAME': author.Name := databaseRecord[3];
+                  'ADDRESS': author.Address := databaseRecord[3];
+                  'ROLE': author.Role := databaseRecord[3];
+                  'NOTES': author.Notes := databaseRecord[3];
+              end;
+            end else if databaseRecord[0] = 'SOURCE' then begin
+              source := FindAssetSource(databaseRecord[1]);
+              case databaseRecord[2] of
+                  'IDENTIFIER': source.Identifier := databaseRecord[3];
+                  'CREDITS': source.Credits := databaseRecord[3];
+                  'ADDRESS': source.Address := databaseRecord[3];
+                  'LICENSE': source.License := databaseRecord[3];
+                  'NOTES': source.Notes := databaseRecord[3];
+              end;
+            end;
+     //end;
+
 
   databaseFile.Free;
 end;
@@ -271,6 +307,8 @@ begin
 
     MainForm.StringGrid.InsertRowWithValues(row, [asset.GetType,
                                          asset.GetName,
+                                         //asset.GetAuthor,
+                                         //asset.GetSource,
                                          date]);
     MainForm.StringGrid.Objects[0, row] := asset;
 
@@ -304,8 +342,10 @@ begin
          date := 'N/A';
 
       MainForm.StringGrid.InsertRowWithValues(row, [asset.GetType,
-                                           asset.GetName,
-                                           date]);
+                                         asset.GetName,
+                                         //asset.GetAuthor,
+                                         //asset.GetSource,
+                                         date]);
       MainForm.StringGrid.Objects[0, row] := asset;
 
       row += 1;
@@ -384,6 +424,7 @@ begin
   LoadDatabaseFromFile;
   RefreshDatabase;
   PopulateAssetList;
+  ResetSourceDropdown;
 
   Caption := GetSetting('PROJECT_NAME');
   if Caption = '' then
@@ -666,9 +707,28 @@ begin
   ExecuteProcess(command, parameters, []);
 end;
 
+procedure TMainForm.AssetSourceChange(Sender: TObject);
+begin
+  if MessageDlg('Confirmation Request',
+                'You sure you want to change the source?', mtConfirmation,
+                [mbYes, mbNo], 0) = mrNo then Exit;
+  selectedAsset.SetSource(AssetSource.Text);
+end;
+
+procedure TMainForm.ResetSourceDropdown;
+var
+  source: TAssetSource;
+begin
+  AssetSource.Items.Clear;
+  for source in GetAllAssetSources do
+      AssetSource.Items.Add(source.Identifier);
+end;
+
 procedure TMainForm.AssetSourcesClick(Sender: TObject);
+
 begin
   AssetSourceDialog.ShowModal;
+  ResetSourceDropdown;
 end;
 
 procedure TMainForm.EditAssetClick(Sender: TObject);
@@ -722,6 +782,11 @@ begin
   RemoveAsset.Click;
 end;
 
+procedure TMainForm.PopupShowInExplorerClick(Sender: TObject);
+begin
+  ShowInExplorer.Click;
+end;
+
 procedure TMainForm.PopupViewClick(Sender: TObject);
 begin
   ViewAsset.Click;
@@ -772,6 +837,8 @@ var
   databaseFile: TAssetWriter;
   asset: TAssetMetadata;
   prop: string;
+  author: TAssetAuthor;
+  source: TAssetSource;
 begin
   databaseFile := TAssetWriter.Create('asset.db');
 
@@ -786,7 +853,23 @@ begin
                              asset.GetDateOnDisk.ToString]);
         for prop in asset.GetPropertyList do
             databaseFile.Append(['PROPERTY', prop, asset.GetMetadata(prop)]);
+        if asset.GetAuthor <> '' then databaseFile.Append(['AUTHOR', asset.GetAuthor]);
+        if asset.GetSource <> '' then databaseFile.Append(['SOURCE', asset.GetSource]);
       end;
+  for author in GetAllAssetAuthors do begin
+    databaseFile.Append(['AUTHOR', author.Identifier, 'IDENTIFIER', author.Identifier]);
+    databaseFile.Append(['AUTHOR', author.Identifier, 'NAME', '"' + author.Name + '"']);
+    databaseFile.Append(['AUTHOR', author.Identifier, 'ADDRESS', '"' + author.Address + '"']);
+    databaseFile.Append(['AUTHOR', author.Identifier, 'ROLE', '"' + author.Role + '"']);
+    databaseFile.Append(['AUTHOR', author.Identifier, 'NOTES', '"' + author.Notes + '"']);
+  end;
+  for source in GetAllAssetSources do begin
+    databaseFile.Append(['SOURCE', source.Identifier, 'IDENTIFIER', source.Identifier]);
+    databaseFile.Append(['SOURCE', source.Identifier, 'CREDITS', '"' + source.Credits + '"']);
+    databaseFile.Append(['SOURCE', source.Identifier, 'ADDRESS', '"' + source.Address + '"']);
+    databaseFile.Append(['SOURCE', source.Identifier, 'LICENSE', '"' + source.License + '"']);
+    databaseFile.Append(['SOURCE', source.Identifier, 'NOTES', '"' + source.Notes + '"']);
+  end;
   databaseFile.Free;
 end;
 
@@ -828,6 +911,9 @@ begin
   MainForm.AssetIgnoreModified.Checked := selectedAsset.GetIgnoreModified;
 
   MainForm.AssetIgnoreModified.Enabled := not selectedAsset.GetAlwaysProcess;
+
+  MainForm.AssetSource.Text := selectedAsset.GetSource;
+  MainForm.AssetAuthor.Text := selectedAsset.GetAuthor;
 
   Mainform.SharedProperty.Enabled := True;
 end;

@@ -3,6 +3,7 @@ object AssetSourceDialog: TAssetSourceDialog
   Height = 240
   Top = 221
   Width = 320
+  BorderIcons = [biMinimize, biMaximize]
   BorderStyle = bsDialog
   Caption = 'AssetSourceDialog'
   ClientHeight = 240

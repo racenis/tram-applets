@@ -106,7 +106,8 @@ begin
             if (not token.StartsWith('"')) and (not token.StartsWith('#')) then
                token := token.Replace(' ', '-');
 
-            token := token.PadRight(colWidth[col] + 1);
+            if (col <> High(line)) then
+               token := token.PadRight(colWidth[col] + 1);
 
             outputFile.Write(token[1], Length(token));
           end;

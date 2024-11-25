@@ -1,7 +1,7 @@
 object PreferencesDialog: TPreferencesDialog
-  Left = 305
+  Left = 295
   Height = 240
-  Top = 132
+  Top = 126
   Width = 320
   BorderIcons = [biMinimize, biMaximize]
   BorderStyle = bsDialog
@@ -35,8 +35,8 @@ object PreferencesDialog: TPreferencesDialog
     Height = 192
     Top = 8
     Width = 304
-    ActivePage = TabSheet2
-    TabIndex = 0
+    ActivePage = ProfileTab
+    TabIndex = 2
     TabOrder = 2
     object TabSheet2: TTabSheet
       Caption = 'TabSheet2'
@@ -78,6 +78,107 @@ object PreferencesDialog: TPreferencesDialog
     end
     object TabSheet1: TTabSheet
       Caption = 'TabSheet1'
+    end
+    object ProfileTab: TTabSheet
+      Caption = 'Profile'
+      ClientHeight = 166
+      ClientWidth = 296
+      object UserIdentifier: TEdit
+        Left = 8
+        Height = 21
+        Top = 24
+        Width = 120
+        TabOrder = 0
+        Text = 'UserIdentifier'
+      end
+      object UserName: TEdit
+        Left = 8
+        Height = 21
+        Top = 64
+        Width = 120
+        TabOrder = 1
+        Text = 'UserName'
+      end
+      object UserAddress: TEdit
+        Left = 8
+        Height = 21
+        Top = 104
+        Width = 120
+        TabOrder = 2
+        Text = 'UserAddress'
+      end
+      object UserRole: TComboBox
+        Left = 136
+        Height = 21
+        Top = 24
+        Width = 152
+        ItemHeight = 13
+        Items.Strings = (
+          '3D Artist'
+          'Animator'
+          'FX Artist'
+          'Texture Artist'
+          'Designer'
+          'UI/UX'
+          'Programmer'
+          'Scripter'
+          'Narrative/Writing'
+          'Intern - paid'
+          'Intern - unpaid'
+          'Cat'
+          'Janitor'
+          'Quality Assurance'
+          'Localisation'
+          'Customer Support'
+        )
+        TabOrder = 3
+        Text = 'UserRole'
+      end
+      object Label1: TLabel
+        Left = 8
+        Height = 13
+        Top = 8
+        Width = 44
+        Caption = 'Identifier'
+      end
+      object Label2: TLabel
+        Left = 8
+        Height = 13
+        Top = 48
+        Width = 27
+        Caption = 'Name'
+      end
+      object Label3: TLabel
+        Left = 8
+        Height = 13
+        Top = 88
+        Width = 39
+        Caption = 'Address'
+      end
+      object Label4: TLabel
+        Left = 136
+        Height = 13
+        Top = 8
+        Width = 21
+        Caption = 'Role'
+      end
+      object UserNotes: TMemo
+        Left = 136
+        Height = 98
+        Top = 64
+        Width = 152
+        Lines.Strings = (
+          'UserNotes'
+        )
+        TabOrder = 4
+      end
+      object Label5: TLabel
+        Left = 136
+        Height = 13
+        Top = 48
+        Width = 103
+        Caption = 'Tell us about yourself'
+      end
     end
   end
 end

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
-  ExtCtrls, fgl, TramAssetParser, TramAssetWriter
+  ExtCtrls, fgl, TramAssetParser, TramAssetWriter, AssetAuthorDialogUnit
   {$IFDEF WINDOWS}, Win32Proc {$ENDIF};
 
 function GetPreference(name:string): string;
@@ -18,6 +18,16 @@ type
   { TPreferencesDialog }
 
   TPreferencesDialog = class(TForm)
+    UserRole: TComboBox;
+    UserIdentifier: TEdit;
+    UserName: TEdit;
+    UserAddress: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    UserNotes: TMemo;
     OpenFile: TLabeledEdit;
     OpenDirectory: TLabeledEdit;
     ShowInDirectory: TLabeledEdit;
@@ -26,6 +36,7 @@ type
     Save: TButton;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
+    ProfileTab: TTabSheet;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ResetClick(Sender: TObject);
@@ -53,13 +64,34 @@ begin
   ShowInDirectory.Text := GetPreference('SHOW_IN_DIRECTORY');
   OpenDirectory.Text := GetPreference('OPEN_DIRECTORY');
   OpenFile.Text := GetPreference('OPEN_FILE');
+
+  UserIdentifier.Text := GetPreference('USER_IDENTIFIER');
+  UserName.Text := GetPreference('USER_NAME');
+  UserAddress.Text := GetPreference('USER_ADDRESS');
+  UserRole.Text := GetPreference('USER_ROLE');
+  UserNotes.Text := GetPreference('USER_NOTES');
 end;
 
 procedure TPreferencesDialog.Depopulate;
+var
+  author: TAssetAuthor;
 begin
   SetPreference('SHOW_IN_DIRECTORY', ShowInDirectory.Text);
   SetPreference('OPEN_DIRECTORY', OpenDirectory.Text);
   SetPreference('OPEN_FILE', OpenFile.Text);
+
+  SetPreference('USER_IDENTIFIER', UserIdentifier.Text);
+  SetPreference('USER_NAME', UserName.Text);
+  SetPreference('USER_ADDRESS', UserAddress.Text);
+  SetPreference('USER_ROLE', UserRole.Text);
+  SetPreference('USER_NOTES', UserNotes.Text);
+
+  author := FindAssetAuthor(UserIdentifier.Text);
+  author.Identifier := UserIdentifier.Text;
+  author.Name := UserName.Text;
+  author.Address := UserAddress.Text;
+  author.Role := UserRole.Text;
+  author.Notes := UserNotes.Text;
 end;
 
 function GetPreferenceDirectory: string;

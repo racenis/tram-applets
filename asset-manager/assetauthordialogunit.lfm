@@ -1,8 +1,9 @@
 object AssetAuthorDialog: TAssetAuthorDialog
-  Left = 572
+  Left = 659
   Height = 240
-  Top = 338
+  Top = 153
   Width = 320
+  BorderIcons = [biMinimize, biMaximize]
   BorderStyle = bsDialog
   Caption = 'AssetAuthorDialog'
   ClientHeight = 240
@@ -17,6 +18,7 @@ object AssetAuthorDialog: TAssetAuthorDialog
     Width = 123
     Caption = 'I Have Seen Enough'
     TabOrder = 0
+    OnClick = CloseDialogClick
   end
   object AuthorList: TListBox
     Left = 8
@@ -25,14 +27,15 @@ object AssetAuthorDialog: TAssetAuthorDialog
     Width = 100
     ItemHeight = 0
     TabOrder = 1
+    OnSelectionChange = AuthorListSelectionChange
   end
-  object AuthorUsername: TEdit
+  object AuthorIdentifier: TEdit
     Left = 112
     Height = 21
     Top = 8
-    Width = 200
+    Width = 203
     TabOrder = 2
-    Text = 'AuthorUsername'
+    Text = 'AuthorIdentifier'
   end
   object AuthorName: TEdit
     Left = 112
@@ -42,19 +45,19 @@ object AssetAuthorDialog: TAssetAuthorDialog
     TabOrder = 3
     Text = 'AuthorName'
   end
-  object AuthorEmail: TEdit
+  object AuthorAddress: TEdit
     Left = 112
     Height = 21
     Top = 56
-    Width = 200
+    Width = 203
     TabOrder = 4
-    Text = 'AuthorEmail'
+    Text = 'AuthorAddress'
   end
   object AuthorRole: TEdit
     Left = 112
     Height = 21
     Top = 80
-    Width = 200
+    Width = 203
     TabOrder = 5
     Text = 'AuthorRole'
   end
@@ -62,7 +65,7 @@ object AssetAuthorDialog: TAssetAuthorDialog
     Left = 112
     Height = 96
     Top = 104
-    Width = 200
+    Width = 203
     Lines.Strings = (
       'AuthorNotes'
     )

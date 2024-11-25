@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, CheckLst,
-  TramAssetMetadata;
+  TramAssetMetadata, PreferencesDialogUnit;
 
 type
 
@@ -70,9 +70,13 @@ end;
 procedure TRefreshNewFileDialog.TrackClick(Sender: TObject);
 var
   i: Integer;
+  asset: TAssetMetadata;
 begin
- for i := 0 to FileChecklist.Count - 1 do
-   (FileChecklist.Items.Objects[i] as TAssetMetadata).SetDateInDBAsOnDisk;
+ for i := 0 to FileChecklist.Count - 1 do begin
+   asset := FileChecklist.Items.Objects[i] as TAssetMetadata;
+   asset.SetDateInDBAsOnDisk;
+   asset.SetAuthor(GetPreference('USER_IDENTIFIER'));
+ end;
 
  self.Close;
 end;

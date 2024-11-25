@@ -38,9 +38,13 @@ type
 
      function GetAlwaysProcess: Boolean;
      function GetIgnoreModified: Boolean;
+     function GetAuthor: string;
+     function GetSource: string;
 
      procedure SetAlwaysProcess(value: Boolean);
      procedure SetIgnoreModified(value: Boolean);
+     procedure SetAuthor(value: string);
+     procedure SetSource(value: string);
   protected
      name: string;
      path: string;
@@ -50,6 +54,8 @@ type
      parent: TAssetCollection;
      alwaysProcess: Boolean;
      ignoreModified: Boolean;
+     author: string;
+     source: string;
   end;
   TAssetMetadataArray = array of TAssetMetadata;
   TAssetCollection = class
@@ -158,6 +164,16 @@ begin
   Result := self.ignoreModified;
 end;
 
+function TAssetMetadata.GetAuthor: string;
+begin
+  Result := self.author;
+end;
+
+function TAssetMetadata.GetSource: string;
+begin
+  Result := self.source;
+end;
+
 procedure TAssetMetadata.SetAlwaysProcess(value: Boolean);
 begin
   self.alwaysProcess := value;
@@ -166,6 +182,16 @@ end;
 procedure TAssetMetadata.SetIgnoreModified(value: Boolean);
 begin
   self.ignoreModified := value;
+end;
+
+procedure TAssetMetadata.SetAuthor(value: string);
+begin
+  self.author := value;
+end;
+
+procedure TAssetMetadata.SetSource(value: string);
+begin
+  self.source := value;
 end;
 
 end.

@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 375
+  Left = 426
   Height = 581
-  Top = 214
+  Top = 337
   Width = 800
   AllowDropFiles = True
   BorderStyle = bsSingle
@@ -148,7 +148,7 @@ object MainForm: TMainForm
       Left = 128
       Height = 21
       Top = 8
-      Width = 63
+      Width = 64
       ReadOnly = True
       TabOrder = 2
     end
@@ -174,7 +174,7 @@ object MainForm: TMainForm
       Left = 88
       Height = 25
       Top = 88
-      Width = 107
+      Width = 104
       Caption = 'Show in Explorer'
       TabOrder = 5
       OnClick = AssetShowDirectoryClick
@@ -192,17 +192,19 @@ object MainForm: TMainForm
       Left = 8
       Height = 21
       Top = 120
-      Width = 80
+      Width = 184
       TabOrder = 7
       TextHint = 'No author'
     end
-    object AssetSource: TEdit
+    object AssetSource: TComboBox
       Left = 8
       Height = 21
       Top = 144
-      Width = 80
+      Width = 184
+      ItemHeight = 13
+      Style = csDropDownList
       TabOrder = 8
-      TextHint = 'No source'
+      OnChange = AssetSourceChange
     end
   end
   object MetadataProperty: TPanel
@@ -377,6 +379,13 @@ object MainForm: TMainForm
     object PopupProcess: TMenuItem
       Caption = 'Process Now'
       OnClick = PopupProcessClick
+    end
+    object Separator13: TMenuItem
+      Caption = '-'
+    end
+    object PopupShowInExplorer: TMenuItem
+      Caption = 'Show in Explorer'
+      OnClick = PopupShowInExplorerClick
     end
     object Separator11: TMenuItem
       Caption = '-'
