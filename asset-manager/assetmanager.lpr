@@ -22,6 +22,7 @@ uses
 
 begin
   RequireDerivedFormResource:=True;
+  Application.Title:='Tramway SDK Asset Manager';
   Application.Scaled:=True;
   Application.Initialize;
   Application.CreateForm(TMainForm, MainForm);

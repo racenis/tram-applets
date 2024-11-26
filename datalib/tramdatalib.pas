@@ -10,7 +10,12 @@ interface
 uses
   TramAssetParser, TramAssetMetadata, TramAssetMetadataTest, 
   TramAssetParserTest, TramAssetCollection, Tram3DModelAsset, 
-  TramAssetDatabase, TramAssetWriter, TramAssetWriterTest, LazarusPackageIntf;
+  TramAssetDatabase, TramAssetWriter, TramAssetWriterTest, TramAnimationAsset, 
+  TramAudioAsset, TramAudioSourceAsset, TramNavmeshAsset, TramPathAsset, 
+  TramSpriteAsset, TramMaterialAsset, TramWorldCellAsset, TramDialogAsset, 
+  TramEntityDefinitionAsset, TramLanguageAsset, TramQuestAsset, 
+  Tram3DModelSourceAsset, TramTexturrSourceAsset, TramShaderAsset, 
+  TramScriptAsset, TramCollisionModelAsset, LazarusPackageIntf;
 
 implementation
 

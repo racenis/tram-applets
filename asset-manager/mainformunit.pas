@@ -6,16 +6,16 @@ unit MainFormUnit;
 // List of stuff to do:
 // - Move database saving and loading
 //   - Either into a seperate file or into data library
-// - Add asset source tracking
-// - Add asset author tracking
 // - Move settings and parameters into datalib
+// - Add icons to asset list based on asset type
+// - Maybe add highlighting based of whether asset is processed or not
 
 interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBGrids, Menus,
   ComCtrls, ExtCtrls, StdCtrls, Grids, TramAssetDatabase, TramAssetMetadata,
-  DateUtils, XMLConf, TramAssetWriter, TramAssetParser,
+  DateUtils, XMLConf, TramAssetWriter, TramAssetParser, Process,
   RefreshNewFileDialogUnit, RefreshMissingFileDialogUnit,
   RefreshChangeFileDialogUnit, LCLType, LCLIntf, IniPropStorage, FileUtil,
   ImportFileDialogUnit, MetadataStaticModelUnit, AboutDialogUnit,
@@ -109,6 +109,7 @@ type
     procedure AssetShowDirectoryClick(Sender: TObject);
     procedure AssetSourceChange(Sender: TObject);
     procedure AssetSourcesClick(Sender: TObject);
+    procedure CompileClick(Sender: TObject);
     procedure EditAssetClick(Sender: TObject);
     procedure FilterButtonClick(Sender: TObject);
     procedure FilterClearClick(Sender: TObject);
@@ -122,6 +123,7 @@ type
     procedure ImportClick(Sender: TObject);
     procedure LoadDBClick(Sender: TObject);
     procedure MoveAssetClick(Sender: TObject);
+    procedure OpenLevelEditorClick(Sender: TObject);
     procedure PopupEditClick(Sender: TObject);
     procedure PopupMoveClick(Sender: TObject);
     procedure PopupProcessClick(Sender: TObject);
@@ -133,6 +135,7 @@ type
     procedure ProjectSettingsClick(Sender: TObject);
     procedure QuitClick(Sender: TObject);
     procedure RemoveAssetClick(Sender: TObject);
+    procedure RunExecutableClick(Sender: TObject);
     procedure SaveDBClick(Sender: TObject);
     procedure ShowDirectoryClick(Sender: TObject);
     procedure ShowInExplorerClick(Sender: TObject);
@@ -180,7 +183,6 @@ begin
   asset := nil;
   source := nil;
   author := nil;
-
 
   if not databaseFile.IsOpen then
      ShowMessage('Database file not found!')
@@ -731,6 +733,33 @@ begin
   ResetSourceDropdown;
 end;
 
+procedure TMainForm.CompileClick(Sender: TObject);
+var
+  cmd: array of string;
+  process: TProcess;
+begin
+  cmd := SplitCommandline(GetSetting('COMPILE_COMMAND'));
+
+  process := TProcess.Create(nil);
+  if Length(cmd) > 0 then
+     process.Executable := cmd[0];
+  if Length(cmd) > 1 then
+     process.Parameters.AddStrings(Copy(cmd, 2));
+
+  // here's an idea of what we could do in the future:
+  // 1. create a process runner form
+  // 2. when shown, it can be given a command to run
+  // 3. it would then run the command and display the standard output in a box
+  // 4. it would then close when the process exits
+
+  try
+     process.Execute;
+  except
+      on E : Exception do ShowMessage('An error occured when trying to compile'
+                       + ' the program:' + #10#10 + E.ToString);
+    end;
+end;
+
 procedure TMainForm.EditAssetClick(Sender: TObject);
 begin
   AssetEdit.Click;
@@ -755,6 +784,29 @@ end;
 procedure TMainForm.MoveAssetClick(Sender: TObject);
 begin
   AssetShowDirectory.Click;
+end;
+
+procedure TMainForm.OpenLevelEditorClick(Sender: TObject);
+var
+  cmd: array of string;
+  process: TProcess;
+begin
+  cmd := SplitCommandline(GetSetting('LEVEL_EDITOR_COMMAND'));
+
+  process := TProcess.Create(nil);
+  if Length(cmd) > 0 then
+     process.Executable := cmd[0];
+  if Length(cmd) > 1 then
+     process.Parameters.AddStrings(Copy(cmd, 2));
+
+  process.Options := process.Options + [poDetached];
+
+  try
+     process.Execute;
+  except
+      on E : Exception do ShowMessage('An error occured when trying to run'
+                       + ' the level editor:' + #10#10 + E.ToString);
+    end;
 end;
 
 procedure TMainForm.PopupEditClick(Sender: TObject);
@@ -830,6 +882,30 @@ begin
   SetSelectedAsset(nil);
   SharedProperty.Enabled := False;
   FilterButton.Click;
+end;
+
+procedure TMainForm.RunExecutableClick(Sender: TObject);
+var
+  cmd: array of string;
+  process: TProcess;
+begin
+  cmd := SplitCommandline(GetSetting('RUN_COMMAND'));
+
+  process := TProcess.Create(nil);
+  if Length(cmd) > 0 then
+     process.Executable := cmd[0];
+  if Length(cmd) > 1 then
+     process.Parameters.AddStrings(Copy(cmd, 2));
+
+
+  process.Options := process.Options + [poDetached];
+
+  try
+     process.Execute;
+  except
+      on E : Exception do ShowMessage('An error occured when trying to run'
+                       + ' the program:' + #10#10 + E.ToString);
+    end;
 end;
 
 procedure TMainForm.SaveDBClick(Sender: TObject);

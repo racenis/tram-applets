@@ -1,8 +1,10 @@
-unit Tram3DModelAsset;
+unit TramMaterialAsset;
 
 {$mode objfpc}{$H+}
 {$WARN 6058 off : Call to subroutine "$1" marked as inline is not inlined}
 interface
+
+// TODO: actually implement
 
 uses
   Classes, SysUtils, TramAssetMetadata, FileUtil, TramAssetParser;
@@ -228,10 +230,10 @@ procedure T3DModelCollection.Remove(asset: TAssetMetadata);
 var
    index: Integer;
 begin
+  // TODO: check if asset in models even
   for index := 0 to High(models) do
       if models[index] = asset then
          Break;
-  if models[index] <> asset then Exit;
   for index := index to High(models) - 1 do
       models[index] := models[index  + 1];
   SetLength(models, Length(models) - 1);

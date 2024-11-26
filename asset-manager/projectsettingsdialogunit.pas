@@ -20,7 +20,8 @@ type
   TProjectSettingsDialog = class(TForm)
     Cancel: TButton;
     CompileCommand: TLabeledEdit;
-    LabeledEdit1: TLabeledEdit;
+    LevelEditor: TLabeledEdit;
+    TabSheet4: TTabSheet;
     TMapCommand: TLabeledEdit;
     TRadCommand: TLabeledEdit;
     TBSPCommand: TLabeledEdit;
@@ -52,9 +53,6 @@ var
 
 implementation
 
-//var
-
-
 {$R *.lfm}
 
 { TProjectSettingsDialog }
@@ -72,6 +70,8 @@ begin
   TBSPCommand.Text := GetSetting('TBSP_COMMAND');
   TMAPCommand.Text := GetSetting('TMAP_COMMAND');
   TRADCommand.Text := GetSetting('TRAD_COMMAND');
+
+  LevelEditor.Text := GetSetting('LEVEL_EDITOR_COMMAND');
 end;
 
 procedure TProjectSettingsDialog.Dereset;
@@ -85,6 +85,8 @@ begin
   SetSetting('TBSP_COMMAND', TBSPCommand.Text);
   SetSetting('TMAP_COMMAND', TMAPCommand.Text);
   SetSetting('TRAD_COMMAND', TRADCommand.Text);
+
+  SetSetting('LEVEL_EDITOR_COMMAND', LevelEditor.Text);
 end;
 
 procedure SetDefault(pref: string; val: string);
@@ -94,12 +96,15 @@ end;
 
 procedure SetDefaults;
 begin
+  // TODO: setup linux versions of defaults
   SetDefault('RUN_COMMAND', 'tram-template.exe');
   SetDefault('COMPILE_COMMAND', 'make project');
 
   SetDefault('TBSP_COMMAND', 'idk');
   SetDefault('TMAP_COMMAND', '..\tram-template\tmap %model %size %padding');
   SetDefault('TRAD_COMMAND', 'idk');
+
+  SetDefault('LEVEL_EDITOR_COMMAND', '..\tram-template\leveleditor');
 end;
 
 procedure TProjectSettingsDialog.FormCreate(Sender: TObject);
@@ -121,8 +126,10 @@ begin
     Exit;
   end;
   for row := 0 to fileLoader.GetRowCount - 1 do
-      //ProjectSettings.Add(fileLoader.GetValue(row, 0), fileLoader.GetValue(row, 1));
-      SetSetting(fileLoader.GetValue(row, 0), fileLoader.GetValue(row, 1).Replace('''''', '"'));
+      if fileLoader.GetColCount(row) = 2 then
+        SetSetting(fileLoader.GetValue(row, 0), fileLoader.GetValue(row, 1).Replace('''''', '"'));
+
+
   fileLoader.Free;
 end;
 
@@ -150,8 +157,6 @@ end;
 
 procedure TProjectSettingsDialog.CancelClick(Sender: TObject);
 begin
-  //LoadSettings;
-  //Reset;
   Close;
 end;
 

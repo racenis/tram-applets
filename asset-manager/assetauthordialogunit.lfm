@@ -5,7 +5,7 @@ object AssetAuthorDialog: TAssetAuthorDialog
   Width = 320
   BorderIcons = [biMinimize, biMaximize]
   BorderStyle = bsDialog
-  Caption = 'AssetAuthorDialog'
+  Caption = 'Asset Authors'
   ClientHeight = 240
   ClientWidth = 320
   OnCreate = FormCreate
@@ -34,41 +34,40 @@ object AssetAuthorDialog: TAssetAuthorDialog
     Height = 21
     Top = 8
     Width = 203
+    ReadOnly = True
     TabOrder = 2
-    Text = 'AuthorIdentifier'
+    Text = 'Select something from the author list.'
   end
   object AuthorName: TEdit
     Left = 112
     Height = 21
     Top = 32
     Width = 203
+    ReadOnly = True
     TabOrder = 3
-    Text = 'AuthorName'
   end
   object AuthorAddress: TEdit
     Left = 112
     Height = 21
     Top = 56
     Width = 203
+    ReadOnly = True
     TabOrder = 4
-    Text = 'AuthorAddress'
   end
   object AuthorRole: TEdit
     Left = 112
     Height = 21
     Top = 80
     Width = 203
+    ReadOnly = True
     TabOrder = 5
-    Text = 'AuthorRole'
   end
   object AuthorNotes: TMemo
     Left = 112
     Height = 96
     Top = 104
     Width = 203
-    Lines.Strings = (
-      'AuthorNotes'
-    )
+    ReadOnly = True
     TabOrder = 6
   end
 end

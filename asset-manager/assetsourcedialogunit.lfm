@@ -5,7 +5,7 @@ object AssetSourceDialog: TAssetSourceDialog
   Width = 320
   BorderIcons = [biMinimize, biMaximize]
   BorderStyle = bsDialog
-  Caption = 'AssetSourceDialog'
+  Caption = 'Asset Sources'
   ClientHeight = 240
   ClientWidth = 320
   OnCreate = FormCreate
@@ -37,7 +37,7 @@ object AssetSourceDialog: TAssetSourceDialog
     Width = 147
     Enabled = False
     TabOrder = 2
-    Text = 'SourceIdentifier'
+    Text = 'Select something from the'
     OnChange = SourceIdentifierChange
   end
   object SourceAddress: TEdit
@@ -47,7 +47,7 @@ object AssetSourceDialog: TAssetSourceDialog
     Width = 147
     Enabled = False
     TabOrder = 3
-    Text = 'SourceAddress'
+    Text = 'source list on the left, or'
     OnChange = SourceAddressChange
   end
   object Label1: TLabel
@@ -100,7 +100,7 @@ object AssetSourceDialog: TAssetSourceDialog
       'Public domain'
     )
     TabOrder = 4
-    Text = 'SourceLicense'
+    Text = 'right-click the list and'
     OnChange = SourceLicenseChange
   end
   object SourceNotes: TMemo
@@ -110,7 +110,9 @@ object AssetSourceDialog: TAssetSourceDialog
     Width = 147
     Enabled = False
     Lines.Strings = (
-      'SourceNotes'
+      'a new asset source.'
+      ''
+      'Then you can click on "Edit" and input its properties.'
     )
     TabOrder = 5
     OnChange = SourceNotesChange
@@ -129,7 +131,7 @@ object AssetSourceDialog: TAssetSourceDialog
     Width = 144
     Enabled = False
     TabOrder = 6
-    Text = 'SourceCredits'
+    Text = 'select "Add New" to add'
     OnChange = SourceCreditsChange
   end
   object Label5: TLabel

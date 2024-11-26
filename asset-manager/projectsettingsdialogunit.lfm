@@ -5,7 +5,7 @@ object ProjectSettingsDialog: TProjectSettingsDialog
   Width = 480
   BorderIcons = [biMinimize, biMaximize]
   BorderStyle = bsDialog
-  Caption = 'ProjectSettingsDialog'
+  Caption = 'Project Settings'
   ClientHeight = 360
   ClientWidth = 480
   OnCreate = FormCreate
@@ -49,10 +49,9 @@ object ProjectSettingsDialog: TProjectSettingsDialog
         Width = 352
         EditLabel.Height = 13
         EditLabel.Width = 352
-        EditLabel.Caption = 'ProjectPath'
+        EditLabel.Caption = 'Project Path'
         ReadOnly = True
         TabOrder = 0
-        Text = 'ProjectPath'
       end
       object RunCommand: TLabeledEdit
         Left = 8
@@ -61,9 +60,9 @@ object ProjectSettingsDialog: TProjectSettingsDialog
         Width = 200
         EditLabel.Height = 13
         EditLabel.Width = 200
-        EditLabel.Caption = 'RunCommand'
+        EditLabel.Caption = 'Run Command'
         TabOrder = 1
-        Text = 'RunCommand'
+        TextHint = 'Example: project.exe'
       end
       object CompileCommand: TLabeledEdit
         Left = 8
@@ -72,9 +71,9 @@ object ProjectSettingsDialog: TProjectSettingsDialog
         Width = 200
         EditLabel.Height = 13
         EditLabel.Width = 200
-        EditLabel.Caption = 'CompileCommand'
+        EditLabel.Caption = 'Compile Command'
         TabOrder = 2
-        Text = 'CompileCommand'
+        TextHint = 'Example: make project'
       end
       object SDKVersion: TLabeledEdit
         Left = 368
@@ -83,10 +82,9 @@ object ProjectSettingsDialog: TProjectSettingsDialog
         Width = 80
         EditLabel.Height = 13
         EditLabel.Width = 80
-        EditLabel.Caption = 'SDKVersion'
+        EditLabel.Caption = 'SDK Version'
         ReadOnly = True
         TabOrder = 3
-        Text = 'SDKVersion'
       end
       object ProjectName: TLabeledEdit
         Left = 8
@@ -95,7 +93,7 @@ object ProjectSettingsDialog: TProjectSettingsDialog
         Width = 200
         EditLabel.Height = 13
         EditLabel.Width = 200
-        EditLabel.Caption = 'ProjectName'
+        EditLabel.Caption = 'Project Name'
         TabOrder = 4
         TextHint = 'Example: My Epic Project'
       end
@@ -106,7 +104,7 @@ object ProjectSettingsDialog: TProjectSettingsDialog
         Width = 200
         EditLabel.Height = 13
         EditLabel.Width = 200
-        EditLabel.Caption = 'ProjectVersion'
+        EditLabel.Caption = 'Project Version'
         TabOrder = 5
         TextHint = 'Example: version 1.0.0'
       end
@@ -122,9 +120,8 @@ object ProjectSettingsDialog: TProjectSettingsDialog
         Width = 200
         EditLabel.Height = 13
         EditLabel.Width = 200
-        EditLabel.Caption = 'TBSPCommand'
+        EditLabel.Caption = 'TBSP Command'
         TabOrder = 0
-        Text = 'TBSPCommand'
       end
       object TMapCommand: TLabeledEdit
         Left = 8
@@ -133,9 +130,8 @@ object ProjectSettingsDialog: TProjectSettingsDialog
         Width = 200
         EditLabel.Height = 13
         EditLabel.Width = 200
-        EditLabel.Caption = 'TMapCommand'
+        EditLabel.Caption = 'TMap Command'
         TabOrder = 1
-        Text = 'TMapCommand'
       end
       object TRadCommand: TLabeledEdit
         Left = 8
@@ -144,26 +140,28 @@ object ProjectSettingsDialog: TProjectSettingsDialog
         Width = 200
         EditLabel.Height = 13
         EditLabel.Width = 200
-        EditLabel.Caption = 'TRadCommand'
+        EditLabel.Caption = 'TRad Command'
         TabOrder = 2
-        Text = 'TRadCommand'
       end
     end
     object TabSheet3: TTabSheet
       Caption = 'Editors'
       ClientHeight = 286
       ClientWidth = 456
-      object LabeledEdit1: TLabeledEdit
+      object LevelEditor: TLabeledEdit
         Left = 8
         Height = 21
         Top = 16
         Width = 200
         EditLabel.Height = 13
         EditLabel.Width = 200
-        EditLabel.Caption = 'LabeledEdit1'
+        EditLabel.Caption = 'Level Editor Command'
         TabOrder = 0
-        Text = 'LabeledEdit1'
+        Text = 'LevelEditor'
       end
+    end
+    object TabSheet4: TTabSheet
+      Caption = 'Converters'
     end
   end
 end

@@ -35,11 +35,14 @@ object PreferencesDialog: TPreferencesDialog
     Height = 192
     Top = 8
     Width = 304
-    ActivePage = ProfileTab
-    TabIndex = 2
+    ActivePage = TabSheet1
+    TabIndex = 0
     TabOrder = 2
+    object TabSheet1: TTabSheet
+      Caption = 'General'
+    end
     object TabSheet2: TTabSheet
-      Caption = 'TabSheet2'
+      Caption = 'Desktop'
       ClientHeight = 166
       ClientWidth = 296
       object ShowInDirectory: TLabeledEdit
@@ -49,7 +52,7 @@ object PreferencesDialog: TPreferencesDialog
         Width = 208
         EditLabel.Height = 13
         EditLabel.Width = 208
-        EditLabel.Caption = 'ShowInDirectory'
+        EditLabel.Caption = 'Show File in Directory Command'
         TabOrder = 0
         Text = 'ShowInDirectory'
       end
@@ -60,7 +63,7 @@ object PreferencesDialog: TPreferencesDialog
         Width = 208
         EditLabel.Height = 13
         EditLabel.Width = 208
-        EditLabel.Caption = 'OpenDirectory'
+        EditLabel.Caption = 'Open Directory Command'
         TabOrder = 1
         Text = 'OpenDirectory'
       end
@@ -71,13 +74,10 @@ object PreferencesDialog: TPreferencesDialog
         Width = 208
         EditLabel.Height = 13
         EditLabel.Width = 208
-        EditLabel.Caption = 'OpenFile'
+        EditLabel.Caption = 'Open File Command'
         TabOrder = 2
         Text = 'OpenFile'
       end
-    end
-    object TabSheet1: TTabSheet
-      Caption = 'TabSheet1'
     end
     object ProfileTab: TTabSheet
       Caption = 'Profile'

@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 426
+  Left = 427
   Height = 581
-  Top = 337
+  Top = 242
   Width = 800
   AllowDropFiles = True
   BorderStyle = bsSingle
@@ -78,6 +78,7 @@ object MainForm: TMainForm
       Top = 4
       Width = 100
       CharCase = ecUppercase
+      DropDownCount = 32
       ItemHeight = 13
       ItemIndex = 0
       Items.Strings = (
@@ -85,6 +86,22 @@ object MainForm: TMainForm
         'STMDL'
         'DYMDL'
         'MDMDL'
+        'COLLMDL'
+        'MDLSRC'
+        'MATERIAL'
+        'TEXSRC'
+        'AUDIO'
+        'AUDIOSRC'
+        'SPRITE'
+        'ANIM'
+        'LANG'
+        'PATH'
+        'NAVMESH'
+        'WORLDCELL'
+        'ENTDEF'
+        'DIALOG'
+        'SCRIPT'
+        'SHADER'
       )
       Style = csDropDownList
       TabOrder = 0
@@ -318,9 +335,11 @@ object MainForm: TMainForm
       Caption = 'Project'
       object RunExecutable: TMenuItem
         Caption = 'Run'
+        OnClick = RunExecutableClick
       end
       object Compile: TMenuItem
         Caption = 'Compile'
+        OnClick = CompileClick
       end
       object Separator4: TMenuItem
         Caption = '-'
@@ -334,6 +353,7 @@ object MainForm: TMainForm
       end
       object OpenLevelEditor: TMenuItem
         Caption = 'Level Editor'
+        OnClick = OpenLevelEditorClick
       end
       object OpenMaterialEditor: TMenuItem
         Caption = 'Material Editor'

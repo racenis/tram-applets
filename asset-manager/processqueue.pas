@@ -16,6 +16,8 @@ procedure ProcessQueueSync();
 function GetQueueLength: Integer;
 procedure SetQueueCallback(callback: TQueueCallback);
 
+function SplitCommandline(path: string): TStringArray;
+
 
 implementation
 
@@ -74,7 +76,6 @@ begin
 
   Result := [];
 
-
   for index := 1 to High(path) do begin
 
       if state = stateQuote then
@@ -110,9 +111,11 @@ begin
 
       token := token + path[index];
 
+  end;
 
-
-
+  if token <> '' then begin
+     SetLength(Result, Length(Result) + 1);
+     Result[High(Result)] := token;
   end;
 
 end;

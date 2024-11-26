@@ -18,10 +18,105 @@
       </Item>
       <Item>
         <Filename Value="tramassetmetadata.pas"/>
-        <UnitName Value="tramassetmetadata"/>
+        <UnitName Value="TramAssetMetadata"/>
+      </Item>
+      <Item>
+        <Filename Value="tramassetmetadatatest.pas"/>
+        <UnitName Value="TramAssetMetadataTest"/>
+      </Item>
+      <Item>
+        <Filename Value="tramassetparsertest.pas"/>
+        <UnitName Value="TramAssetParserTest"/>
+      </Item>
+      <Item>
+        <Filename Value="tramassetcollection.pas"/>
+        <UnitName Value="TramAssetCollection"/>
+      </Item>
+      <Item>
+        <Filename Value="tram3dmodelasset.pas"/>
+        <UnitName Value="Tram3DModelAsset"/>
+      </Item>
+      <Item>
+        <Filename Value="tramassetdatabase.pas"/>
+        <UnitName Value="TramAssetDatabase"/>
+      </Item>
+      <Item>
+        <Filename Value="tramassetwriter.pas"/>
+        <UnitName Value="TramAssetWriter"/>
+      </Item>
+      <Item>
+        <Filename Value="tramassetwritertest.pas"/>
+        <UnitName Value="TramAssetWriterTest"/>
+      </Item>
+      <Item>
+        <Filename Value="tramanimationasset.pas"/>
+        <UnitName Value="TramAnimationAsset"/>
+      </Item>
+      <Item>
+        <Filename Value="tramaudioasset.pas"/>
+        <UnitName Value="TramAudioAsset"/>
+      </Item>
+      <Item>
+        <Filename Value="tramaudiosourceasset.pas"/>
+        <UnitName Value="TramAudioSourceAsset"/>
+      </Item>
+      <Item>
+        <Filename Value="tramnavmeshasset.pas"/>
+        <UnitName Value="TramNavmeshAsset"/>
+      </Item>
+      <Item>
+        <Filename Value="trampathasset.pas"/>
+        <UnitName Value="TramPathAsset"/>
+      </Item>
+      <Item>
+        <Filename Value="tramspriteasset.pas"/>
+        <UnitName Value="TramSpriteAsset"/>
+      </Item>
+      <Item>
+        <Filename Value="trammaterialasset.pas"/>
+        <UnitName Value="TramMaterialAsset"/>
+      </Item>
+      <Item>
+        <Filename Value="tramworldcellasset.pas"/>
+        <UnitName Value="TramWorldCellAsset"/>
+      </Item>
+      <Item>
+        <Filename Value="tramdialogasset.pas"/>
+        <UnitName Value="TramDialogAsset"/>
+      </Item>
+      <Item>
+        <Filename Value="tramentitydefinitionasset.pas"/>
+        <UnitName Value="TramEntityDefinitionAsset"/>
+      </Item>
+      <Item>
+        <Filename Value="tramlanguageasset.pas"/>
+        <UnitName Value="TramLanguageAsset"/>
+      </Item>
+      <Item>
+        <Filename Value="tramquestasset.pas"/>
+        <UnitName Value="TramQuestAsset"/>
+      </Item>
+      <Item>
+        <Filename Value="tram3dmodelsourceasset.pas"/>
+        <UnitName Value="Tram3DModelSourceAsset"/>
+      </Item>
+      <Item>
+        <Filename Value="tramtexturrsourceasset.pas"/>
+        <UnitName Value="TramTexturrSourceAsset"/>
+      </Item>
+      <Item>
+        <Filename Value="tramshaderasset.pas"/>
+        <UnitName Value="tramshaderasset"/>
+      </Item>
+      <Item>
+        <Filename Value="tramscriptasset.pas"/>
+        <UnitName Value="tramscriptasset"/>
       </Item>
     </Files>
     <RequiredPkgs>
+      <Item>
+        <PackageName Value="LazUtils"/>
+      </Item>
       <Item>
         <PackageName Value="FCL"/>
       </Item>
