@@ -1,0 +1,587 @@
+object MainForm: TMainForm
+  Left = 305
+  Height = 456
+  Top = 132
+  Width = 791
+  Caption = 'MainForm'
+  ClientHeight = 456
+  ClientWidth = 791
+  Menu = MainMenu
+  LCLVersion = '3.0.0.3'
+  object Tabs: TPageControl
+    Left = 0
+    Height = 456
+    Top = 0
+    Width = 791
+    ActivePage = ItemTab
+    TabIndex = 1
+    TabOrder = 0
+    object GeneralTab: TTabSheet
+      Caption = 'General'
+    end
+    object ItemTab: TTabSheet
+      Caption = 'Items'
+      ClientHeight = 430
+      ClientWidth = 783
+      object ItemTabSearchItem: TEdit
+        Left = 8
+        Height = 21
+        Top = 32
+        Width = 144
+        TabOrder = 0
+        Text = 'ItemTabSearchItem'
+      end
+      object ItemTabItemList: TListBox
+        Left = 8
+        Height = 344
+        Top = 80
+        Width = 144
+        ItemHeight = 0
+        TabOrder = 1
+      end
+      object ItemTabGeneralGroup: TGroupBox
+        Left = 160
+        Height = 96
+        Top = 8
+        Width = 249
+        Caption = 'General'
+        ClientHeight = 78
+        ClientWidth = 245
+        TabOrder = 2
+        object ItemTabClassName: TEdit
+          Left = 88
+          Height = 21
+          Top = 0
+          Width = 144
+          TabOrder = 0
+          Text = 'ItemTabClassName'
+        end
+        object Label1: TLabel
+          Left = 8
+          Height = 21
+          Top = 0
+          Width = 64
+          AutoSize = False
+          Caption = 'Class Name'
+          Layout = tlCenter
+        end
+        object Label2: TLabel
+          Left = 8
+          Height = 21
+          Top = 24
+          Width = 64
+          AutoSize = False
+          Caption = 'Base Class'
+          Layout = tlCenter
+        end
+        object ItemTabBaseClass: TComboBox
+          Left = 88
+          Height = 21
+          Top = 24
+          Width = 144
+          ItemHeight = 13
+          TabOrder = 1
+          Text = 'ItemTabBaseClass'
+        end
+        object ItemTabEquipmentSlot: TComboBox
+          Left = 88
+          Height = 21
+          Top = 48
+          Width = 144
+          ItemHeight = 13
+          TabOrder = 2
+          Text = 'ItemTabEquipmentSlot'
+        end
+        object Label9: TLabel
+          Left = 8
+          Height = 21
+          Top = 48
+          Width = 80
+          AutoSize = False
+          Caption = 'Equipment Slot'
+          Layout = tlCenter
+        end
+      end
+      object ItemTab2DGroup: TGroupBox
+        Left = 160
+        Height = 120
+        Top = 176
+        Width = 249
+        Caption = 'GUI Display'
+        ClientHeight = 102
+        ClientWidth = 245
+        TabOrder = 3
+        object ItemTabSprite: TComboBox
+          Left = 88
+          Height = 21
+          Top = 0
+          Width = 144
+          ItemHeight = 13
+          TabOrder = 0
+          Text = 'ItemTabSprite'
+        end
+        object ItemTabSpriteFrame: TSpinEdit
+          Left = 88
+          Height = 21
+          Top = 24
+          Width = 144
+          TabOrder = 1
+        end
+        object ItemTabIconFrame: TSpinEdit
+          Left = 88
+          Height = 21
+          Top = 72
+          Width = 144
+          TabOrder = 2
+        end
+        object ItemTabIcon: TComboBox
+          Left = 88
+          Height = 21
+          Top = 48
+          Width = 144
+          ItemHeight = 13
+          TabOrder = 3
+          Text = 'ItemTabIcon'
+        end
+        object Label5: TLabel
+          Left = 8
+          Height = 21
+          Top = 0
+          Width = 64
+          AutoSize = False
+          Caption = 'Sprite'
+          Layout = tlCenter
+        end
+        object Label6: TLabel
+          Left = 8
+          Height = 21
+          Top = 24
+          Width = 64
+          AutoSize = False
+          Caption = 'Sprite Frame'
+          Layout = tlCenter
+        end
+        object Label7: TLabel
+          Left = 8
+          Height = 21
+          Top = 48
+          Width = 64
+          AutoSize = False
+          Caption = 'Icon'
+          Layout = tlCenter
+        end
+        object Label8: TLabel
+          Left = 8
+          Height = 21
+          Top = 72
+          Width = 64
+          AutoSize = False
+          Caption = 'Icon Frame'
+          Layout = tlCenter
+        end
+      end
+      object ItemTab3DGroup: TGroupBox
+        Left = 160
+        Height = 72
+        Top = 104
+        Width = 249
+        Caption = 'World Display'
+        ClientHeight = 54
+        ClientWidth = 245
+        TabOrder = 4
+        object Label3: TLabel
+          Left = 8
+          Height = 21
+          Top = 0
+          Width = 64
+          AutoSize = False
+          Caption = 'Viewmodel'
+          Layout = tlCenter
+        end
+        object Label4: TLabel
+          Left = 8
+          Height = 21
+          Top = 24
+          Width = 64
+          AutoSize = False
+          Caption = 'Worldmodel'
+          Layout = tlCenter
+        end
+        object ItemTabViewmodel: TComboBox
+          Left = 88
+          Height = 21
+          Top = 0
+          Width = 144
+          ItemHeight = 13
+          TabOrder = 0
+          Text = 'ItemTabViewmodel'
+        end
+        object ItemTabWorldmodel: TComboBox
+          Left = 88
+          Height = 21
+          Top = 24
+          Width = 144
+          ItemHeight = 13
+          TabOrder = 1
+          Text = 'ItemTabWorldmodel'
+        end
+      end
+      object ItemTabFile: TComboBox
+        Left = 8
+        Height = 21
+        Top = 8
+        Width = 144
+        ItemHeight = 13
+        TabOrder = 5
+        Text = 'ItemTabFile'
+      end
+      object ItemTabLayoutGroup: TGroupBox
+        Left = 160
+        Height = 128
+        Top = 296
+        Width = 249
+        Caption = 'Inventory Layout'
+        ClientHeight = 110
+        ClientWidth = 245
+        TabOrder = 6
+        object Label16: TLabel
+          Left = 8
+          Height = 21
+          Top = 8
+          Width = 40
+          AutoSize = False
+          Caption = 'Width'
+          Layout = tlCenter
+        end
+        object Label17: TLabel
+          Left = 8
+          Height = 21
+          Top = 80
+          Width = 40
+          AutoSize = False
+          Caption = 'Weight'
+          Layout = tlCenter
+        end
+        object Label18: TLabel
+          Left = 8
+          Height = 21
+          Top = 32
+          Width = 40
+          AutoSize = False
+          Caption = 'Height'
+          Layout = tlCenter
+        end
+        object Label19: TLabel
+          Left = 8
+          Height = 21
+          Top = 56
+          Width = 40
+          AutoSize = False
+          Caption = 'Stack'
+          Layout = tlCenter
+        end
+        object Label20: TLabel
+          Left = 120
+          Height = 21
+          Top = 56
+          Width = 72
+          AutoSize = False
+          Caption = 'Compartment'
+          Layout = tlCenter
+        end
+        object ItemTabItemWidth: TSpinEdit
+          Left = 48
+          Height = 21
+          Top = 8
+          Width = 66
+          TabOrder = 0
+        end
+        object ItemTabItemHeight: TSpinEdit
+          Left = 48
+          Height = 21
+          Top = 32
+          Width = 66
+          TabOrder = 1
+        end
+        object ItemTabItemStack: TSpinEdit
+          Left = 48
+          Height = 21
+          Top = 56
+          Width = 66
+          TabOrder = 2
+        end
+        object ItemTabItemWeight: TFloatSpinEdit
+          Left = 48
+          Height = 21
+          Top = 80
+          Width = 66
+          TabOrder = 3
+        end
+        object ItemTabItemCompartment: TComboBox
+          Left = 120
+          Height = 21
+          Top = 80
+          Width = 112
+          ItemHeight = 13
+          TabOrder = 4
+          Text = 'ItemTabItemCompartment'
+        end
+      end
+      object ItemTabNewItem: TButton
+        Left = 8
+        Height = 21
+        Top = 56
+        Width = 72
+        Caption = 'Add New'
+        TabOrder = 7
+      end
+      object ItemTabDeleteItem: TButton
+        Left = 80
+        Height = 21
+        Top = 56
+        Width = 72
+        Caption = 'Remove'
+        TabOrder = 8
+      end
+      object GroupBox1: TGroupBox
+        Left = 416
+        Height = 232
+        Top = 8
+        Width = 361
+        Caption = 'Attributes and Effects'
+        ClientHeight = 214
+        ClientWidth = 357
+        TabOrder = 9
+        object ItemTabNewAttribute: TButton
+          Left = 8
+          Height = 21
+          Top = 0
+          Width = 64
+          Caption = 'Add New'
+          TabOrder = 0
+        end
+        object ItemTabDeleteAttribute: TButton
+          Left = 72
+          Height = 21
+          Top = 0
+          Width = 56
+          Caption = 'Remove'
+          TabOrder = 1
+          OnClick = ItemTabDeleteAttributeClick
+        end
+        object ItemTabAttributeList: TListBox
+          Left = 8
+          Height = 184
+          Top = 24
+          Width = 120
+          ItemHeight = 0
+          TabOrder = 2
+        end
+        object ItemTabAttributeEffectSwitch: TRadioGroup
+          Left = 136
+          Height = 45
+          Top = 163
+          Width = 208
+          AutoFill = True
+          Caption = 'Record Type'
+          ChildSizing.LeftRightSpacing = 6
+          ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+          ChildSizing.EnlargeVertical = crsHomogenousChildResize
+          ChildSizing.ShrinkHorizontal = crsScaleChilds
+          ChildSizing.ShrinkVertical = crsScaleChilds
+          ChildSizing.Layout = cclTopToBottomThenLeftToRight
+          ChildSizing.ControlsPerLine = 1
+          ClientHeight = 27
+          ClientWidth = 204
+          ColumnLayout = clVerticalThenHorizontal
+          TabOrder = 3
+          object ItemTabAttributeRadio: TRadioButton
+            Left = 6
+            Height = 27
+            Top = 0
+            Width = 103
+            Caption = 'Attribute'
+            TabOrder = 0
+          end
+          object ItemTabEffectRadio: TRadioButton
+            Left = 109
+            Height = 27
+            Top = 0
+            Width = 89
+            Caption = 'Effect'
+            TabOrder = 1
+          end
+        end
+        object ItemTabAttribute: TComboBox
+          Left = 200
+          Height = 21
+          Top = 0
+          Width = 146
+          ItemHeight = 13
+          TabOrder = 4
+          Text = 'ItemTabAttribute'
+        end
+        object ItemTabAttributeValue: TFloatSpinEdit
+          Left = 200
+          Height = 21
+          Top = 24
+          Width = 146
+          TabOrder = 5
+        end
+        object ItemTabEffectTag: TEdit
+          Left = 200
+          Height = 21
+          Top = 72
+          Width = 144
+          TabOrder = 6
+          Text = 'ItemTabEffectTag'
+        end
+        object ItemTabEffectType: TComboBox
+          Left = 200
+          Height = 21
+          Top = 96
+          Width = 146
+          ItemHeight = 13
+          TabOrder = 7
+          Text = 'ItemTabEffectType'
+        end
+        object ItemTabEffectDuration: TFloatSpinEdit
+          Left = 200
+          Height = 21
+          Top = 120
+          Width = 144
+          TabOrder = 8
+        end
+        object Label10: TLabel
+          Left = 136
+          Height = 21
+          Top = 0
+          Width = 64
+          AutoSize = False
+          Caption = 'Attribute'
+          Layout = tlCenter
+        end
+        object Label11: TLabel
+          Left = 136
+          Height = 21
+          Top = 24
+          Width = 64
+          AutoSize = False
+          Caption = 'Value'
+          Layout = tlCenter
+        end
+        object Label12: TLabel
+          Left = 136
+          Height = 21
+          Top = 72
+          Width = 64
+          AutoSize = False
+          Caption = 'Tag'
+          Layout = tlCenter
+        end
+        object Label13: TLabel
+          Left = 136
+          Height = 21
+          Top = 96
+          Width = 64
+          AutoSize = False
+          Caption = 'Type'
+          Layout = tlCenter
+        end
+        object Label14: TLabel
+          Left = 136
+          Height = 21
+          Top = 120
+          Width = 64
+          AutoSize = False
+          Caption = 'Duration'
+          Layout = tlCenter
+        end
+        object Label15: TLabel
+          Left = 136
+          Height = 21
+          Top = 48
+          Width = 64
+          AutoSize = False
+          Caption = 'Name'
+          Layout = tlCenter
+        end
+        object ItemTabEffectName: TEdit
+          Left = 200
+          Height = 21
+          Top = 48
+          Width = 144
+          TabOrder = 9
+          Text = 'ItemTabEffectName'
+        end
+      end
+    end
+    object DropTableTab: TTabSheet
+      Caption = 'Drop Tables'
+    end
+    object CharacterTab: TTabSheet
+      Caption = 'Characters'
+    end
+    object ClassTab: TTabSheet
+      Caption = 'Character Classes'
+    end
+    object FactionTab: TTabSheet
+      Caption = 'Factions'
+    end
+    object AIPackageTab: TTabSheet
+      Caption = 'AI Packages'
+    end
+    object QuestTab: TTabSheet
+      Caption = 'Quests'
+    end
+    object DialogTab: TTabSheet
+      Caption = 'Dialog Topics'
+    end
+  end
+  object MainMenu: TMainMenu
+    Left = 16
+    Top = 408
+    object MenuItemFile: TMenuItem
+      Caption = 'File'
+      object MenuItemLoadDatabase: TMenuItem
+        Caption = 'Load Database'
+      end
+      object MenuItemSaveFiles: TMenuItem
+        Caption = 'Save Files'
+      end
+      object Separator1: TMenuItem
+        Caption = '-'
+      end
+      object MenuItemNewQuest: TMenuItem
+        Caption = 'New Quest'
+      end
+      object MenuItemNewDialog: TMenuItem
+        Caption = 'New Dialog'
+      end
+      object MenuItemNewItem: TMenuItem
+        Caption = 'New Item'
+      end
+      object MenuItemNewCharacter: TMenuItem
+        Caption = 'New Character'
+      end
+      object Separator2: TMenuItem
+        Caption = '-'
+      end
+      object MenuItemQuit: TMenuItem
+        Caption = 'Quit'
+      end
+    end
+    object MenuItemHelp: TMenuItem
+      Caption = 'Help'
+      object MenuItemGetHelp: TMenuItem
+        Caption = 'GetHelp'
+      end
+      object Separator3: TMenuItem
+        Caption = '-'
+      end
+      object MenuItemAbout: TMenuItem
+        Caption = 'About'
+      end
+    end
+  end
+end
