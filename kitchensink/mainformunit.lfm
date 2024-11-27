@@ -13,8 +13,8 @@ object MainForm: TMainForm
     Height = 456
     Top = 0
     Width = 791
-    ActivePage = ItemTab
-    TabIndex = 1
+    ActivePage = ClassTab
+    TabIndex = 4
     TabOrder = 0
     object GeneralTab: TTabSheet
       Caption = 'General'
@@ -29,7 +29,7 @@ object MainForm: TMainForm
         Top = 32
         Width = 144
         TabOrder = 0
-        Text = 'ItemTabSearchItem'
+        TextHint = 'Search for an item.'
       end
       object ItemTabItemList: TListBox
         Left = 8
@@ -54,7 +54,7 @@ object MainForm: TMainForm
           Top = 0
           Width = 144
           TabOrder = 0
-          Text = 'ItemTabClassName'
+          Text = 'none'
         end
         object Label1: TLabel
           Left = 8
@@ -81,7 +81,7 @@ object MainForm: TMainForm
           Width = 144
           ItemHeight = 13
           TabOrder = 1
-          Text = 'ItemTabBaseClass'
+          Text = 'none'
         end
         object ItemTabEquipmentSlot: TComboBox
           Left = 88
@@ -90,7 +90,7 @@ object MainForm: TMainForm
           Width = 144
           ItemHeight = 13
           TabOrder = 2
-          Text = 'ItemTabEquipmentSlot'
+          Text = 'none'
         end
         object Label9: TLabel
           Left = 8
@@ -118,7 +118,7 @@ object MainForm: TMainForm
           Width = 144
           ItemHeight = 13
           TabOrder = 0
-          Text = 'ItemTabSprite'
+          Text = 'none'
         end
         object ItemTabSpriteFrame: TSpinEdit
           Left = 88
@@ -141,7 +141,7 @@ object MainForm: TMainForm
           Width = 144
           ItemHeight = 13
           TabOrder = 3
-          Text = 'ItemTabIcon'
+          Text = 'none'
         end
         object Label5: TLabel
           Left = 8
@@ -214,7 +214,7 @@ object MainForm: TMainForm
           Width = 144
           ItemHeight = 13
           TabOrder = 0
-          Text = 'ItemTabViewmodel'
+          Text = 'none'
         end
         object ItemTabWorldmodel: TComboBox
           Left = 88
@@ -223,7 +223,7 @@ object MainForm: TMainForm
           Width = 144
           ItemHeight = 13
           TabOrder = 1
-          Text = 'ItemTabWorldmodel'
+          Text = 'none'
         end
       end
       object ItemTabFile: TComboBox
@@ -233,7 +233,7 @@ object MainForm: TMainForm
         Width = 144
         ItemHeight = 13
         TabOrder = 5
-        Text = 'ItemTabFile'
+        TextHint = 'Select a file.'
       end
       object ItemTabLayoutGroup: TGroupBox
         Left = 160
@@ -324,7 +324,7 @@ object MainForm: TMainForm
           Width = 112
           ItemHeight = 13
           TabOrder = 4
-          Text = 'ItemTabItemCompartment'
+          Text = 'none'
         end
       end
       object ItemTabNewItem: TButton
@@ -401,7 +401,9 @@ object MainForm: TMainForm
             Top = 0
             Width = 103
             Caption = 'Attribute'
-            TabOrder = 0
+            Checked = True
+            TabOrder = 1
+            TabStop = True
           end
           object ItemTabEffectRadio: TRadioButton
             Left = 109
@@ -409,7 +411,7 @@ object MainForm: TMainForm
             Top = 0
             Width = 89
             Caption = 'Effect'
-            TabOrder = 1
+            TabOrder = 0
           end
         end
         object ItemTabAttribute: TComboBox
@@ -419,11 +421,13 @@ object MainForm: TMainForm
           Width = 146
           ItemHeight = 13
           TabOrder = 4
-          Text = 'ItemTabAttribute'
+          Text = 'none'
+          TextHint = 'Select an attribute.'
         end
         object ItemTabAttributeValue: TFloatSpinEdit
           Left = 200
           Height = 21
+          Hint = 'Attribute modification, in whatever units the'#13#10'selected attribute is using.'
           Top = 24
           Width = 146
           TabOrder = 5
@@ -431,10 +435,11 @@ object MainForm: TMainForm
         object ItemTabEffectTag: TEdit
           Left = 200
           Height = 21
+          Hint = 'Used to identify a specific effect through scripting.'#13#10'Could be used i.e. to remove this effect through a'#13#10'script, while leaving other effects unaffected.'
           Top = 72
           Width = 144
           TabOrder = 6
-          Text = 'ItemTabEffectTag'
+          TextHint = 'Identification tag (optional)'
         end
         object ItemTabEffectType: TComboBox
           Left = 200
@@ -443,11 +448,12 @@ object MainForm: TMainForm
           Width = 146
           ItemHeight = 13
           TabOrder = 7
-          Text = 'ItemTabEffectType'
+          TextHint = 'Effect action type'
         end
         object ItemTabEffectDuration: TFloatSpinEdit
           Left = 200
           Height = 21
+          Hint = 'If set to a positive value, then the effect will last'#13#10'this Duration, set in seconds.'#13#10#13#10'The attribute modification will be applied at a rate'#13#10'of *Value* units per second.'#13#10#13#10'If set to negative, then the attribute modification'#13#10'specified by Value will be applied in a single tick and'#13#10'the effect will expire immediately.'
           Top = 120
           Width = 144
           TabOrder = 8
@@ -509,33 +515,565 @@ object MainForm: TMainForm
         object ItemTabEffectName: TEdit
           Left = 200
           Height = 21
+          Hint = 'Used to give a meaningful name of the effect to'#13#10'the user. The name references a language string.'
           Top = 48
           Width = 144
           TabOrder = 9
-          Text = 'ItemTabEffectName'
+          TextHint = 'Display name (optional)'
         end
       end
     end
     object DropTableTab: TTabSheet
       Caption = 'Drop Tables'
+      ClientHeight = 430
+      ClientWidth = 783
+      object ItemTabSearchItem1: TEdit
+        Left = 8
+        Height = 21
+        Top = 32
+        Width = 144
+        TabOrder = 0
+        TextHint = 'Search for an item.'
+      end
+      object ItemTabItemList1: TListBox
+        Left = 8
+        Height = 344
+        Top = 80
+        Width = 144
+        ItemHeight = 0
+        TabOrder = 1
+      end
+      object ItemTabFile1: TComboBox
+        Left = 8
+        Height = 21
+        Top = 8
+        Width = 144
+        ItemHeight = 13
+        TabOrder = 2
+        TextHint = 'Select a file.'
+      end
+      object ItemTabNewItem1: TButton
+        Left = 8
+        Height = 21
+        Top = 56
+        Width = 72
+        Caption = 'Add New'
+        TabOrder = 3
+      end
+      object ItemTabDeleteItem1: TButton
+        Left = 80
+        Height = 21
+        Top = 56
+        Width = 72
+        Caption = 'Remove'
+        TabOrder = 4
+      end
     end
     object CharacterTab: TTabSheet
       Caption = 'Characters'
+      ClientHeight = 430
+      ClientWidth = 783
+      object ItemTabSearchItem2: TEdit
+        Left = 8
+        Height = 21
+        Top = 32
+        Width = 144
+        TabOrder = 0
+        TextHint = 'Search for an item.'
+      end
+      object ItemTabItemList2: TListBox
+        Left = 8
+        Height = 344
+        Top = 80
+        Width = 144
+        ItemHeight = 0
+        TabOrder = 1
+      end
+      object ItemTabFile2: TComboBox
+        Left = 8
+        Height = 21
+        Top = 8
+        Width = 144
+        ItemHeight = 13
+        TabOrder = 2
+        TextHint = 'Select a file.'
+      end
+      object ItemTabNewItem2: TButton
+        Left = 8
+        Height = 21
+        Top = 56
+        Width = 72
+        Caption = 'Add New'
+        TabOrder = 3
+      end
+      object ItemTabDeleteItem2: TButton
+        Left = 80
+        Height = 21
+        Top = 56
+        Width = 72
+        Caption = 'Remove'
+        TabOrder = 4
+      end
     end
     object ClassTab: TTabSheet
       Caption = 'Character Classes'
+      ClientHeight = 430
+      ClientWidth = 783
+      object ClassTabSearchClass: TEdit
+        Left = 8
+        Height = 21
+        Top = 32
+        Width = 144
+        TabOrder = 0
+        TextHint = 'Search for an item.'
+      end
+      object ClassTabClassList: TListBox
+        Left = 8
+        Height = 344
+        Top = 80
+        Width = 144
+        ItemHeight = 0
+        TabOrder = 1
+      end
+      object ClassTabFile: TComboBox
+        Left = 8
+        Height = 21
+        Top = 8
+        Width = 144
+        ItemHeight = 13
+        TabOrder = 2
+        TextHint = 'Select a file.'
+      end
+      object ClassTabNewClass: TButton
+        Left = 8
+        Height = 21
+        Top = 56
+        Width = 72
+        Caption = 'Add New'
+        TabOrder = 3
+      end
+      object ClassTabeDeleteClass: TButton
+        Left = 80
+        Height = 21
+        Top = 56
+        Width = 72
+        Caption = 'Remove'
+        TabOrder = 4
+      end
+      object ClassTabGeneralGroup: TGroupBox
+        Left = 160
+        Height = 56
+        Top = 8
+        Width = 224
+        Caption = 'General'
+        ClientHeight = 38
+        ClientWidth = 220
+        TabOrder = 5
+        object ClassTabClassName: TEdit
+          Left = 72
+          Height = 21
+          Top = 8
+          Width = 140
+          TabOrder = 0
+          TextHint = 'Enter the name of the class'
+        end
+        object Label21: TLabel
+          Left = 8
+          Height = 21
+          Top = 8
+          Width = 64
+          AutoSize = False
+          Caption = 'Class Name'
+          Font.Height = 13
+          Layout = tlCenter
+          ParentFont = False
+        end
+      end
+      object ClassTabFactionGroup: TGroupBox
+        Left = 160
+        Height = 224
+        Top = 200
+        Width = 225
+        Caption = 'Factions'
+        ClientHeight = 206
+        ClientWidth = 221
+        TabOrder = 6
+        object ClassTabFactionList: TListView
+          Left = 8
+          Height = 112
+          Top = 8
+          Width = 204
+          Columns = <          
+            item
+              Caption = 'Faction'
+              Width = 10
+            end          
+            item
+              Caption = 'Rank'
+              Width = 10
+            end          
+            item
+              Caption = 'Loyalty'
+              Width = 10
+            end>
+          TabOrder = 0
+        end
+        object ClassTabFactionSelect: TComboBox
+          Left = 8
+          Height = 21
+          Top = 128
+          Width = 112
+          ItemHeight = 13
+          TabOrder = 1
+          TextHint = 'Select to add'
+        end
+        object ClassTabFactionAdd: TButton
+          Left = 129
+          Height = 21
+          Top = 128
+          Width = 83
+          Caption = 'Add To Faction'
+          TabOrder = 2
+        end
+        object ClassTabFactionLoyalty: TFloatSpinEdit
+          Left = 52
+          Height = 21
+          Top = 176
+          Width = 68
+          TabOrder = 3
+        end
+        object ClassTabFactionRank: TFloatSpinEdit
+          Left = 52
+          Height = 21
+          Top = 152
+          Width = 68
+          TabOrder = 4
+        end
+        object Label22: TLabel
+          Left = 8
+          Height = 21
+          Top = 152
+          Width = 40
+          AutoSize = False
+          Caption = 'Rank'
+          Font.Height = 13
+          Layout = tlCenter
+          ParentFont = False
+        end
+        object Label23: TLabel
+          Left = 8
+          Height = 21
+          Top = 176
+          Width = 40
+          AutoSize = False
+          Caption = 'Loyalty'
+          Font.Height = 13
+          Layout = tlCenter
+          ParentFont = False
+        end
+        object ClassTabFactionRemove: TButton
+          Left = 129
+          Height = 21
+          Top = 152
+          Width = 83
+          Caption = 'Remove'
+          TabOrder = 5
+        end
+      end
+      object ClassTabBaseClassGroup: TGroupBox
+        Left = 160
+        Height = 120
+        Top = 72
+        Width = 225
+        Caption = 'Base Classes'
+        ClientHeight = 102
+        ClientWidth = 221
+        TabOrder = 7
+        object ClassTabBaseList: TListBox
+          Left = 8
+          Height = 81
+          Top = 8
+          Width = 100
+          ItemHeight = 0
+          TabOrder = 0
+        end
+        object ClassTabBaseSelect: TComboBox
+          Left = 112
+          Height = 21
+          Top = 11
+          Width = 100
+          ItemHeight = 13
+          TabOrder = 1
+          TextHint = 'Select to add'
+        end
+        object ClassTabAddBaseClass: TButton
+          Left = 112
+          Height = 21
+          Top = 40
+          Width = 99
+          Caption = 'Add Base Class'
+          TabOrder = 2
+        end
+        object ClassTabDeleteBaseClass: TButton
+          Left = 112
+          Height = 21
+          Top = 68
+          Width = 99
+          Caption = 'Remove'
+          TabOrder = 3
+        end
+      end
+      object ClassTabAttributeGroup: TGroupBox
+        Left = 392
+        Height = 416
+        Top = 8
+        Width = 385
+        Caption = 'Attributes'
+        ClientHeight = 398
+        ClientWidth = 381
+        TabOrder = 8
+        object ClassTabAttributeList: TListBox
+          Left = 8
+          Height = 381
+          Top = 8
+          Width = 144
+          ItemHeight = 0
+          TabOrder = 0
+        end
+        object ClassTabAttributeSelect: TComboBox
+          Left = 160
+          Height = 21
+          Top = 8
+          Width = 144
+          ItemHeight = 13
+          TabOrder = 1
+          TextHint = 'Select attribute to add'
+        end
+        object ClassTabAddAttribute: TButton
+          Left = 312
+          Height = 21
+          Top = 8
+          Width = 64
+          Caption = 'Add'
+          TabOrder = 2
+        end
+        object ClassTabDeleteAttribute: TButton
+          Left = 312
+          Height = 21
+          Top = 32
+          Width = 64
+          Caption = 'Remove'
+          TabOrder = 3
+        end
+        object ClassTabOverride: TCheckBox
+          Left = 160
+          Height = 21
+          Top = 32
+          Width = 73
+          AutoSize = False
+          Caption = 'Override'
+          Enabled = False
+          TabOrder = 4
+        end
+        object ClassTabAttributeValue: TFloatSpinEdit
+          Left = 160
+          Height = 21
+          Top = 75
+          Width = 144
+          TabOrder = 5
+        end
+        object Label24: TLabel
+          Left = 160
+          Height = 13
+          Top = 54
+          Width = 26
+          Caption = 'Value'
+        end
+      end
     end
     object FactionTab: TTabSheet
       Caption = 'Factions'
+      ClientHeight = 430
+      ClientWidth = 783
+      object ItemTabSearchItem4: TEdit
+        Left = 8
+        Height = 21
+        Top = 32
+        Width = 144
+        TabOrder = 0
+        TextHint = 'Search for an item.'
+      end
+      object ItemTabItemList4: TListBox
+        Left = 8
+        Height = 344
+        Top = 80
+        Width = 144
+        ItemHeight = 0
+        TabOrder = 1
+      end
+      object ItemTabFile4: TComboBox
+        Left = 8
+        Height = 21
+        Top = 8
+        Width = 144
+        ItemHeight = 13
+        TabOrder = 2
+        TextHint = 'Select a file.'
+      end
+      object ItemTabNewItem4: TButton
+        Left = 8
+        Height = 21
+        Top = 56
+        Width = 72
+        Caption = 'Add New'
+        TabOrder = 3
+      end
+      object ItemTabDeleteItem4: TButton
+        Left = 80
+        Height = 21
+        Top = 56
+        Width = 72
+        Caption = 'Remove'
+        TabOrder = 4
+      end
     end
     object AIPackageTab: TTabSheet
       Caption = 'AI Packages'
+      ClientHeight = 430
+      ClientWidth = 783
+      object ItemTabSearchItem5: TEdit
+        Left = 8
+        Height = 21
+        Top = 32
+        Width = 144
+        TabOrder = 0
+        TextHint = 'Search for an item.'
+      end
+      object ItemTabItemList5: TListBox
+        Left = 8
+        Height = 344
+        Top = 80
+        Width = 144
+        ItemHeight = 0
+        TabOrder = 1
+      end
+      object ItemTabFile5: TComboBox
+        Left = 8
+        Height = 21
+        Top = 8
+        Width = 144
+        ItemHeight = 13
+        TabOrder = 2
+        TextHint = 'Select a file.'
+      end
+      object ItemTabNewItem5: TButton
+        Left = 8
+        Height = 21
+        Top = 56
+        Width = 72
+        Caption = 'Add New'
+        TabOrder = 3
+      end
+      object ItemTabDeleteItem5: TButton
+        Left = 80
+        Height = 21
+        Top = 56
+        Width = 72
+        Caption = 'Remove'
+        TabOrder = 4
+      end
     end
     object QuestTab: TTabSheet
       Caption = 'Quests'
+      ClientHeight = 430
+      ClientWidth = 783
+      object ItemTabSearchItem6: TEdit
+        Left = 8
+        Height = 21
+        Top = 32
+        Width = 144
+        TabOrder = 0
+        TextHint = 'Search for an item.'
+      end
+      object ItemTabItemList6: TListBox
+        Left = 8
+        Height = 344
+        Top = 80
+        Width = 144
+        ItemHeight = 0
+        TabOrder = 1
+      end
+      object ItemTabFile6: TComboBox
+        Left = 8
+        Height = 21
+        Top = 8
+        Width = 144
+        ItemHeight = 13
+        TabOrder = 2
+        TextHint = 'Select a file.'
+      end
+      object ItemTabNewItem6: TButton
+        Left = 8
+        Height = 21
+        Top = 56
+        Width = 72
+        Caption = 'Add New'
+        TabOrder = 3
+      end
+      object ItemTabDeleteItem6: TButton
+        Left = 80
+        Height = 21
+        Top = 56
+        Width = 72
+        Caption = 'Remove'
+        TabOrder = 4
+      end
     end
     object DialogTab: TTabSheet
       Caption = 'Dialog Topics'
+      ClientHeight = 430
+      ClientWidth = 783
+      object DialogTabSearchTopic: TEdit
+        Left = 8
+        Height = 21
+        Top = 32
+        Width = 144
+        TabOrder = 0
+        TextHint = 'Search for an item.'
+      end
+      object DialogTabItemList: TListBox
+        Left = 8
+        Height = 344
+        Top = 80
+        Width = 144
+        ItemHeight = 0
+        TabOrder = 1
+      end
+      object DialogTabFile: TComboBox
+        Left = 8
+        Height = 21
+        Top = 8
+        Width = 144
+        ItemHeight = 13
+        TabOrder = 2
+        TextHint = 'Select a file.'
+      end
+      object DialogTabNewItem: TButton
+        Left = 8
+        Height = 21
+        Top = 56
+        Width = 72
+        Caption = 'Add New'
+        TabOrder = 3
+      end
+      object DialogTabDeleteItem: TButton
+        Left = 80
+        Height = 21
+        Top = 56
+        Width = 72
+        Caption = 'Remove'
+        TabOrder = 4
+      end
     end
   end
   object MainMenu: TMainMenu

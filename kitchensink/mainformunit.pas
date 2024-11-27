@@ -6,19 +6,72 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, Menus,
-  StdCtrls, ExtCtrls, Spin;
+  StdCtrls, ExtCtrls, Spin, EditBtn;
 
 type
 
   { TMainForm }
 
   TMainForm = class(TForm)
+    ClassTabAddBaseClass: TButton;
+    ClassTabDeleteBaseClass: TButton;
+    ClassTabFactionAdd: TButton;
+    ClassTabFactionRemove: TButton;
+    ClassTabAddAttribute: TButton;
+    ClassTabDeleteAttribute: TButton;
+    ClassTabOverride: TCheckBox;
+    ClassTabGeneralGroup: TGroupBox;
+    ClassTabFactionGroup: TGroupBox;
+    ClassTabBaseClassGroup: TGroupBox;
+    ClassTabAttributeGroup: TGroupBox;
+    ClassTabBaseSelect: TComboBox;
+    ClassTabFactionSelect: TComboBox;
+    ClassTabAttributeSelect: TComboBox;
+    ClassTabClassName: TEdit;
+    ClassTabFactionLoyalty: TFloatSpinEdit;
+    ClassTabFactionRank: TFloatSpinEdit;
+    ClassTabAttributeValue: TFloatSpinEdit;
+    ItemTabDeleteItem1: TButton;
+    ItemTabDeleteItem2: TButton;
+    ClassTabeDeleteClass: TButton;
+    ItemTabDeleteItem4: TButton;
+    ItemTabDeleteItem5: TButton;
+    ItemTabDeleteItem6: TButton;
+    DialogTabDeleteItem: TButton;
+    ItemTabFile1: TComboBox;
+    ItemTabFile2: TComboBox;
+    ClassTabFile: TComboBox;
+    ItemTabFile4: TComboBox;
+    ItemTabFile5: TComboBox;
+    ItemTabFile6: TComboBox;
+    DialogTabFile: TComboBox;
+    ItemTabItemList1: TListBox;
+    ItemTabItemList2: TListBox;
+    ClassTabClassList: TListBox;
+    ItemTabItemList4: TListBox;
+    ItemTabItemList5: TListBox;
+    ItemTabItemList6: TListBox;
+    DialogTabItemList: TListBox;
     ItemTabNewItem: TButton;
     ItemTabDeleteItem: TButton;
     ItemTabNewAttribute: TButton;
     ItemTabDeleteAttribute: TButton;
     ItemTabBaseClass: TComboBox;
     ItemTabItemCompartment: TComboBox;
+    ItemTabNewItem1: TButton;
+    ItemTabNewItem2: TButton;
+    ClassTabNewClass: TButton;
+    ItemTabNewItem4: TButton;
+    ItemTabNewItem5: TButton;
+    ItemTabNewItem6: TButton;
+    DialogTabNewItem: TButton;
+    ItemTabSearchItem1: TEdit;
+    ItemTabSearchItem2: TEdit;
+    ClassTabSearchClass: TEdit;
+    ItemTabSearchItem4: TEdit;
+    ItemTabSearchItem5: TEdit;
+    ItemTabSearchItem6: TEdit;
+    DialogTabSearchTopic: TEdit;
     ItemTabViewmodel: TComboBox;
     ItemTabWorldmodel: TComboBox;
     ItemTabEquipmentSlot: TComboBox;
@@ -52,6 +105,10 @@ type
     Label19: TLabel;
     Label2: TLabel;
     Label20: TLabel;
+    Label21: TLabel;
+    Label22: TLabel;
+    Label23: TLabel;
+    Label24: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
@@ -61,6 +118,9 @@ type
     Label9: TLabel;
     ItemTabItemList: TListBox;
     ItemTabAttributeList: TListBox;
+    ClassTabBaseList: TListBox;
+    ClassTabAttributeList: TListBox;
+    ClassTabFactionList: TListView;
     MainMenu: TMainMenu;
     MenuItemAbout: TMenuItem;
     MenuItemHelp: TMenuItem;
