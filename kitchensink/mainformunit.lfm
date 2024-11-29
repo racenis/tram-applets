@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 305
+  Left = 376
   Height = 456
-  Top = 132
+  Top = 289
   Width = 791
   Caption = 'MainForm'
   ClientHeight = 456
@@ -13,8 +13,8 @@ object MainForm: TMainForm
     Height = 456
     Top = 0
     Width = 791
-    ActivePage = ClassTab
-    TabIndex = 4
+    ActivePage = QuestTab
+    TabIndex = 7
     TabOrder = 0
     object GeneralTab: TTabSheet
       Caption = 'General'
@@ -614,6 +614,54 @@ object MainForm: TMainForm
         Caption = 'Remove'
         TabOrder = 4
       end
+      object CharacterTabGeneral: TGroupBox
+        Left = 160
+        Height = 105
+        Top = 8
+        Width = 185
+        Caption = 'CharacterTabGeneral'
+        TabOrder = 5
+      end
+      object CharacterTabFactions: TGroupBox
+        Left = 160
+        Height = 105
+        Top = 120
+        Width = 185
+        Caption = 'CharacterTabFactions'
+        TabOrder = 6
+      end
+      object CharacterTabDispositions: TGroupBox
+        Left = 160
+        Height = 105
+        Top = 232
+        Width = 185
+        Caption = 'CharacterTabDispositions'
+        TabOrder = 7
+      end
+      object CharacterTabAttributes: TGroupBox
+        Left = 352
+        Height = 105
+        Top = 8
+        Width = 185
+        Caption = 'CharacterTabAttributes'
+        TabOrder = 8
+      end
+      object CharacterTabInventory: TGroupBox
+        Left = 352
+        Height = 105
+        Top = 120
+        Width = 185
+        Caption = 'CharacterTabInventory'
+        TabOrder = 9
+      end
+      object CharacterTabAIPackages: TGroupBox
+        Left = 568
+        Height = 105
+        Top = 8
+        Width = 185
+        Caption = 'CharacterTabAIPackages'
+        TabOrder = 10
+      end
     end
     object ClassTab: TTabSheet
       Caption = 'Character Classes'
@@ -825,16 +873,16 @@ object MainForm: TMainForm
       end
       object ClassTabAttributeGroup: TGroupBox
         Left = 392
-        Height = 416
+        Height = 280
         Top = 8
         Width = 385
         Caption = 'Attributes'
-        ClientHeight = 398
+        ClientHeight = 262
         ClientWidth = 381
         TabOrder = 8
         object ClassTabAttributeList: TListBox
           Left = 8
-          Height = 381
+          Height = 248
           Top = 8
           Width = 144
           ItemHeight = 0
@@ -890,6 +938,14 @@ object MainForm: TMainForm
           Caption = 'Value'
         end
       end
+      object ClassTabAIPackages: TGroupBox
+        Left = 392
+        Height = 128
+        Top = 296
+        Width = 385
+        Caption = 'AI Packages'
+        TabOrder = 9
+      end
     end
     object FactionTab: TTabSheet
       Caption = 'Factions'
@@ -935,6 +991,83 @@ object MainForm: TMainForm
         Width = 72
         Caption = 'Remove'
         TabOrder = 4
+      end
+      object FactionTabGeneral: TGroupBox
+        Left = 160
+        Height = 57
+        Top = 8
+        Width = 224
+        Caption = 'General'
+        ClientHeight = 39
+        ClientWidth = 220
+        TabOrder = 5
+        object FactionTabName: TEdit
+          Left = 72
+          Height = 21
+          Top = 8
+          Width = 144
+          TabOrder = 0
+          Text = 'FactionTabName'
+        end
+        object Label48: TLabel
+          Left = 8
+          Height = 21
+          Top = 8
+          Width = 64
+          AutoSize = False
+          Caption = 'Name'
+          Font.Height = 13
+          Layout = tlCenter
+          ParentFont = False
+        end
+      end
+      object FactionTabRelations: TGroupBox
+        Left = 392
+        Height = 240
+        Top = 8
+        Width = 384
+        Caption = 'Relations'
+        ClientHeight = 222
+        ClientWidth = 380
+        TabOrder = 6
+        object FactionTabSelect: TListBox
+          Left = 8
+          Height = 192
+          Top = 24
+          Width = 144
+          ItemHeight = 0
+          TabOrder = 0
+        end
+        object FactionTabSelectFilter: TEdit
+          Left = 8
+          Height = 21
+          Top = 0
+          Width = 144
+          TabOrder = 1
+          TextHint = 'Filter by name'
+        end
+        object FactionTabFilterDisposition: TCheckBox
+          Left = 160
+          Height = 17
+          Top = 56
+          Width = 212
+          Caption = 'Show only non-zero disposition relations'
+          TabOrder = 2
+        end
+        object FactionTabDisposition: TSpinEdit
+          Left = 160
+          Height = 21
+          Top = 24
+          Width = 90
+          TabOrder = 3
+        end
+        object Label49: TLabel
+          Left = 160
+          Height = 13
+          Top = 8
+          Width = 51
+          Caption = 'Disposition'
+        end
       end
     end
     object AIPackageTab: TTabSheet
@@ -1028,6 +1161,409 @@ object MainForm: TMainForm
         Caption = 'Remove'
         TabOrder = 4
       end
+      object QuestsTabGeneral: TGroupBox
+        Left = 160
+        Height = 105
+        Top = 8
+        Width = 224
+        Caption = 'General'
+        ClientHeight = 87
+        ClientWidth = 220
+        TabOrder = 5
+        object Label27: TLabel
+          Left = 8
+          Height = 21
+          Top = 0
+          Width = 64
+          AutoSize = False
+          Caption = 'Quest Name'
+          Layout = tlCenter
+        end
+        object QuestTabGeneralName: TEdit
+          Left = 80
+          Height = 21
+          Top = 0
+          Width = 132
+          TabOrder = 0
+          TextHint = 'my-quest'
+        end
+      end
+      object QuestsTabStages: TGroupBox
+        Left = 160
+        Height = 304
+        Top = 120
+        Width = 224
+        Caption = 'Stages'
+        ClientHeight = 286
+        ClientWidth = 220
+        TabOrder = 6
+        object QuestTabStageList: TListBox
+          Left = 8
+          Height = 152
+          Top = 128
+          Width = 204
+          ItemHeight = 0
+          TabOrder = 0
+        end
+        object QuestTabStageTitle: TEdit
+          Left = 8
+          Height = 21
+          Top = 24
+          Width = 148
+          TabOrder = 1
+          TextHint = 'quest.my-quest.title'
+        end
+        object Label25: TLabel
+          Left = 8
+          Height = 13
+          Top = 8
+          Width = 51
+          Caption = 'Stage Title'
+        end
+        object Label26: TLabel
+          Left = 8
+          Height = 13
+          Top = 48
+          Width = 67
+          Caption = 'Stage Subtitle'
+        end
+        object QuestTabStageSubtitle: TEdit
+          Left = 8
+          Height = 21
+          Top = 64
+          Width = 204
+          TabOrder = 2
+          TextHint = 'quest.my-quest.subtitle'
+        end
+        object QuestTabStageAddNew: TButton
+          Left = 8
+          Height = 25
+          Top = 96
+          Width = 104
+          Caption = 'Add New'
+          TabOrder = 3
+        end
+        object QuestTabStageDelete: TButton
+          Left = 112
+          Height = 25
+          Top = 96
+          Width = 100
+          Caption = 'Remove'
+          TabOrder = 4
+        end
+        object QuestTabStageStage: TSpinEdit
+          Left = 162
+          Height = 21
+          Top = 24
+          Width = 50
+          TabOrder = 5
+        end
+        object Label28: TLabel
+          Left = 162
+          Height = 13
+          Top = 8
+          Width = 26
+          Caption = 'State'
+        end
+      end
+      object QuestsTabVariables: TGroupBox
+        Left = 392
+        Height = 200
+        Top = 8
+        Width = 384
+        Caption = 'Variables'
+        ClientHeight = 182
+        ClientWidth = 380
+        TabOrder = 7
+        object Label29: TLabel
+          Left = 152
+          Height = 21
+          Top = 0
+          Width = 64
+          AutoSize = False
+          Caption = 'Name'
+          Layout = tlCenter
+        end
+        object QuestTabVariableList: TListBox
+          Left = 8
+          Height = 165
+          Top = 8
+          Width = 140
+          ItemHeight = 0
+          TabOrder = 0
+        end
+        object QuestTabVariableAddNew: TButton
+          Left = 152
+          Height = 25
+          Top = 148
+          Width = 75
+          Caption = 'Add New'
+          TabOrder = 1
+        end
+        object QuestTabVariableDelete: TButton
+          Left = 232
+          Height = 25
+          Top = 148
+          Width = 75
+          Caption = 'Remove'
+          TabOrder = 2
+        end
+        object QuestTabVariableName: TEdit
+          Left = 216
+          Height = 21
+          Top = 0
+          Width = 160
+          TabOrder = 3
+          TextHint = 'my-var'
+        end
+        object QuestTabVariableType: TComboBox
+          Left = 216
+          Height = 21
+          Top = 24
+          Width = 160
+          ItemHeight = 13
+          Items.Strings = (
+            'is'
+            'is-not'
+            'greater'
+            'greater-equal'
+            'less'
+            'less-equal'
+            'not'
+            'and'
+            'or'
+            'script'
+          )
+          Style = csDropDownList
+          TabOrder = 4
+        end
+        object QuestTabVariableQuest: TComboBox
+          Left = 216
+          Height = 21
+          Top = 48
+          Width = 160
+          ItemHeight = 13
+          TabOrder = 5
+        end
+        object QuestTabVariableVariable: TComboBox
+          Left = 216
+          Height = 21
+          Top = 72
+          Width = 160
+          ItemHeight = 13
+          TabOrder = 6
+        end
+        object QuestTabVariableValueString: TEdit
+          Left = 216
+          Height = 21
+          Top = 96
+          Width = 160
+          TabOrder = 7
+        end
+        object QuestTabVariableRadioInt: TRadioButton
+          Left = 152
+          Height = 17
+          Top = 128
+          Width = 34
+          Caption = 'Int'
+          Checked = True
+          TabOrder = 12
+          TabStop = True
+        end
+        object QuestTabVariableRadioFloat: TRadioButton
+          Left = 192
+          Height = 17
+          Top = 128
+          Width = 44
+          Caption = 'Float'
+          TabOrder = 8
+        end
+        object QuestTabVariableRadioBoolean: TRadioButton
+          Left = 240
+          Height = 17
+          Top = 128
+          Width = 40
+          Caption = 'Bool'
+          TabOrder = 9
+        end
+        object QuestTabVariableRadioName: TRadioButton
+          Left = 288
+          Height = 17
+          Top = 128
+          Width = 47
+          Caption = 'Name'
+          TabOrder = 10
+        end
+        object Label30: TLabel
+          Left = 152
+          Height = 21
+          Top = 24
+          Width = 64
+          AutoSize = False
+          Caption = 'Type'
+          Layout = tlCenter
+        end
+        object Label31: TLabel
+          Left = 152
+          Height = 21
+          Top = 48
+          Width = 64
+          AutoSize = False
+          Caption = 'Quest'
+          Layout = tlCenter
+        end
+        object Label32: TLabel
+          Left = 152
+          Height = 21
+          Top = 72
+          Width = 64
+          AutoSize = False
+          Caption = 'Variable'
+          Layout = tlCenter
+        end
+        object Label33: TLabel
+          Left = 152
+          Height = 21
+          Top = 96
+          Width = 64
+          AutoSize = False
+          Caption = 'Value'
+          Layout = tlCenter
+        end
+        object QuestTabVariableValueBool: TCheckBox
+          Left = 216
+          Height = 17
+          Top = 100
+          Width = 151
+          Caption = 'QuestTabVariableValueBool'
+          TabOrder = 11
+          Visible = False
+        end
+      end
+      object QuestsTabTriggers: TGroupBox
+        Left = 392
+        Height = 208
+        Top = 216
+        Width = 384
+        Caption = 'Triggers'
+        ClientHeight = 190
+        ClientWidth = 380
+        TabOrder = 8
+        object ListBox1: TListBox
+          Left = 8
+          Height = 176
+          Top = 8
+          Width = 140
+          ItemHeight = 0
+          TabOrder = 0
+        end
+        object QuestTabTriggerAddNew: TButton
+          Left = 152
+          Height = 25
+          Top = 159
+          Width = 75
+          Caption = 'Add New'
+          TabOrder = 1
+        end
+        object Label34: TLabel
+          Left = 152
+          Height = 21
+          Top = 0
+          Width = 64
+          AutoSize = False
+          Caption = 'Name'
+          Layout = tlCenter
+        end
+        object QuestTabTriggerName: TEdit
+          Left = 216
+          Height = 21
+          Top = 0
+          Width = 160
+          TabOrder = 2
+          TextHint = 'my-trigger'
+        end
+        object QuestTabTriggerCondition: TComboBox
+          Left = 216
+          Height = 21
+          Top = 24
+          Width = 160
+          ItemHeight = 13
+          TabOrder = 3
+        end
+        object Label35: TLabel
+          Left = 152
+          Height = 21
+          Top = 24
+          Width = 64
+          AutoSize = False
+          Caption = 'Condition'
+          Layout = tlCenter
+        end
+        object QuestTabTriggerDelete: TButton
+          Left = 232
+          Height = 25
+          Top = 159
+          Width = 75
+          Caption = 'Remove'
+          TabOrder = 4
+        end
+        object Label36: TLabel
+          Left = 152
+          Height = 21
+          Top = 48
+          Width = 64
+          AutoSize = False
+          Caption = 'Target'
+          Layout = tlCenter
+        end
+        object QuestTabTriggerTarget: TComboBox
+          Left = 216
+          Height = 21
+          Top = 48
+          Width = 160
+          ItemHeight = 13
+          TabOrder = 5
+        end
+        object QuestTabTriggerType: TComboBox
+          Left = 216
+          Height = 21
+          Top = 72
+          Width = 160
+          ItemHeight = 13
+          Items.Strings = (
+            'set-value'
+            'set-objective'
+            'increment'
+          )
+          Style = csDropDownList
+          TabOrder = 6
+        end
+        object QuestTabTriggerParameter: TEdit
+          Left = 216
+          Height = 21
+          Top = 96
+          Width = 160
+          TabOrder = 7
+        end
+        object Label37: TLabel
+          Left = 152
+          Height = 21
+          Top = 72
+          Width = 64
+          AutoSize = False
+          Caption = 'Type'
+          Layout = tlCenter
+        end
+        object Label38: TLabel
+          Left = 152
+          Height = 21
+          Top = 96
+          Width = 64
+          AutoSize = False
+          Caption = 'Parameter'
+          Layout = tlCenter
+        end
+      end
     end
     object DialogTab: TTabSheet
       Caption = 'Dialog Topics'
@@ -1073,6 +1609,250 @@ object MainForm: TMainForm
         Width = 72
         Caption = 'Remove'
         TabOrder = 4
+      end
+      object DialogTabGeneral: TGroupBox
+        Left = 160
+        Height = 70
+        Top = 8
+        Width = 224
+        Caption = 'General'
+        ClientHeight = 52
+        ClientWidth = 220
+        TabOrder = 5
+        object Label39: TLabel
+          Left = 8
+          Height = 21
+          Top = 0
+          Width = 40
+          AutoSize = False
+          Caption = 'Name'
+          Layout = tlCenter
+        end
+        object DialogTabName: TEdit
+          Left = 56
+          Height = 21
+          Top = 0
+          Width = 160
+          TabOrder = 0
+        end
+        object Label40: TLabel
+          Left = 8
+          Height = 21
+          Top = 24
+          Width = 40
+          AutoSize = False
+          Caption = 'Type'
+          Layout = tlCenter
+        end
+        object DialogTabType: TComboBox
+          Left = 56
+          Height = 21
+          Top = 24
+          Width = 160
+          ItemHeight = 13
+          ItemIndex = 0
+          Items.Strings = (
+            'topic'
+            'import-single'
+            'import-multiple'
+          )
+          Style = csDropDownList
+          TabOrder = 1
+          Text = 'topic'
+        end
+      end
+      object DialogTabStrings: TGroupBox
+        Left = 160
+        Height = 72
+        Top = 80
+        Width = 225
+        Caption = 'Strings'
+        ClientHeight = 54
+        ClientWidth = 221
+        TabOrder = 6
+        object Label41: TLabel
+          Left = 8
+          Height = 21
+          Top = 0
+          Width = 40
+          AutoSize = False
+          Caption = 'Prompt'
+          Layout = tlCenter
+        end
+        object Label42: TLabel
+          Left = 8
+          Height = 21
+          Top = 24
+          Width = 40
+          AutoSize = False
+          Caption = 'Answer'
+          Layout = tlCenter
+        end
+        object DialogTabPrompt: TEdit
+          Left = 56
+          Height = 21
+          Top = 0
+          Width = 160
+          TabOrder = 0
+          TextHint = 'none'
+        end
+        object DialogTabAnswer: TEdit
+          Left = 56
+          Height = 21
+          Top = 24
+          Width = 160
+          TabOrder = 1
+          TextHint = 'none'
+        end
+      end
+      object DialogTabCondition: TGroupBox
+        Left = 160
+        Height = 73
+        Top = 152
+        Width = 226
+        Caption = 'Condition'
+        ClientHeight = 55
+        ClientWidth = 222
+        TabOrder = 7
+        object DialogTabConditionQuest: TComboBox
+          Left = 56
+          Height = 21
+          Top = 0
+          Width = 160
+          ItemHeight = 13
+          TabOrder = 0
+          TextHint = 'none'
+        end
+        object DialogTabConditionVariable: TComboBox
+          Left = 56
+          Height = 21
+          Top = 24
+          Width = 160
+          ItemHeight = 13
+          TabOrder = 1
+          TextHint = 'none'
+        end
+        object Label43: TLabel
+          Left = 8
+          Height = 21
+          Top = 0
+          Width = 40
+          AutoSize = False
+          Caption = 'Quest'
+          Layout = tlCenter
+        end
+        object Label44: TLabel
+          Left = 8
+          Height = 21
+          Top = 24
+          Width = 40
+          AutoSize = False
+          Caption = 'Variable'
+          Layout = tlCenter
+        end
+      end
+      object DialogTabTrigger: TGroupBox
+        Left = 160
+        Height = 73
+        Top = 224
+        Width = 226
+        Caption = 'Trigger'
+        ClientHeight = 55
+        ClientWidth = 222
+        TabOrder = 8
+        object DialogTabTriggerQuest: TComboBox
+          Left = 56
+          Height = 21
+          Top = 0
+          Width = 160
+          ItemHeight = 13
+          TabOrder = 0
+          TextHint = 'none'
+        end
+        object DialogTabTriggerName: TComboBox
+          Left = 56
+          Height = 21
+          Top = 24
+          Width = 160
+          ItemHeight = 13
+          TabOrder = 1
+          TextHint = 'none'
+        end
+        object Label45: TLabel
+          Left = 8
+          Height = 21
+          Top = 0
+          Width = 40
+          AutoSize = False
+          Caption = 'Quest'
+          Layout = tlCenter
+        end
+        object Label46: TLabel
+          Left = 8
+          Height = 21
+          Top = 24
+          Width = 40
+          AutoSize = False
+          Caption = 'Trigger'
+          Layout = tlCenter
+        end
+      end
+      object DialogTabNextTopics: TGroupBox
+        Left = 392
+        Height = 289
+        Top = 8
+        Width = 384
+        Caption = 'Next Topics'
+        ClientHeight = 271
+        ClientWidth = 380
+        TabOrder = 9
+        object DialogTabNextSelect: TListBox
+          Left = 8
+          Height = 237
+          Top = 24
+          Width = 144
+          ItemHeight = 0
+          TabOrder = 0
+        end
+        object DialogTabNextList: TListBox
+          Left = 224
+          Height = 237
+          Top = 24
+          Width = 148
+          ItemHeight = 0
+          TabOrder = 1
+        end
+        object DialogTabNextSelectFilter: TEdit
+          Left = 8
+          Height = 21
+          Top = 0
+          Width = 144
+          TabOrder = 2
+          TextHint = 'Filter available by name'
+        end
+        object DialogTabNextAdd: TButton
+          Left = 160
+          Height = 25
+          Top = 80
+          Width = 54
+          Caption = '>>>'
+          TabOrder = 3
+        end
+        object DialogTabNextRemove: TButton
+          Left = 160
+          Height = 25
+          Top = 160
+          Width = 54
+          Caption = '<<<'
+          TabOrder = 4
+        end
+        object Label47: TLabel
+          Left = 224
+          Height = 13
+          Top = 8
+          Width = 101
+          Caption = 'Selected next topics:'
+        end
       end
     end
   end
