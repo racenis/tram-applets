@@ -7,6 +7,8 @@ object MainForm: TMainForm
   ClientHeight = 456
   ClientWidth = 791
   Menu = MainMenu
+  OnCreate = FormCreate
+  Position = poScreenCenter
   LCLVersion = '3.0.0.3'
   object Tabs: TPageControl
     Left = 0
@@ -16,8 +18,137 @@ object MainForm: TMainForm
     ActivePage = QuestTab
     TabIndex = 7
     TabOrder = 0
+    OnChange = TabsChange
     object GeneralTab: TTabSheet
       Caption = 'General'
+      ClientHeight = 430
+      ClientWidth = 783
+      object GenerealTabCompartments: TGroupBox
+        Left = 632
+        Height = 208
+        Top = 8
+        Width = 145
+        Caption = 'GenerealTabCompartments'
+        ClientHeight = 190
+        ClientWidth = 141
+        TabOrder = 0
+        object GeneralTabCompartmentSelect: TListBox
+          Left = 8
+          Height = 128
+          Top = 8
+          Width = 124
+          ItemHeight = 0
+          TabOrder = 0
+        end
+        object Edit1: TEdit
+          Left = 8
+          Height = 21
+          Top = 136
+          Width = 124
+          TabOrder = 1
+          Text = 'Edit1'
+        end
+        object GeneralTabCompartementAddNew: TButton
+          Left = 8
+          Height = 21
+          Top = 160
+          Width = 64
+          Caption = 'GeneralTabCompartementAddNew'
+          TabOrder = 2
+        end
+        object GeneralTabCompartementDelete: TButton
+          Left = 72
+          Height = 21
+          Top = 160
+          Width = 60
+          Caption = 'GeneralTabCompartementDelete'
+          TabOrder = 3
+        end
+      end
+      object GenerealTabInventorySlots: TGroupBox
+        Left = 632
+        Height = 200
+        Top = 224
+        Width = 145
+        Caption = 'GenerealTabInventorySlots'
+        ClientHeight = 182
+        ClientWidth = 141
+        TabOrder = 1
+        object GeneralTabInventorySlotSelect: TListBox
+          Left = 8
+          Height = 120
+          Top = 8
+          Width = 124
+          ItemHeight = 0
+          TabOrder = 0
+        end
+        object Edit2: TEdit
+          Left = 8
+          Height = 21
+          Top = 128
+          Width = 124
+          TabOrder = 1
+          Text = 'Edit1'
+        end
+        object GeneralTabInventorySlotAddNew: TButton
+          Left = 8
+          Height = 21
+          Top = 152
+          Width = 64
+          Caption = 'Button1'
+          TabOrder = 2
+        end
+        object GeneralTabInventorySlotDelete: TButton
+          Left = 72
+          Height = 21
+          Top = 152
+          Width = 60
+          Caption = 'Button2'
+          TabOrder = 3
+        end
+      end
+      object GeneralTabAttributes: TGroupBox
+        Left = 480
+        Height = 208
+        Top = 8
+        Width = 145
+        Caption = 'GeneralTabAttributes'
+        ClientHeight = 190
+        ClientWidth = 141
+        TabOrder = 2
+        object GeneralTabAttributeSelect: TListBox
+          Left = 8
+          Height = 128
+          Top = 8
+          Width = 124
+          ItemHeight = 0
+          TabOrder = 0
+        end
+        object Edit3: TEdit
+          Left = 8
+          Height = 21
+          Top = 136
+          Width = 124
+          TabOrder = 1
+          Text = 'Edit1'
+        end
+        object GeneralTabAttributeAddNew: TButton
+          Left = 8
+          Height = 21
+          Top = 160
+          Width = 64
+          Caption = 'Button1'
+          TabOrder = 2
+        end
+        object GeneralTabAttributeDelete: TButton
+          Left = 72
+          Height = 21
+          Top = 160
+          Width = 60
+          Caption = 'Button2'
+          TabOrder = 3
+        end
+      end
     end
     object ItemTab: TTabSheet
       Caption = 'Items'
@@ -1120,7 +1251,7 @@ object MainForm: TMainForm
       Caption = 'Quests'
       ClientHeight = 430
       ClientWidth = 783
-      object ItemTabSearchItem6: TEdit
+      object QuestTabSearchItem: TEdit
         Left = 8
         Height = 21
         Top = 32
@@ -1128,15 +1259,16 @@ object MainForm: TMainForm
         TabOrder = 0
         TextHint = 'Search for an item.'
       end
-      object ItemTabItemList6: TListBox
+      object QuestTabItemList: TListBox
         Left = 8
         Height = 344
         Top = 80
         Width = 144
         ItemHeight = 0
         TabOrder = 1
+        OnClick = QuestTabItemListClick
       end
-      object ItemTabFile6: TComboBox
+      object QuestTabFile: TComboBox
         Left = 8
         Height = 21
         Top = 8
@@ -1144,22 +1276,25 @@ object MainForm: TMainForm
         ItemHeight = 13
         TabOrder = 2
         TextHint = 'Select a file.'
+        OnChange = QuestTabFileChange
       end
-      object ItemTabNewItem6: TButton
+      object QuestTabNewItem: TButton
         Left = 8
         Height = 21
         Top = 56
         Width = 72
         Caption = 'Add New'
         TabOrder = 3
+        OnClick = QuestTabNewItemClick
       end
-      object ItemTabDeleteItem6: TButton
+      object QuestTabDeleteItem: TButton
         Left = 80
         Height = 21
         Top = 56
         Width = 72
         Caption = 'Remove'
         TabOrder = 4
+        OnClick = QuestTabDeleteItemClick
       end
       object QuestsTabGeneral: TGroupBox
         Left = 160
@@ -1186,6 +1321,7 @@ object MainForm: TMainForm
           Width = 132
           TabOrder = 0
           TextHint = 'my-quest'
+          OnEditingDone = QuestTabGeneralNameEditingDone
         end
       end
       object QuestsTabStages: TGroupBox
@@ -1204,6 +1340,7 @@ object MainForm: TMainForm
           Width = 204
           ItemHeight = 0
           TabOrder = 0
+          OnClick = QuestTabStageListClick
         end
         object QuestTabStageTitle: TEdit
           Left = 8
@@ -1242,6 +1379,7 @@ object MainForm: TMainForm
           Width = 104
           Caption = 'Add New'
           TabOrder = 3
+          OnClick = QuestTabStageAddNewClick
         end
         object QuestTabStageDelete: TButton
           Left = 112
@@ -1250,6 +1388,7 @@ object MainForm: TMainForm
           Width = 100
           Caption = 'Remove'
           TabOrder = 4
+          OnClick = QuestTabStageDeleteClick
         end
         object QuestTabStageStage: TSpinEdit
           Left = 162
@@ -1291,6 +1430,7 @@ object MainForm: TMainForm
           Width = 140
           ItemHeight = 0
           TabOrder = 0
+          OnClick = QuestTabVariableListClick
         end
         object QuestTabVariableAddNew: TButton
           Left = 152
@@ -1299,6 +1439,7 @@ object MainForm: TMainForm
           Width = 75
           Caption = 'Add New'
           TabOrder = 1
+          OnClick = QuestTabVariableAddNewClick
         end
         object QuestTabVariableDelete: TButton
           Left = 232
@@ -1323,6 +1464,7 @@ object MainForm: TMainForm
           Width = 160
           ItemHeight = 13
           Items.Strings = (
+            'value'
             'is'
             'is-not'
             'greater'
@@ -1449,13 +1591,14 @@ object MainForm: TMainForm
         ClientHeight = 190
         ClientWidth = 380
         TabOrder = 8
-        object ListBox1: TListBox
+        object QuestTabTriggerList: TListBox
           Left = 8
           Height = 176
           Top = 8
           Width = 140
           ItemHeight = 0
           TabOrder = 0
+          OnClick = QuestTabTriggerListClick
         end
         object QuestTabTriggerAddNew: TButton
           Left = 152
@@ -1464,6 +1607,7 @@ object MainForm: TMainForm
           Width = 75
           Caption = 'Add New'
           TabOrder = 1
+          OnClick = QuestTabTriggerAddNewClick
         end
         object Label34: TLabel
           Left = 152
@@ -1863,6 +2007,7 @@ object MainForm: TMainForm
       Caption = 'File'
       object MenuItemLoadDatabase: TMenuItem
         Caption = 'Load Database'
+        OnClick = MenuItemLoadDatabaseClick
       end
       object MenuItemSaveFiles: TMenuItem
         Caption = 'Save Files'
@@ -1887,6 +2032,7 @@ object MainForm: TMainForm
       end
       object MenuItemQuit: TMenuItem
         Caption = 'Quit'
+        OnClick = MenuItemQuitClick
       end
     end
     object MenuItemHelp: TMenuItem

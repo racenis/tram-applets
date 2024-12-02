@@ -5,9 +5,51 @@ unit TramQuestAsset;
 interface
 
 uses
-  Classes, SysUtils, TramAssetMetadata, FileUtil, TramAssetParser;
+  Classes, SysUtils, TramAssetMetadata, FileUtil, TramAssetParser, fgl;
 
 type
+  TQuest = class;
+  TQuestData = class;
+  TQuestDataList = specialize TFPGList<TQuestData>;
+
+  TQuestVariable = class
+  public
+     name: string;
+     variableType: string;
+
+     valueType: string;
+     value: string;
+     valueQuest: string;
+
+     targetQuest: string;
+     targetVariable: string;
+
+     objectiveSubtitle: string;
+     objectiveState: string;
+  end;
+  TQuestVariableList = specialize TFPGList<TQuestVariable>;
+
+  TQuestTrigger = class
+  public
+     name: string;
+  end;
+  TQuestTriggerList = specialize TFPGList<TQuestTrigger>;
+
+  TQuestData = class
+  public
+     constructor Create;
+  public
+     name: string;
+     parent: TQuest;
+
+     variables: TQuestVariableList;
+     triggers: TQuestTriggerList;
+
+     dataList: TQuestDataList; static;
+  end;
+
+
+
   TQuestCollection = class;
   TQuest = class(TAssetMetadata)
   public
@@ -21,6 +63,7 @@ type
       function GetPropertyList: TAssetPropertyList; override;
 
       procedure LoadMetadata(); override;
+      procedure LoadFromDisk(); override;
   protected
       procedure SetDateInDB(date: Integer);
       procedure SetDateOnDisk(date: Integer);
@@ -87,6 +130,122 @@ begin
 
 end;
 
+procedure TQuest.LoadFromDisk();
+var
+   assetFile: TAssetParser;
+   rowIndex: Integer;
+   prevQuest: TQuestData;
+   newVariable: TQuestVariable;
+   newTrigger: TQuestTrigger;
+begin
+  assetFile := TAssetParser.Create(GetPath);
+
+  if not assetFile.IsOpen then
+  begin
+    WriteLn('was not loaded!!!!!');
+    Exit;
+  end;
+
+  if assetFile.GetRowCount < 1 then
+  begin
+    WriteLn('was not loaded!!!!!');
+    Exit;
+  end;
+
+  if assetFile.GetValue(0, 0) <> 'QUESTv1' then
+  begin
+    WriteLn('INCORRECT HEADER!!!');
+    Exit;
+  end;
+
+  // if quest -> new quest
+  // remember pointer
+  // if var -> new var and parse it
+  // like that..
+
+  for rowIndex := 1 to assetFile.GetRowCount - 1 do
+  case assetFile.GetValue(rowIndex, 0) of
+       //case '':
+       'quest': begin
+         prevQuest := TQuestData.Create;
+         TQuestData.dataList.Add(prevQuest);
+
+         prevQuest.name := assetFile.GetValue(rowIndex, 1);
+         prevQuest.parent := self;
+       end;
+
+       'variable': begin
+         newVariable := TQuestVariable.Create;
+
+         newVariable.name := assetFile.GetValue(rowIndex, 1);
+         newVariable.variableType := assetFile.GetValue(rowIndex, 2);
+
+
+         case newVariable.variableType of
+              'value': begin
+                 newVariable.valueType := assetFile.GetValue(rowIndex, 3);
+                 newVariable.value := assetFile.GetValue(rowIndex, 4);
+               end;
+
+              'objective': begin
+                 newVariable.value := assetFile.GetValue(rowIndex, 3);
+                 newVariable.objectiveSubtitle := assetFile.GetValue(rowIndex, 4);
+                 newVariable.objectiveState := assetFile.GetValue(rowIndex, 5);
+               end;
+
+              'script': begin
+                 newVariable.value := assetFile.GetValue(rowIndex, 2);
+               end;
+
+              else begin
+
+                WriteLn( newVariable.variableType);
+
+                newVariable.targetQuest := assetFile.GetValue(rowIndex, 3);
+                newVariable.targetVariable := assetFile.GetValue(rowIndex, 4);
+
+                if newVariable.variableType <> 'not' then begin
+                  newVariable.valueType := assetFile.GetValue(rowIndex, 5);
+
+                  if newVariable.valueType = 'var' then begin
+                    newVariable.valueQuest := assetFile.GetValue(rowIndex, 6);
+                    newVariable.value := assetFile.GetValue(rowIndex, 7);
+                  end else begin
+                    newVariable.value := assetFile.GetValue(rowIndex, 6);
+                  end;
+                end;
+
+              end;
+         end;
+
+
+         prevQuest.variables.Add(newVariable);
+       end;
+
+       'trigger': begin
+         newTrigger := TQuestTrigger.Create;
+
+         newTrigger.name := assetFile.GetValue(rowIndex, 1);
+
+         prevQuest.triggers.Add(newTrigger);
+       end
+       else WriteLn('What is this:', assetFile.GetValue(rowIndex, 0));
+
+
+  end;
+  //begin
+   // WriteLn(assetFile.GetValue(rowIndex, 0));
+  //end;
+
+
+
+end;
+
+constructor TQuestData.Create;
+begin
+  variables := TQuestVariableList.Create;
+  triggers := TQuestTriggerList.Create;
+end;
 
 constructor TQuestCollection.Create;
 begin
@@ -130,6 +289,8 @@ begin
   for questFile in files do
   begin
     quest := nil;
+
+    WriteLn('helloo');
 
     // extract asset name from Sprite
     questName := questFile.Replace('\', '/');
@@ -198,6 +359,11 @@ begin
 
   for i := 0 to High(self.quests) do
       Result[i] := self.quests[i];
+end;
+
+initialization
+begin
+  TQuestData.dataList := TQuestDataList.Create;
 end;
 
 end.
