@@ -75,8 +75,8 @@ type
     Label37: TLabel;
     Label38: TLabel;
     QuestTabTriggerList: TListBox;
-    QuestTabStageAddNew: TButton;
-    QuestTabStageDelete: TButton;
+    QuestTabObjectiveAddNew: TButton;
+    QuestTabObjectiveDelete: TButton;
     QuestTabTriggerTarget: TComboBox;
     QuestTabTriggerType: TComboBox;
     QuestTabVariableAddNew: TButton;
@@ -114,8 +114,8 @@ type
     QuestTabVariableType: TComboBox;
     QuestTabVariableQuest: TComboBox;
     QuestTabVariableVariable: TComboBox;
-    QuestTabStageTitle: TEdit;
-    QuestTabStageSubtitle: TEdit;
+    QuestTabObjectiveTitle: TEdit;
+    QuestTabObjectiveSubtitle: TEdit;
     QuestTabGeneralName: TEdit;
     QuestTabVariableName: TEdit;
     QuestTabVariableValueString: TEdit;
@@ -130,7 +130,7 @@ type
     Label31: TLabel;
     Label32: TLabel;
     Label33: TLabel;
-    QuestTabStageList: TListBox;
+    QuestTabObjectiveList: TListBox;
     QuestTabVariableList: TListBox;
     QuestsTabGeneral: TGroupBox;
     QuestsTabStages: TGroupBox;
@@ -257,7 +257,7 @@ type
     Separator1: TMenuItem;
     Separator2: TMenuItem;
     Separator3: TMenuItem;
-    QuestTabStageStage: TSpinEdit;
+    QuestTabObjectiveState: TSpinEdit;
     FactionTabDisposition: TSpinEdit;
     Tabs: TPageControl;
     GeneralTab: TTabSheet;
@@ -275,12 +275,14 @@ type
     procedure QuestTabFileChange(Sender: TObject);
     procedure QuestTabGeneralNameEditingDone(Sender: TObject);
     procedure QuestTabNewItemClick(Sender: TObject);
-    procedure QuestTabStageAddNewClick(Sender: TObject);
-    procedure QuestTabStageDeleteClick(Sender: TObject);
-    procedure QuestTabStageListClick(Sender: TObject);
+    procedure QuestTabObjectiveAddNewClick(Sender: TObject);
+    procedure QuestTabObjectiveDeleteClick(Sender: TObject);
+    procedure QuestTabObjectiveListClick(Sender: TObject);
+    procedure QuestTabTriggerDeleteClick(Sender: TObject);
     procedure QuestTabTriggerRecheck;
     procedure QuestTabTriggerAddNewClick(Sender: TObject);
     procedure QuestTabTriggerListClick(Sender: TObject);
+    procedure QuestTabVariableDeleteClick(Sender: TObject);
     procedure QuestTabVariableRecheck;
     procedure QuestTabVariableAddNewClick(Sender: TObject);
     procedure QuestTabVariableListClick(Sender: TObject);
@@ -302,7 +304,7 @@ var
   questCollection: TQuestCollection;
   selectedQuest: TQuestData;
   selectedVariable: TQuestVariable;
-  selectedStage: TQuestVariable;
+  selectedObjective: TQuestVariable;
   selectedTrigger: TQuestTrigger;
 
 implementation
@@ -358,17 +360,24 @@ var
 begin
   if selectedQuest = nil then begin
     selectedVariable := nil;
-    selectedStage := nil;
+    selectedObjective := nil;
     selectedTrigger := nil;
   end;
 
+  QuestTabGeneralName.Text:= selectedQuest.name;
 
-  QuestTabStageList.Clear;
+  QuestTabObjectiveList.Clear;
   QuestTabVariableList.Clear;
   QuestTabTriggerList.Clear;
 
   for variable in selectedQuest.variables do
-      QuestTabVariableList.AddItem(variable.name, variable);
+      WriteLn('VarTYpe:', variable.variableType);
+
+  for variable in selectedQuest.variables do
+      if variable.variableType = 'objective' then
+         QuestTabObjectiveList.AddItem(variable.name, variable)
+      else
+          QuestTabVariableList.AddItem(variable.name, variable);
 
   for trigger in selectedQuest.triggers do
       QuestTabTriggerList.AddItem(trigger.name, trigger);
@@ -449,29 +458,71 @@ begin
   QuestTabRefreshList;
 end;
 
-procedure TMainForm.QuestTabStageAddNewClick(Sender: TObject);
+procedure TMainForm.QuestTabObjectiveAddNewClick(Sender: TObject);
 begin
   if selectedQuest = nil then begin
     ShowMessage('Select a Quest file, then you can add a stage to it!');
     Exit;
   end;
 
-  selectedStage := TQuestVariable.Create;
-  selectedStage.name := 'new-objective';
+  selectedObjective := TQuestVariable.Create;
+  selectedObjective.name := 'new-objective';
+  selectedObjective.variableType := 'objective';
 
-  selectedQuest.variables.Add(selectedStage);
+  selectedQuest.variables.Add(selectedObjective);
 
   QuestTabRefresh;
 end;
 
-procedure TMainForm.QuestTabStageDeleteClick(Sender: TObject);
+procedure TMainForm.QuestTabObjectiveDeleteClick(Sender: TObject);
 begin
+  if selectedObjective = nil then begin
+    ShowMessage('Select a Quest Stage, then you can remove it!');
+    Exit;
+  end;
 
+  if MessageDlg('Removing stage', 'Do you want to remove '
+                + selectedObjective.name + ' from ' + selectedQuest.name
+                + '?', mtConfirmation,
+   [mbYes, mbNo], 0) = mrYes
+  then begin
+    selectedQuest.variables.Remove(selectedObjective);
+    selectedObjective := nil;
+    QuestTabRefresh;
+  end;
 end;
 
-procedure TMainForm.QuestTabStageListClick(Sender: TObject);
+procedure TMainForm.QuestTabObjectiveListClick(Sender: TObject);
 begin
+  if QuestTabObjectiveList.ItemIndex < 0 then begin
+    selectedObjective := nil;
+    Exit;
+  end;
 
+  selectedObjective := QuestTabObjectiveList.Items.Objects[QuestTabObjectiveList.ItemIndex] as TQuestVariable;
+
+  QuestTabObjectiveTitle.Text := selectedObjective.value;
+  QuestTabObjectiveSubtitle.Text := selectedObjective.objectiveSubtitle;
+
+  QuestTabObjectiveState.Text := selectedObjective.objectiveState;
+end;
+
+procedure TMainForm.QuestTabTriggerDeleteClick(Sender: TObject);
+begin
+  if selectedTrigger = nil then begin
+    ShowMessage('Select a Quest Trigger, then you can remove it!');
+    Exit;
+  end;
+
+  if MessageDlg('Removing trigger', 'Do you want to remove '
+                + selectedTrigger.name + ' from ' + selectedQuest.name
+                + '?', mtConfirmation,
+   [mbYes, mbNo], 0) = mrYes
+  then begin
+    selectedQuest.triggers.Remove(selectedTrigger);
+    selectedTrigger := nil;
+    QuestTabRefresh;
+  end;
 end;
 
 procedure TMainForm.QuestTabTriggerAddNewClick(Sender: TObject);
@@ -549,6 +600,24 @@ begin
   end;
 
   QuestTabTriggerRecheck;
+end;
+
+procedure TMainForm.QuestTabVariableDeleteClick(Sender: TObject);
+begin
+  if selectedVariable = nil then begin
+    ShowMessage('Select a Quest Variable, then you can remove it!');
+    Exit;
+  end;
+
+  if MessageDlg('Removing variable', 'Do you want to remove '
+                + selectedVariable.name + ' from ' + selectedQuest.name
+                + '?', mtConfirmation,
+   [mbYes, mbNo], 0) = mrYes
+  then begin
+    selectedQuest.variables.Remove(selectedVariable);
+    selectedVariable := nil;
+    QuestTabRefresh;
+  end;
 end;
 
 procedure TMainForm.QuestTabVariableAddNewClick(Sender: TObject);
@@ -647,17 +716,18 @@ begin
 
   selectedQuest := QuestTabItemList.Items.Objects[QuestTabItemList.ItemIndex] as TQuestData;
 
-  QuestTabStageList.Clear;
-  QuestTabVariableList.Clear;
-  QuestTabTriggerList.Clear;
+  //QuestTabObjectiveList.Clear;
+  //QuestTabVariableList.Clear;
+  //QuestTabTriggerList.Clear;
 
-  QuestTabGeneralName.Text:= selectedQuest.name;
+  //QuestTabGeneralName.Text:= selectedQuest.name;
+  QuestTabRefresh;
 
-  for questVariable in selectedQuest.variables do
-      QuestTabVariableList.AddItem(questVariable.name, questVariable);
+  //for questVariable in selectedQuest.variables do
+   //   QuestTabVariableList.AddItem(questVariable.name, questVariable);
 
-  for questTrigger in selectedQuest.triggers do
-      QuestTabTriggerList.AddItem(questTrigger.name, questTrigger);
+  //for questTrigger in selectedQuest.triggers do
+  //    QuestTabTriggerList.AddItem(questTrigger.name, questTrigger);
 end;
 
 procedure TMainForm.MenuItemLoadDatabaseClick(Sender: TObject);
@@ -676,7 +746,7 @@ begin
 
   selectedQuest := nil;
   selectedVariable := nil;
-  selectedStage := nil;
+  selectedObjective := nil;
   selectedTrigger := nil;
 end;
 
