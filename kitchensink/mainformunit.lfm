@@ -1274,6 +1274,7 @@ object MainForm: TMainForm
         Top = 8
         Width = 144
         ItemHeight = 13
+        Style = csDropDownList
         TabOrder = 2
         TextHint = 'Select a file.'
         OnChange = QuestTabFileChange
@@ -1602,8 +1603,8 @@ object MainForm: TMainForm
         end
         object QuestTabTriggerAddNew: TButton
           Left = 152
-          Height = 25
-          Top = 159
+          Height = 21
+          Top = 163
           Width = 75
           Caption = 'Add New'
           TabOrder = 1
@@ -1626,7 +1627,7 @@ object MainForm: TMainForm
           TabOrder = 2
           TextHint = 'my-trigger'
         end
-        object QuestTabTriggerCondition: TComboBox
+        object QuestTabTriggerConditionQuest: TComboBox
           Left = 216
           Height = 21
           Top = 24
@@ -1640,13 +1641,13 @@ object MainForm: TMainForm
           Top = 24
           Width = 64
           AutoSize = False
-          Caption = 'Condition'
+          Caption = 'Quest'
           Layout = tlCenter
         end
         object QuestTabTriggerDelete: TButton
           Left = 232
-          Height = 25
-          Top = 159
+          Height = 21
+          Top = 163
           Width = 75
           Caption = 'Remove'
           TabOrder = 4
@@ -1654,7 +1655,7 @@ object MainForm: TMainForm
         object Label36: TLabel
           Left = 152
           Height = 21
-          Top = 48
+          Top = 72
           Width = 64
           AutoSize = False
           Caption = 'Target'
@@ -1663,7 +1664,7 @@ object MainForm: TMainForm
         object QuestTabTriggerTarget: TComboBox
           Left = 216
           Height = 21
-          Top = 48
+          Top = 72
           Width = 160
           ItemHeight = 13
           TabOrder = 5
@@ -1671,7 +1672,7 @@ object MainForm: TMainForm
         object QuestTabTriggerType: TComboBox
           Left = 216
           Height = 21
-          Top = 72
+          Top = 96
           Width = 160
           ItemHeight = 13
           Items.Strings = (
@@ -1682,17 +1683,17 @@ object MainForm: TMainForm
           Style = csDropDownList
           TabOrder = 6
         end
-        object QuestTabTriggerParameter: TEdit
+        object QuestTabTriggerValue: TEdit
           Left = 216
           Height = 21
-          Top = 96
+          Top = 120
           Width = 160
           TabOrder = 7
         end
         object Label37: TLabel
           Left = 152
           Height = 21
-          Top = 72
+          Top = 96
           Width = 64
           AutoSize = False
           Caption = 'Type'
@@ -1701,10 +1702,59 @@ object MainForm: TMainForm
         object Label38: TLabel
           Left = 152
           Height = 21
-          Top = 96
+          Top = 120
           Width = 64
           AutoSize = False
           Caption = 'Parameter'
+          Layout = tlCenter
+        end
+        object QuestTabTriggerRadioInt: TRadioButton
+          Left = 152
+          Height = 17
+          Top = 144
+          Width = 142
+          Caption = 'QuestTabTriggerRadioInt'
+          TabOrder = 8
+        end
+        object QuestTabTriggerRadioFloat: TRadioButton
+          Left = 200
+          Height = 17
+          Top = 144
+          Width = 152
+          Caption = 'QuestTabTriggerRadioFloat'
+          TabOrder = 9
+        end
+        object QuestTabTriggerRadioBoolean: TRadioButton
+          Left = 248
+          Height = 17
+          Top = 144
+          Width = 166
+          Caption = 'QuestTabTriggerRadioBoolean'
+          TabOrder = 10
+        end
+        object QuestTabTriggerRadioName: TRadioButton
+          Left = 296
+          Height = 17
+          Top = 144
+          Width = 155
+          Caption = 'QuestTabTriggerRadioName'
+          TabOrder = 11
+        end
+        object QuestTabTriggerConditionVariable: TComboBox
+          Left = 216
+          Height = 21
+          Top = 48
+          Width = 160
+          ItemHeight = 13
+          TabOrder = 12
+        end
+        object Label50: TLabel
+          Left = 152
+          Height = 21
+          Top = 48
+          Width = 64
+          AutoSize = False
+          Caption = 'Condition'
           Layout = tlCenter
         end
       end

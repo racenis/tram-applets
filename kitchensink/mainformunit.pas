@@ -66,7 +66,9 @@ type
     GeneralTabCompartmentSelect: TListBox;
     GeneralTabInventorySlotSelect: TListBox;
     GeneralTabAttributeSelect: TListBox;
-    QuestTabTriggerParameter: TEdit;
+    Label50: TLabel;
+    QuestTabTriggerConditionVariable: TComboBox;
+    QuestTabTriggerValue: TEdit;
     Label34: TLabel;
     Label35: TLabel;
     Label36: TLabel;
@@ -82,7 +84,7 @@ type
     QuestTabVariableDelete: TButton;
     QuestTabTriggerDelete: TButton;
     QuestTabTriggerName: TEdit;
-    QuestTabTriggerCondition: TComboBox;
+    QuestTabTriggerConditionQuest: TComboBox;
     QuestTabVariableValueBool: TCheckBox;
     ClassTabAddBaseClass: TButton;
     ClassTabDeleteBaseClass: TButton;
@@ -248,6 +250,10 @@ type
     QuestTabVariableRadioFloat: TRadioButton;
     QuestTabVariableRadioBoolean: TRadioButton;
     QuestTabVariableRadioName: TRadioButton;
+    QuestTabTriggerRadioInt: TRadioButton;
+    QuestTabTriggerRadioFloat: TRadioButton;
+    QuestTabTriggerRadioBoolean: TRadioButton;
+    QuestTabTriggerRadioName: TRadioButton;
     Separator1: TMenuItem;
     Separator2: TMenuItem;
     Separator3: TMenuItem;
@@ -272,8 +278,10 @@ type
     procedure QuestTabStageAddNewClick(Sender: TObject);
     procedure QuestTabStageDeleteClick(Sender: TObject);
     procedure QuestTabStageListClick(Sender: TObject);
+    procedure QuestTabTriggerRecheck;
     procedure QuestTabTriggerAddNewClick(Sender: TObject);
     procedure QuestTabTriggerListClick(Sender: TObject);
+    procedure QuestTabVariableRecheck;
     procedure QuestTabVariableAddNewClick(Sender: TObject);
     procedure QuestTabVariableListClick(Sender: TObject);
     procedure RefrshAllFileLists;
@@ -481,9 +489,66 @@ begin
   QuestTabRefresh;
 end;
 
-procedure TMainForm.QuestTabTriggerListClick(Sender: TObject);
+procedure TMainForm.QuestTabTriggerRecheck;
 begin
 
+  // RADIO BUTTONS
+  case selectedTrigger.triggerType of
+    'set-objective', 'increment': begin
+        QuestTabTriggerRadioInt.Enabled := False;
+        QuestTabTriggerRadioFloat.Enabled := False;
+        QuestTabTriggerRadioBoolean.Enabled := False;
+        QuestTabTriggerRadioName.Enabled := False;
+
+        //QuestTabVariableValueString.Text := 'Not applicable.';
+        //QuestTabVariableValueString.Enabled := False;
+    end;
+    else begin
+        QuestTabTriggerRadioInt.Enabled := True;
+        QuestTabTriggerRadioFloat.Enabled := True;
+        QuestTabTriggerRadioBoolean.Enabled := True;
+        QuestTabTriggerRadioName.Enabled := True;
+
+        //QuestTabVariableValueString.Enabled := True;
+    end;
+  end;
+
+  // TEXT FIELD
+  case selectedTrigger.triggerType of
+    'increment': begin
+        QuestTabTriggerValue.Text := 'Not applicable.';
+        QuestTabTriggerValue.Enabled := False;
+    end;
+    else begin
+        QuestTabTriggerValue.Enabled := True;
+    end;
+  end;
+end;
+
+procedure TMainForm.QuestTabTriggerListClick(Sender: TObject);
+begin
+  if QuestTabTriggerList.ItemIndex < 0 then begin
+    selectedTrigger := nil;
+    Exit;
+  end;
+
+  selectedTrigger := QuestTabTriggerList.Items.Objects[QuestTabTriggerList.ItemIndex] as TQuestTrigger;
+
+  QuestTabTriggerName.Text := selectedTrigger.name;
+  QuestTabTriggerConditionQuest.Text := selectedTrigger.conditionQuest;
+  QuestTabTriggerConditionVariable.Text := selectedTrigger.conditionVariable;
+  QuestTabTriggerType.Text := selectedTrigger.triggerType;
+  QuestTabTriggerTarget.Text := selectedTrigger.triggerTarget;
+  QuestTabTriggerValue.Text := selectedTrigger.value;
+
+  case selectedTrigger.valueType of
+    'int': QuestTabTriggerRadioInt.Checked := True;
+    'float': QuestTabTriggerRadioFloat.Checked := True;
+    'bool': QuestTabTriggerRadioBoolean.Checked := True;
+    'name': QuestTabTriggerRadioName.Checked := True;
+  end;
+
+  QuestTabTriggerRecheck;
 end;
 
 procedure TMainForm.QuestTabVariableAddNewClick(Sender: TObject);
@@ -499,6 +564,43 @@ begin
   selectedQuest.variables.Add(selectedVariable);
 
   QuestTabRefresh;
+end;
+
+procedure TMainForm.QuestTabVariableRecheck;
+begin
+  case selectedVariable.variableType of
+    'not', 'script': begin
+        QuestTabVariableRadioInt.Enabled := False;
+        QuestTabVariableRadioFloat.Enabled := False;
+        QuestTabVariableRadioBoolean.Enabled := False;
+        QuestTabVariableRadioName.Enabled := False;
+
+        QuestTabVariableValueString.Text := 'Not applicable.';
+        QuestTabVariableValueString.Enabled := False;
+    end;
+    else begin
+        QuestTabVariableRadioInt.Enabled := True;
+        QuestTabVariableRadioFloat.Enabled := True;
+        QuestTabVariableRadioBoolean.Enabled := True;
+        QuestTabVariableRadioName.Enabled := True;
+
+        QuestTabVariableValueString.Enabled := True;
+    end;
+  end;
+
+  case selectedVariable.variableType of
+    'value', 'script': begin
+        QuestTabVariableQuest.Enabled := False;
+        QuestTabVariableVariable.Enabled := False;
+
+        QuestTabVariableQuest.Text := 'Not applicable.';
+        QuestTabVariableVariable.Text := 'Not applicable.';
+    end;
+    else begin
+        QuestTabVariableQuest.Enabled := True;
+        QuestTabVariableVariable.Enabled := True;
+    end;
+  end;
 end;
 
 procedure TMainForm.QuestTabVariableListClick(Sender: TObject);
@@ -522,6 +624,8 @@ begin
     'bool': QuestTabVariableRadioBoolean.Checked := True;
     'name': QuestTabVariableRadioName.Checked := True;
   end;
+
+  QuestTabVariableRecheck;
 end;
 
 procedure TMainForm.RefrshAllFileLists;

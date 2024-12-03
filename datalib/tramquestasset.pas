@@ -31,7 +31,18 @@ type
 
   TQuestTrigger = class
   public
-     name: string;
+     name: string;                // name of the trigger
+
+     conditionQuest: string;      // quest that contains the condition variable
+     conditionVariable: string;   // variable that evals to 'bool'
+
+     triggerType: string;         // type of trigger, e.g. 'set-variable'
+     triggerTarget: string;       // depends on type
+
+     valueType: string;           // 'int', 'bool', 'name', etc.
+     valueQuest: string;          // used if valueType = 'var'
+     value: string;               // value, as a string
+
   end;
   TQuestTriggerList = specialize TFPGList<TQuestTrigger>;
 
@@ -226,6 +237,25 @@ begin
          newTrigger := TQuestTrigger.Create;
 
          newTrigger.name := assetFile.GetValue(rowIndex, 1);
+         newTrigger.conditionQuest := assetFile.GetValue(rowIndex, 2);
+         newTrigger.conditionVariable := assetFile.GetValue(rowIndex, 3);
+
+         newTrigger.triggerType := assetFile.GetValue(rowIndex, 4);
+         newTrigger.triggerTarget := assetFile.GetValue(rowIndex, 5);
+
+         case newTrigger.triggerType of
+              'set-objective': newTrigger.value := assetFile.GetValue(rowIndex, 6);
+              'set-variable': begin
+                newTrigger.valueType := assetFile.GetValue(rowIndex, 5);
+
+                if newTrigger.valueType = 'var' then begin
+                  newTrigger.valueQuest := assetFile.GetValue(rowIndex, 6);
+                  newTrigger.value := assetFile.GetValue(rowIndex, 7);
+                end else begin
+                  newTrigger.value := assetFile.GetValue(rowIndex, 6);
+                end;
+              end;
+         end;
 
          prevQuest.triggers.Add(newTrigger);
        end
