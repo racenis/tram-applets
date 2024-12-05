@@ -435,6 +435,10 @@ var
   disableValueTypeSelect: Boolean;
   disableValueSelect: Boolean;
   disableQuestSelect: Boolean;
+
+  candidateQuest: TQuestData;
+  variableQuest: TQuestData;
+  variableVariable: TQuestVariable;
 begin
   QuestTabVariableName.Enabled := selectedVariable <> nil;
   QuestTabVariableType.Enabled := selectedVariable <> nil;
@@ -463,6 +467,22 @@ begin
     'bool': QuestTabVariableRadioBoolean.Checked := True;
     'name': QuestTabVariableRadioName.Checked := True;
   end;
+
+  // setting up quest trigger variable dropdown
+  QuestTabVariableQuest.Items.Clear;
+  variableQuest := nil;
+  for candidateQuest in TQuestData.dataList do begin
+      if candidateQuest.name = QuestTabVariableQuest.Text then
+         variableQuest := candidateQuest;
+      QuestTabVariableQuest.AddItem(candidateQuest.name, candidateQuest);
+  end;
+
+  QuestTabVariableVariable.Items.Clear;
+  if variableQuest <> nil then
+     for variableVariable in variableQuest.variables do
+         QuestTabVariableVariable.AddItem(variableVariable.name, variableVariable);
+
+
 
   // checking which controls need to be disabled for the variable's type
   disableValueTypeSelect := False;
@@ -508,6 +528,11 @@ begin
 end;
 
 procedure TMainForm.QuestTabRefreshTrigger;
+var
+  candidateQuest: TQuestData;
+  conditionQuest: TQuestData;
+  conditionVariable: TQuestVariable;
+  targetVariable: TQuestVariable;
 begin
   QuestTabTriggerName.Enabled := selectedTrigger <> nil;
   QuestTabTriggerConditionQuest.Enabled := selectedTrigger <> nil;
@@ -531,6 +556,37 @@ begin
   QuestTabTriggerType.Text := selectedTrigger.triggerType;
   QuestTabTriggerTarget.Text := selectedTrigger.triggerTarget;
   QuestTabTriggerValue.Text := selectedTrigger.value;
+
+
+  // we don't actually need to reset the quest list here, we could reset it
+  // only when new quests are added, removed or loaded.
+  // but this will be simpler
+  QuestTabTriggerConditionQuest.Items.Clear;
+  conditionQuest := nil;
+  for candidateQuest in TQuestData.dataList do begin
+      if candidateQuest.name = QuestTabTriggerConditionQuest.Text then
+         conditionQuest := candidateQuest;
+      QuestTabTriggerConditionQuest.AddItem(candidateQuest.name, candidateQuest);
+  end;
+
+  QuestTabTriggerConditionVariable.Items.Clear;
+  if conditionQuest <> nil then
+     for conditionVariable in conditionQuest.variables do
+         QuestTabTriggerConditionVariable.AddItem(conditionVariable.name, conditionVariable);
+
+
+  QuestTabTriggerTarget.Items.Clear;
+  case selectedTrigger.triggerType of
+    'set-value', 'increment':
+      for targetVariable in selectedQuest.variables do
+          if targetVariable.variableType <> 'objective' then
+             QuestTabTriggerTarget.AddItem(targetVariable.name, targetVariable);
+    'set-objective':
+      for targetVariable in selectedQuest.variables do
+          if targetVariable.variableType = 'objective' then
+             QuestTabTriggerTarget.AddItem(targetVariable.name, targetVariable);
+  end;
+
 
   case selectedTrigger.valueType of
     'int': QuestTabTriggerRadioInt.Checked := True;
