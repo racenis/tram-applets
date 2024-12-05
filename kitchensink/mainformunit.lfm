@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 376
+  Left = 362
   Height = 456
-  Top = 289
+  Top = 259
   Width = 791
   Caption = 'MainForm'
   ClientHeight = 456
@@ -1336,8 +1336,8 @@ object MainForm: TMainForm
         TabOrder = 6
         object QuestTabObjectiveList: TListBox
           Left = 8
-          Height = 152
-          Top = 128
+          Height = 128
+          Top = 152
           Width = 204
           ItemHeight = 0
           TabOrder = 0
@@ -1346,37 +1346,39 @@ object MainForm: TMainForm
         object QuestTabObjectiveTitle: TEdit
           Left = 8
           Height = 21
-          Top = 24
-          Width = 148
+          Top = 64
+          Width = 204
           TabOrder = 1
           TextHint = 'quest.my-quest.title'
+          OnEditingDone = QuestTabObjectiveTitleEditingDone
         end
         object Label25: TLabel
           Left = 8
           Height = 13
-          Top = 8
+          Top = 48
           Width = 51
           Caption = 'Stage Title'
         end
         object Label26: TLabel
           Left = 8
           Height = 13
-          Top = 48
+          Top = 88
           Width = 67
           Caption = 'Stage Subtitle'
         end
         object QuestTabObjectiveSubtitle: TEdit
-          Left = 8
+          Left = 6
           Height = 21
-          Top = 64
+          Top = 104
           Width = 204
           TabOrder = 2
           TextHint = 'quest.my-quest.subtitle'
+          OnEditingDone = QuestTabObjectiveSubtitleEditingDone
         end
         object QuestTabObjectiveAddNew: TButton
           Left = 8
-          Height = 25
-          Top = 96
+          Height = 21
+          Top = 128
           Width = 104
           Caption = 'Add New'
           TabOrder = 3
@@ -1384,8 +1386,8 @@ object MainForm: TMainForm
         end
         object QuestTabObjectiveDelete: TButton
           Left = 112
-          Height = 25
-          Top = 96
+          Height = 21
+          Top = 128
           Width = 100
           Caption = 'Remove'
           TabOrder = 4
@@ -1396,6 +1398,7 @@ object MainForm: TMainForm
           Height = 21
           Top = 24
           Width = 50
+          OnEditingDone = QuestTabObjectiveStateEditingDone
           TabOrder = 5
         end
         object Label28: TLabel
@@ -1404,6 +1407,22 @@ object MainForm: TMainForm
           Top = 8
           Width = 26
           Caption = 'State'
+        end
+        object QuestTabObjectiveName: TEdit
+          Left = 8
+          Height = 21
+          Top = 24
+          Width = 148
+          TabOrder = 6
+          TextHint = 'my-stage'
+          OnEditingDone = QuestTabObjectiveNameEditingDone
+        end
+        object Label51: TLabel
+          Left = 8
+          Height = 13
+          Top = 8
+          Width = 58
+          Caption = 'Stage Name'
         end
       end
       object QuestsTabVariables: TGroupBox
@@ -1458,6 +1477,7 @@ object MainForm: TMainForm
           Width = 160
           TabOrder = 3
           TextHint = 'my-var'
+          OnEditingDone = QuestTabVariableNameEditingDone
         end
         object QuestTabVariableType: TComboBox
           Left = 216
@@ -1480,6 +1500,7 @@ object MainForm: TMainForm
           )
           Style = csDropDownList
           TabOrder = 4
+          OnEditingDone = QuestTabVariableTypeEditingDone
         end
         object QuestTabVariableQuest: TComboBox
           Left = 216
@@ -1488,6 +1509,7 @@ object MainForm: TMainForm
           Width = 160
           ItemHeight = 13
           TabOrder = 5
+          OnEditingDone = QuestTabVariableQuestEditingDone
         end
         object QuestTabVariableVariable: TComboBox
           Left = 216
@@ -1496,6 +1518,7 @@ object MainForm: TMainForm
           Width = 160
           ItemHeight = 13
           TabOrder = 6
+          OnEditingDone = QuestTabVariableVariableEditingDone
         end
         object QuestTabVariableValueString: TEdit
           Left = 216
@@ -1503,6 +1526,7 @@ object MainForm: TMainForm
           Top = 96
           Width = 160
           TabOrder = 7
+          OnEditingDone = QuestTabVariableValueStringEditingDone
         end
         object QuestTabVariableRadioInt: TRadioButton
           Left = 152
@@ -1513,6 +1537,7 @@ object MainForm: TMainForm
           Checked = True
           TabOrder = 12
           TabStop = True
+          OnChange = QuestTabVariableRadioChange
         end
         object QuestTabVariableRadioFloat: TRadioButton
           Left = 192
@@ -1521,6 +1546,7 @@ object MainForm: TMainForm
           Width = 44
           Caption = 'Float'
           TabOrder = 8
+          OnChange = QuestTabVariableRadioChange
         end
         object QuestTabVariableRadioBoolean: TRadioButton
           Left = 240
@@ -1529,6 +1555,7 @@ object MainForm: TMainForm
           Width = 40
           Caption = 'Bool'
           TabOrder = 9
+          OnChange = QuestTabVariableRadioChange
         end
         object QuestTabVariableRadioName: TRadioButton
           Left = 288
@@ -1537,6 +1564,7 @@ object MainForm: TMainForm
           Width = 47
           Caption = 'Name'
           TabOrder = 10
+          OnChange = QuestTabVariableRadioChange
         end
         object Label30: TLabel
           Left = 152
@@ -1627,6 +1655,7 @@ object MainForm: TMainForm
           Width = 160
           TabOrder = 2
           TextHint = 'my-trigger'
+          OnEditingDone = QuestTabTriggerNameEditingDone
         end
         object QuestTabTriggerConditionQuest: TComboBox
           Left = 216
@@ -1635,6 +1664,7 @@ object MainForm: TMainForm
           Width = 160
           ItemHeight = 13
           TabOrder = 3
+          OnEditingDone = QuestTabTriggerConditionQuestEditingDone
         end
         object Label35: TLabel
           Left = 152
@@ -1670,6 +1700,7 @@ object MainForm: TMainForm
           Width = 160
           ItemHeight = 13
           TabOrder = 5
+          OnEditingDone = QuestTabTriggerTargetEditingDone
         end
         object QuestTabTriggerType: TComboBox
           Left = 216
@@ -1684,6 +1715,7 @@ object MainForm: TMainForm
           )
           Style = csDropDownList
           TabOrder = 6
+          OnEditingDone = QuestTabTriggerTypeEditingDone
         end
         object QuestTabTriggerValue: TEdit
           Left = 216
@@ -1691,6 +1723,7 @@ object MainForm: TMainForm
           Top = 120
           Width = 160
           TabOrder = 7
+          OnEditingDone = QuestTabTriggerValueEditingDone
         end
         object Label37: TLabel
           Left = 152
@@ -1717,6 +1750,7 @@ object MainForm: TMainForm
           Width = 34
           Caption = 'Int'
           TabOrder = 8
+          OnChange = QuestTabTriggerRadioChange
         end
         object QuestTabTriggerRadioFloat: TRadioButton
           Left = 200
@@ -1725,6 +1759,7 @@ object MainForm: TMainForm
           Width = 44
           Caption = 'Float'
           TabOrder = 9
+          OnChange = QuestTabTriggerRadioChange
         end
         object QuestTabTriggerRadioBoolean: TRadioButton
           Left = 248
@@ -1733,6 +1768,7 @@ object MainForm: TMainForm
           Width = 40
           Caption = 'Bool'
           TabOrder = 10
+          OnChange = QuestTabTriggerRadioChange
         end
         object QuestTabTriggerRadioName: TRadioButton
           Left = 296
@@ -1741,6 +1777,7 @@ object MainForm: TMainForm
           Width = 47
           Caption = 'Name'
           TabOrder = 11
+          OnChange = QuestTabTriggerRadioChange
         end
         object QuestTabTriggerConditionVariable: TComboBox
           Left = 216
@@ -1749,6 +1786,7 @@ object MainForm: TMainForm
           Width = 160
           ItemHeight = 13
           TabOrder = 12
+          OnEditingDone = QuestTabTriggerConditionVariableEditingDone
         end
         object Label50: TLabel
           Left = 152

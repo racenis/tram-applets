@@ -67,6 +67,8 @@ type
     GeneralTabInventorySlotSelect: TListBox;
     GeneralTabAttributeSelect: TListBox;
     Label50: TLabel;
+    Label51: TLabel;
+    QuestTabObjectiveName: TEdit;
     QuestTabTriggerConditionVariable: TComboBox;
     QuestTabTriggerValue: TEdit;
     Label34: TLabel;
@@ -278,17 +280,37 @@ type
     procedure QuestTabObjectiveAddNewClick(Sender: TObject);
     procedure QuestTabObjectiveDeleteClick(Sender: TObject);
     procedure QuestTabObjectiveListClick(Sender: TObject);
+    procedure QuestTabObjectiveNameEditingDone(Sender: TObject);
+    procedure QuestTabObjectiveStateEditingDone(Sender: TObject);
+    procedure QuestTabObjectiveSubtitleEditingDone(Sender: TObject);
+    procedure QuestTabObjectiveTitleEditingDone(Sender: TObject);
+    procedure QuestTabTriggerConditionQuestEditingDone(Sender: TObject);
+    procedure QuestTabTriggerConditionVariableEditingDone(Sender: TObject);
     procedure QuestTabTriggerDeleteClick(Sender: TObject);
+    procedure QuestTabTriggerNameEditingDone(Sender: TObject);
+    procedure QuestTabTriggerRadioChange(Sender: TObject);
     procedure QuestTabTriggerRecheck;
     procedure QuestTabTriggerAddNewClick(Sender: TObject);
     procedure QuestTabTriggerListClick(Sender: TObject);
+    procedure QuestTabTriggerTargetEditingDone(Sender: TObject);
+    procedure QuestTabTriggerTypeEditingDone(Sender: TObject);
+    procedure QuestTabTriggerValueEditingDone(Sender: TObject);
     procedure QuestTabVariableDeleteClick(Sender: TObject);
+    procedure QuestTabVariableNameEditingDone(Sender: TObject);
+    procedure QuestTabVariableQuestEditingDone(Sender: TObject);
+    procedure QuestTabVariableRadioChange(Sender: TObject);
     procedure QuestTabVariableRecheck;
     procedure QuestTabVariableAddNewClick(Sender: TObject);
     procedure QuestTabVariableListClick(Sender: TObject);
+    procedure QuestTabVariableTypeEditingDone(Sender: TObject);
+    procedure QuestTabVariableValueStringEditingDone(Sender: TObject);
+    procedure QuestTabVariableVariableEditingDone(Sender: TObject);
     procedure RefrshAllFileLists;
     procedure QuestTabRefreshList;
     procedure QuestTabRefresh;
+    procedure QuestTabRefreshObjective;
+    procedure QuestTabRefreshVariable;
+    procedure QuestTabRefreshTrigger;
     procedure ItemTabDeleteAttributeClick(Sender: TObject);
     procedure QuestTabItemListClick(Sender: TObject);
     procedure MenuItemLoadDatabaseClick(Sender: TObject);
@@ -362,6 +384,12 @@ begin
     selectedVariable := nil;
     selectedObjective := nil;
     selectedTrigger := nil;
+
+    QuestTabRefreshVariable;
+    QuestTabRefreshObjective;
+    QuestTabRefreshTrigger;
+
+    Exit;
   end;
 
   QuestTabGeneralName.Text:= selectedQuest.name;
@@ -383,10 +411,176 @@ begin
       QuestTabTriggerList.AddItem(trigger.name, trigger);
 end;
 
+procedure TMainForm.QuestTabRefreshObjective;
+begin
+  QuestTabObjectiveName.Enabled := selectedObjective <> nil;
+  QuestTabObjectiveTitle.Enabled := selectedObjective <> nil;
+  QuestTabObjectiveSubtitle.Enabled := selectedObjective <> nil;
+  QuestTabObjectiveState.Enabled := selectedObjective <> nil;
+
+  if selectedObjective = nil then begin
+    QuestTabObjectiveName.Text := 'No objective selected.';
+    Exit;
+  end;
+
+  QuestTabObjectiveName.Text := selectedObjective.name;
+  QuestTabObjectiveTitle.Text := selectedObjective.value;
+  QuestTabObjectiveSubtitle.Text := selectedObjective.objectiveSubtitle;
+
+  QuestTabObjectiveState.Text := selectedObjective.objectiveState;
+end;
+
+procedure TMainForm.QuestTabRefreshVariable;
+var
+  disableValueTypeSelect: Boolean;
+  disableValueSelect: Boolean;
+  disableQuestSelect: Boolean;
+begin
+  QuestTabVariableName.Enabled := selectedVariable <> nil;
+  QuestTabVariableType.Enabled := selectedVariable <> nil;
+  QuestTabVariableQuest.Enabled := selectedVariable <> nil;
+  QuestTabVariableVariable.Enabled := selectedVariable <> nil;
+  QuestTabVariableValueString.Enabled := selectedVariable <> nil;
+  QuestTabVariableRadioInt.Enabled := selectedVariable <> nil;
+  QuestTabVariableRadioFloat.Enabled := selectedVariable <> nil;
+  QuestTabVariableRadioBoolean.Enabled := selectedVariable <> nil;
+  QuestTabVariableRadioName.Enabled := selectedVariable <> nil;
+
+  if selectedVariable = nil then begin
+    QuestTabVariableName.Text := 'No quest variable selected';
+    Exit;
+  end;
+
+  QuestTabVariableName.Text := selectedVariable.name;
+  QuestTabVariableType.Text := selectedVariable.variableType;
+  QuestTabVariableQuest.Text := selectedVariable.targetQuest;
+  QuestTabVariableVariable.Text := selectedVariable.targetVariable;
+  QuestTabVariableValueString.Text := selectedVariable.value;
+
+  case selectedVariable.valueType of
+    'int': QuestTabVariableRadioInt.Checked := True;
+    'float': QuestTabVariableRadioFloat.Checked := True;
+    'bool': QuestTabVariableRadioBoolean.Checked := True;
+    'name': QuestTabVariableRadioName.Checked := True;
+  end;
+
+  // checking which controls need to be disabled for the variable's type
+  disableValueTypeSelect := False;
+  disableValueSelect := False;
+  disableQuestSelect := False;
+
+  case selectedVariable.variableType of
+    'not': begin
+        disableValueTypeSelect := True;
+        disableValueSelect := True;
+    end;
+    'script': begin
+        disableValueTypeSelect := True;
+        disableQuestSelect := True;
+    end;
+    'value': begin
+        disableQuestSelect := True;
+    end;
+  end;
+
+  // applying the enables and disables of the controls
+
+  // applying value type
+  QuestTabVariableRadioInt.Enabled := not disableValueTypeSelect;
+  QuestTabVariableRadioFloat.Enabled := not disableValueTypeSelect;
+  QuestTabVariableRadioBoolean.Enabled := not disableValueTypeSelect;
+  QuestTabVariableRadioName.Enabled := not disableValueTypeSelect;
+
+  // applying value string
+  QuestTabVariableValueString.Enabled := not disableValueSelect;
+
+  if disableValueSelect then
+     QuestTabVariableValueString.Text := 'Not applicable.';
+
+  // applying quest
+  QuestTabVariableQuest.Enabled := not disableQuestSelect;
+  QuestTabVariableVariable.Enabled := not disableQuestSelect;
+
+  if disableQuestSelect then begin
+    QuestTabVariableQuest.Text := 'Not applicable.';
+    QuestTabVariableVariable.Text := 'Not applicable.';
+  end;
+end;
+
+procedure TMainForm.QuestTabRefreshTrigger;
+begin
+  QuestTabTriggerName.Enabled := selectedTrigger <> nil;
+  QuestTabTriggerConditionQuest.Enabled := selectedTrigger <> nil;
+  QuestTabTriggerConditionVariable.Enabled := selectedTrigger <> nil;
+  QuestTabTriggerTarget.Enabled := selectedTrigger <> nil;
+  QuestTabTriggerType.Enabled := selectedTrigger <> nil;
+  QuestTabTriggerValue.Enabled := selectedTrigger <> nil;
+  QuestTabTriggerRadioInt.Enabled := selectedTrigger <> nil;
+  QuestTabTriggerRadioFloat.Enabled := selectedTrigger <> nil;
+  QuestTabTriggerRadioBoolean.Enabled := selectedTrigger <> nil;
+  QuestTabTriggerRadioName.Enabled := selectedTrigger <> nil;
+
+   if selectedTrigger = nil then begin
+     QuestTabTriggerName.Text := 'No quest trigger selected';
+     Exit;
+   end;
+
+  QuestTabTriggerName.Text := selectedTrigger.name;
+  QuestTabTriggerConditionQuest.Text := selectedTrigger.conditionQuest;
+  QuestTabTriggerConditionVariable.Text := selectedTrigger.conditionVariable;
+  QuestTabTriggerType.Text := selectedTrigger.triggerType;
+  QuestTabTriggerTarget.Text := selectedTrigger.triggerTarget;
+  QuestTabTriggerValue.Text := selectedTrigger.value;
+
+  case selectedTrigger.valueType of
+    'int': QuestTabTriggerRadioInt.Checked := True;
+    'float': QuestTabTriggerRadioFloat.Checked := True;
+    'bool': QuestTabTriggerRadioBoolean.Checked := True;
+    'name': QuestTabTriggerRadioName.Checked := True;
+  end;
+
+  // RADIO BUTTONS
+  case selectedTrigger.triggerType of
+    'set-objective', 'increment': begin
+        QuestTabTriggerRadioInt.Enabled := False;
+        QuestTabTriggerRadioFloat.Enabled := False;
+        QuestTabTriggerRadioBoolean.Enabled := False;
+        QuestTabTriggerRadioName.Enabled := False;
+
+        //QuestTabVariableValueString.Text := 'Not applicable.';
+        //QuestTabVariableValueString.Enabled := False;
+    end;
+    else begin
+        QuestTabTriggerRadioInt.Enabled := True;
+        QuestTabTriggerRadioFloat.Enabled := True;
+        QuestTabTriggerRadioBoolean.Enabled := True;
+        QuestTabTriggerRadioName.Enabled := True;
+
+        //QuestTabVariableValueString.Enabled := True;
+    end;
+  end;
+
+  // TEXT FIELD
+  case selectedTrigger.triggerType of
+    'increment': begin
+        QuestTabTriggerValue.Text := 'Not applicable.';
+        QuestTabTriggerValue.Enabled := False;
+    end;
+    else begin
+        QuestTabTriggerValue.Enabled := True;
+    end;
+  end;
+end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   LoadAllFilesAndStuff;
+
+  QuestsTabGeneral.Enabled := False;
+  QuestsTabStages.Enabled := False;
+  QuestsTabVariables.Enabled := False;
+  QuestsTabTriggers.Enabled := False;
+
 end;
 
 procedure TMainForm.MenuItemQuitClick(Sender: TObject);
@@ -408,6 +602,12 @@ begin
   then begin
     TQuestData.dataList.Remove(selectedQuest);
     selectedQuest := nil;
+
+    QuestsTabGeneral.Enabled := False;
+    QuestsTabStages.Enabled := False;
+    QuestsTabVariables.Enabled := False;
+    QuestsTabTriggers.Enabled := False;
+
     QuestTabRefreshList;
   end;
 end;
@@ -468,10 +668,14 @@ begin
   selectedObjective := TQuestVariable.Create;
   selectedObjective.name := 'new-objective';
   selectedObjective.variableType := 'objective';
+  selectedObjective.objectiveState := '0';
 
   selectedQuest.variables.Add(selectedObjective);
 
-  QuestTabRefresh;
+  QuestTabObjectiveList.AddItem('new-objective', selectedObjective);
+  QuestTabObjectiveList.ItemIndex := QuestTabObjectiveList.Items.Count - 1;
+
+  QuestTabRefreshObjective;
 end;
 
 procedure TMainForm.QuestTabObjectiveDeleteClick(Sender: TObject);
@@ -489,6 +693,7 @@ begin
     selectedQuest.variables.Remove(selectedObjective);
     selectedObjective := nil;
     QuestTabRefresh;
+    QuestTabRefreshObjective;
   end;
 end;
 
@@ -501,10 +706,58 @@ begin
 
   selectedObjective := QuestTabObjectiveList.Items.Objects[QuestTabObjectiveList.ItemIndex] as TQuestVariable;
 
-  QuestTabObjectiveTitle.Text := selectedObjective.value;
-  QuestTabObjectiveSubtitle.Text := selectedObjective.objectiveSubtitle;
+  QuestTabRefreshObjective;
+end;
 
-  QuestTabObjectiveState.Text := selectedObjective.objectiveState;
+procedure TMainForm.QuestTabObjectiveNameEditingDone(Sender: TObject);
+begin
+  // TODO: validate
+  if selectedObjective = nil then Exit;
+  selectedObjective.name := QuestTabObjectiveName.text;
+
+  QuestTabRefresh;
+end;
+
+procedure TMainForm.QuestTabObjectiveStateEditingDone(Sender: TObject);
+begin
+  // TODO: validate
+  if selectedObjective = nil then Exit;
+  selectedObjective.objectiveState := QuestTabObjectiveState.text;
+
+  QuestTabRefresh;
+end;
+
+procedure TMainForm.QuestTabObjectiveSubtitleEditingDone(Sender: TObject);
+begin
+  // TODO: validate
+  if selectedObjective = nil then Exit;
+  selectedObjective.objectiveSubtitle := QuestTabObjectiveSubtitle.text;
+
+  QuestTabRefresh;
+end;
+
+procedure TMainForm.QuestTabObjectiveTitleEditingDone(Sender: TObject);
+begin
+  // TODO: validate
+  if selectedObjective = nil then Exit;
+  selectedObjective.value := QuestTabObjectiveTitle.Text;
+
+  QuestTabRefresh;
+end;
+
+procedure TMainForm.QuestTabTriggerConditionQuestEditingDone(Sender: TObject);
+begin
+  if selectedTrigger = nil then Exit;
+  selectedTrigger.conditionQuest := QuestTabTriggerConditionQuest.Text;
+
+  QuestTabRefreshTrigger
+end;
+
+procedure TMainForm.QuestTabTriggerConditionVariableEditingDone(Sender: TObject
+  );
+begin
+  if selectedTrigger = nil then Exit;
+  selectedTrigger.conditionVariable := QuestTabTriggerConditionVariable.Text;
 end;
 
 procedure TMainForm.QuestTabTriggerDeleteClick(Sender: TObject);
@@ -525,6 +778,25 @@ begin
   end;
 end;
 
+procedure TMainForm.QuestTabTriggerNameEditingDone(Sender: TObject);
+begin
+  if selectedTrigger = nil then Exit;
+  // TODO: validate
+  selectedTrigger.name := QuestTabTriggerName.Text;
+  QuestTabRefresh;
+end;
+
+procedure TMainForm.QuestTabTriggerRadioChange(Sender: TObject);
+begin
+  if selectedTrigger = nil then Exit;
+
+  if QuestTabTriggerRadioInt.Checked then selectedTrigger.valueType := 'int';
+  if QuestTabTriggerRadioFloat.Checked then selectedTrigger.valueType := 'float';
+  if QuestTabTriggerRadioBoolean.Checked then selectedTrigger.valueType := 'bool';
+  if QuestTabTriggerRadioName.Checked then selectedTrigger.valueType := 'name';
+
+end;
+
 procedure TMainForm.QuestTabTriggerAddNewClick(Sender: TObject);
 begin
   if selectedQuest = nil then begin
@@ -537,43 +809,16 @@ begin
 
   selectedQuest.triggers.Add(selectedTrigger);
 
-  QuestTabRefresh;
+  QuestTabTriggerList.AddItem('new-trigger', selectedTrigger);
+  QuestTabTriggerList.ItemIndex := QuestTabTriggerList.Items.Count - 1;
+
+  QuestTabRefreshTrigger;
 end;
 
 procedure TMainForm.QuestTabTriggerRecheck;
 begin
 
-  // RADIO BUTTONS
-  case selectedTrigger.triggerType of
-    'set-objective', 'increment': begin
-        QuestTabTriggerRadioInt.Enabled := False;
-        QuestTabTriggerRadioFloat.Enabled := False;
-        QuestTabTriggerRadioBoolean.Enabled := False;
-        QuestTabTriggerRadioName.Enabled := False;
 
-        //QuestTabVariableValueString.Text := 'Not applicable.';
-        //QuestTabVariableValueString.Enabled := False;
-    end;
-    else begin
-        QuestTabTriggerRadioInt.Enabled := True;
-        QuestTabTriggerRadioFloat.Enabled := True;
-        QuestTabTriggerRadioBoolean.Enabled := True;
-        QuestTabTriggerRadioName.Enabled := True;
-
-        //QuestTabVariableValueString.Enabled := True;
-    end;
-  end;
-
-  // TEXT FIELD
-  case selectedTrigger.triggerType of
-    'increment': begin
-        QuestTabTriggerValue.Text := 'Not applicable.';
-        QuestTabTriggerValue.Enabled := False;
-    end;
-    else begin
-        QuestTabTriggerValue.Enabled := True;
-    end;
-  end;
 end;
 
 procedure TMainForm.QuestTabTriggerListClick(Sender: TObject);
@@ -585,21 +830,27 @@ begin
 
   selectedTrigger := QuestTabTriggerList.Items.Objects[QuestTabTriggerList.ItemIndex] as TQuestTrigger;
 
-  QuestTabTriggerName.Text := selectedTrigger.name;
-  QuestTabTriggerConditionQuest.Text := selectedTrigger.conditionQuest;
-  QuestTabTriggerConditionVariable.Text := selectedTrigger.conditionVariable;
-  QuestTabTriggerType.Text := selectedTrigger.triggerType;
-  QuestTabTriggerTarget.Text := selectedTrigger.triggerTarget;
-  QuestTabTriggerValue.Text := selectedTrigger.value;
+  QuestTabRefreshTrigger;
+end;
 
-  case selectedTrigger.valueType of
-    'int': QuestTabTriggerRadioInt.Checked := True;
-    'float': QuestTabTriggerRadioFloat.Checked := True;
-    'bool': QuestTabTriggerRadioBoolean.Checked := True;
-    'name': QuestTabTriggerRadioName.Checked := True;
-  end;
+procedure TMainForm.QuestTabTriggerTargetEditingDone(Sender: TObject);
+begin
+  if selectedTrigger = nil then Exit;
+  selectedTrigger.triggerTarget := QuestTabTriggerTarget.Text;
+end;
 
-  QuestTabTriggerRecheck;
+procedure TMainForm.QuestTabTriggerTypeEditingDone(Sender: TObject);
+begin
+  if selectedTrigger = nil then Exit;
+  selectedTrigger.triggerType := QuestTabTriggerType.Text;
+
+  QuestTabRefreshTrigger;
+end;
+
+procedure TMainForm.QuestTabTriggerValueEditingDone(Sender: TObject);
+begin
+  if selectedTrigger = nil then Exit;
+  selectedTrigger.value := QuestTabTriggerValue.Text;
 end;
 
 procedure TMainForm.QuestTabVariableDeleteClick(Sender: TObject);
@@ -620,6 +871,34 @@ begin
   end;
 end;
 
+procedure TMainForm.QuestTabVariableNameEditingDone(Sender: TObject);
+begin
+  // TODO: validate
+  if selectedVariable = nil then Exit;
+  selectedVariable.name := QuestTabVariableName.text;
+
+  QuestTabRefresh;
+end;
+
+procedure TMainForm.QuestTabVariableQuestEditingDone(Sender: TObject);
+begin
+  // TODO: validate
+  if selectedVariable = nil then Exit;
+  selectedVariable.targetQuest := QuestTabVariableQuest.Text;
+  QuestTabRefreshVariable;
+end;
+
+procedure TMainForm.QuestTabVariableRadioChange(Sender: TObject);
+begin
+  if selectedVariable = nil then Exit;
+
+  if QuestTabVariableRadioInt.Checked then selectedVariable.valueType := 'int';
+  if QuestTabVariableRadioFloat.Checked then selectedVariable.valueType := 'float';
+  if QuestTabVariableRadioBoolean.Checked then selectedVariable.valueType := 'bool';
+  if QuestTabVariableRadioName.Checked then selectedVariable.valueType := 'name';
+
+end;
+
 procedure TMainForm.QuestTabVariableAddNewClick(Sender: TObject);
 begin
   if selectedQuest = nil then begin
@@ -629,47 +908,20 @@ begin
 
   selectedVariable := TQuestVariable.Create;
   selectedVariable.name := 'new-variable';
+  selectedVariable.value := '0';
+  selectedVariable.valueType := 'int';
 
   selectedQuest.variables.Add(selectedVariable);
 
-  QuestTabRefresh;
+  QuestTabVariableList.AddItem('new-variable', selectedVariable);
+  QuestTabVariableList.ItemIndex := QuestTabVariableList.Items.Count - 1;
+
+  QuestTabRefreshVariable;
 end;
 
 procedure TMainForm.QuestTabVariableRecheck;
 begin
-  case selectedVariable.variableType of
-    'not', 'script': begin
-        QuestTabVariableRadioInt.Enabled := False;
-        QuestTabVariableRadioFloat.Enabled := False;
-        QuestTabVariableRadioBoolean.Enabled := False;
-        QuestTabVariableRadioName.Enabled := False;
-
-        QuestTabVariableValueString.Text := 'Not applicable.';
-        QuestTabVariableValueString.Enabled := False;
-    end;
-    else begin
-        QuestTabVariableRadioInt.Enabled := True;
-        QuestTabVariableRadioFloat.Enabled := True;
-        QuestTabVariableRadioBoolean.Enabled := True;
-        QuestTabVariableRadioName.Enabled := True;
-
-        QuestTabVariableValueString.Enabled := True;
-    end;
-  end;
-
-  case selectedVariable.variableType of
-    'value', 'script': begin
-        QuestTabVariableQuest.Enabled := False;
-        QuestTabVariableVariable.Enabled := False;
-
-        QuestTabVariableQuest.Text := 'Not applicable.';
-        QuestTabVariableVariable.Text := 'Not applicable.';
-    end;
-    else begin
-        QuestTabVariableQuest.Enabled := True;
-        QuestTabVariableVariable.Enabled := True;
-    end;
-  end;
+  // TODO: delete this
 end;
 
 procedure TMainForm.QuestTabVariableListClick(Sender: TObject);
@@ -681,7 +933,10 @@ begin
 
   selectedVariable := QuestTabVariableList.Items.Objects[QuestTabVariableList.ItemIndex] as TQuestVariable;
 
-  QuestTabVariableName.Text := selectedVariable.name;
+  QuestTabRefreshVariable;
+
+
+  (*QuestTabVariableName.Text := selectedVariable.name;
   QuestTabVariableType.Text := selectedVariable.variableType;
   QuestTabVariableQuest.Text := selectedVariable.targetQuest;
   QuestTabVariableVariable.Text := selectedVariable.targetVariable;
@@ -694,7 +949,32 @@ begin
     'name': QuestTabVariableRadioName.Checked := True;
   end;
 
-  QuestTabVariableRecheck;
+  QuestTabVariableRecheck;*)
+end;
+
+procedure TMainForm.QuestTabVariableTypeEditingDone(Sender: TObject);
+begin
+  // TODO: validate
+  if selectedVariable = nil then Exit;
+  selectedVariable.variableType := QuestTabVariableType.Text;
+  QuestTabRefreshVariable;
+end;
+
+
+
+procedure TMainForm.QuestTabVariableValueStringEditingDone(Sender: TObject);
+begin
+  // TODO: validate
+  // check which type is selected and then do the thing
+  if selectedVariable = nil then Exit;
+  selectedVariable.value := QuestTabVariableValueString.Text;
+end;
+
+procedure TMainForm.QuestTabVariableVariableEditingDone(Sender: TObject);
+begin
+  // TODO: validate
+  if selectedVariable = nil then Exit;
+  selectedVariable.targetVariable := QuestTabVariableVariable.Text;
 end;
 
 procedure TMainForm.RefrshAllFileLists;
@@ -709,6 +989,12 @@ var
 begin
   if QuestTabItemList.ItemIndex < 0 then begin
     selectedQuest := nil;
+
+    QuestsTabGeneral.Enabled := False;
+    QuestsTabStages.Enabled := False;
+    QuestsTabVariables.Enabled := False;
+    QuestsTabTriggers.Enabled := False;
+
     Exit;
   end;
 
@@ -716,12 +1002,22 @@ begin
 
   selectedQuest := QuestTabItemList.Items.Objects[QuestTabItemList.ItemIndex] as TQuestData;
 
+
+  QuestsTabGeneral.Enabled := True;
+  QuestsTabStages.Enabled := True;
+  QuestsTabVariables.Enabled := True;
+  QuestsTabTriggers.Enabled := True;
+
   //QuestTabObjectiveList.Clear;
   //QuestTabVariableList.Clear;
   //QuestTabTriggerList.Clear;
 
   //QuestTabGeneralName.Text:= selectedQuest.name;
   QuestTabRefresh;
+
+  QuestTabRefreshObjective;
+  QuestTabRefreshVariable;
+  QuestTabRefreshTrigger;
 
   //for questVariable in selectedQuest.variables do
    //   QuestTabVariableList.AddItem(questVariable.name, questVariable);
