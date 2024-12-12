@@ -271,6 +271,21 @@ type
     AIPackageTab: TTabSheet;
     QuestTab: TTabSheet;
     DialogTab: TTabSheet;
+    procedure DialogTabAnswerEditingDone(Sender: TObject);
+    procedure DialogTabConditionQuestEditingDone(Sender: TObject);
+    procedure DialogTabConditionVariableEditingDone(Sender: TObject);
+    procedure DialogTabDeleteItemClick(Sender: TObject);
+    procedure DialogTabFileChange(Sender: TObject);
+    procedure DialogTabItemListClick(Sender: TObject);
+    procedure DialogTabNameEditingDone(Sender: TObject);
+    procedure DialogTabNewItemClick(Sender: TObject);
+    procedure DialogTabNextAddClick(Sender: TObject);
+    procedure DialogTabNextRemoveClick(Sender: TObject);
+    procedure DialogTabNextSelectFilterChange(Sender: TObject);
+    procedure DialogTabPromptEditingDone(Sender: TObject);
+    procedure DialogTabTriggerNameEditingDone(Sender: TObject);
+    procedure DialogTabTriggerQuestEditingDone(Sender: TObject);
+    procedure DialogTabTypeChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure MenuItemQuitClick(Sender: TObject);
     procedure QuestTabDeleteItemClick(Sender: TObject);
@@ -311,6 +326,9 @@ type
     procedure QuestTabRefreshObjective;
     procedure QuestTabRefreshVariable;
     procedure QuestTabRefreshTrigger;
+    procedure DialogTabRefreshList;
+    procedure DialogTabRefresh;
+    procedure DialogTabRefreshNextSelect;
     procedure ItemTabDeleteAttributeClick(Sender: TObject);
     procedure QuestTabItemListClick(Sender: TObject);
     procedure MenuItemLoadDatabaseClick(Sender: TObject);
@@ -324,10 +342,14 @@ type
 var
   MainForm: TMainForm;
   questCollection: TQuestCollection;
+  dialogCollection: TDialogCollection;
+
   selectedQuest: TQuestData;
   selectedVariable: TQuestVariable;
   selectedObjective: TQuestVariable;
   selectedTrigger: TQuestTrigger;
+
+  selectedTopic: TDialogTopic;
 
 implementation
 
@@ -346,6 +368,12 @@ begin
       MainForm.QuestTabFile.AddItem(asset.GetName, asset);
   end;
 
+  dialogCollection.ScanFromDisk;
+
+  for asset in dialogCollection.GetAssets do begin
+      asset.LoadFromDisk;
+      MainForm.DialogTabFile.AddItem(asset.GetName, asset);
+  end;
 
   //MainForm.QuestTabRefreshList;
 end;
@@ -637,6 +665,262 @@ begin
   QuestsTabVariables.Enabled := False;
   QuestsTabTriggers.Enabled := False;
 
+  DialogTabGeneral.Enabled := False;
+  DialogTabStrings.Enabled := False;
+  DialogTabCondition.Enabled := False;
+  DialogTabTrigger.Enabled := False;
+  DialogTabNextTopics.Enabled := False;
+end;
+
+procedure TMainForm.DialogTabRefreshList;
+var
+  asset: TAssetMetadata;
+  topic: TDialogTopic;
+begin
+  DialogTabItemList.Clear;
+  DialogTabItemList.ClearSelection;
+
+  for topic in TDialogTopic.dataList do
+      if (DialogTabFile.Items.Objects[DialogTabFile.ItemIndex] as TDialog) = topic.parent then
+         DialogTabItemList.AddItem(topic.name, topic);
+end;
+
+procedure TMainForm.DialogTabFileChange(Sender: TObject);
+begin
+  DialogTabRefreshList;
+end;
+
+procedure TMainForm.DialogTabRefresh;
+var
+  topic: TDialogTopic;
+  nextTopic: string;
+  hasNext: Boolean;
+begin
+  DialogTabGeneral.Enabled := selectedTopic <> nil;
+  DialogTabStrings.Enabled := selectedTopic <> nil;
+  DialogTabCondition.Enabled := selectedTopic <> nil;
+  DialogTabTrigger.Enabled := selectedTopic <> nil;
+  DialogTabNextTopics.Enabled := selectedTopic <> nil;
+
+  DialogTabNextSelectFilter.Text := '';
+
+  if selectedTopic = nil then begin
+    Exit;
+  end;
+
+  DialogTabStrings.Enabled := selectedTopic.dialogType = dialogTopic;
+
+  case selectedTopic.dialogType of
+    TDialogTopicType.dialogTopic: DialogTabType.Text := 'topic';
+    TDialogTopicType.dialogSingle: DialogTabType.Text := 'import-single';
+    TDialogTopicType.dialogMulti: DialogTabType.Text := 'import-multiple';
+  end;
+
+  DialogTabName.Text := selectedTopic.name;
+
+  DialogTabPrompt.Text := selectedTopic.prompt;
+  DialogTabAnswer.Text := selectedTopic.answer;
+  DialogTabConditionQuest.Text := selectedTopic.conditionQuest;
+  DialogTabConditionVariable.Text := selectedTopic.conditionVariable;
+
+  DialogTabTriggerQuest.Text := selectedTopic.triggerQuest;
+  DialogTabTriggerName.Text := selectedTopic.triggerTrigger;
+
+  DialogTabNextSelect.Clear;
+  DialogTabNextList.Clear;
+
+  for topic in TDialogTopic.dataList do begin
+      hasNext := False;
+
+      for nextTopic in selectedTopic.nextTopics do
+          if nextTopic = topic.name then hasNext := True;
+
+      if hasNext then
+          DialogTabNextList.AddItem(topic.name, topic)
+      else
+         DialogTabNextSelect.AddItem(topic.name, topic);
+  end;
+end;
+
+procedure TMainForm.DialogTabRefreshNextSelect;
+var
+  topic: TDialogTopic;
+begin
+  DialogTabNextSelect.Items.Clear;
+
+  for topic in TDialogTopic.dataList do begin
+      if (DialogTabNextSelectFilter.Text <> '')
+         and (not topic.name.Contains(DialogTabNextSelectFilter.Text)) then Continue;
+      if selectedTopic.nextTopics.IndexOf(topic.name) < 0 then
+         DialogTabNextSelect.AddItem(topic.name, topic);
+  end;
+end;
+
+procedure TMainForm.DialogTabItemListClick(Sender: TObject);
+var
+  questVariable: TQuestVariable;
+  questTrigger: TQuestTrigger;
+begin
+  if DialogTabItemList.ItemIndex < 0 then begin
+    selectedTopic := nil;
+    Exit;
+  end;
+
+  WriteLn(DialogTabItemList.ItemIndex);
+
+  selectedTopic := DialogTabItemList.Items.Objects[DialogTabItemList.ItemIndex] as TDialogTopic;
+
+  DialogTabRefresh;
+end;
+
+procedure TMainForm.DialogTabNameEditingDone(Sender: TObject);
+var
+  index: Integer;
+begin
+  index := DialogTabItemList.Items.IndexOfObject(selectedTopic);
+  if index >= 0 then
+     DialogTabItemList.Items.Strings[index] := DialogTabName.Text;
+  selectedTopic.name := DialogTabName.Text;
+  //DialogTabRefreshList;
+end;
+
+procedure TMainForm.DialogTabDeleteItemClick(Sender: TObject);
+begin
+  if selectedTopic = nil then begin
+    ShowMessage('Select a dialog before removing it!');
+    Exit;
+  end;
+
+  if MessageDlg('Removing dialog topic', 'Do you want to remove '
+                + selectedTopic.name + ' from ' + selectedTopic.parent.GetName
+                + '?', mtConfirmation,
+   [mbYes, mbNo], 0) = mrYes
+  then begin
+    TDialogTopic.dataList.Remove(selectedTopic);
+    selectedTopic := nil;
+
+    DialogTabGeneral.Enabled := False;
+    DialogTabStrings.Enabled := False;
+    DialogTabCondition.Enabled := False;
+    DialogTabTrigger.Enabled := False;
+    DialogTabNextTopics.Enabled := False;
+
+    DialogTabRefreshList;
+  end;
+end;
+
+procedure TMainForm.DialogTabAnswerEditingDone(Sender: TObject);
+var
+  index: Integer;
+begin
+  index := DialogTabItemList.Items.IndexOfObject(selectedTopic);
+  if index >= 0 then
+     DialogTabItemList.Items.Strings[index] := DialogTabName.Text;
+  selectedTopic.name := DialogTabName.Text;
+  //DialogTabRefreshList;
+end;
+
+procedure TMainForm.DialogTabConditionQuestEditingDone(Sender: TObject);
+begin
+
+end;
+
+procedure TMainForm.DialogTabConditionVariableEditingDone(Sender: TObject);
+begin
+
+end;
+
+procedure TMainForm.DialogTabNewItemClick(Sender: TObject);
+var
+  dialogFile: TDialog;
+  newTopic: TDialogTopic;
+  topicName: string;
+begin
+  if DialogTabFile.ItemIndex < 0 then begin
+    ShowMessage('Select a Dialog file, then you can add a quest to it!');
+    Exit;
+  end;
+
+  dialogFile := (DialogTabFile.Items.Objects[DialogTabFile.ItemIndex] as TDialog);
+
+  topicName := DialogTabSearchTopic.Text;
+  topicName := topicName.Trim;
+
+  // TODO: add more validation (no spaces, unique, etc.)
+  if topicName = '' then begin
+    ShowMessage('Type in the dialog topic name into the search box.'
+                + 'This name will be used for the topic name.');
+    Exit;
+  end;
+
+  newTopic := TDialogTopic.Create;
+  newTopic.name := topicName;
+  newTopic.parent := dialogFile;
+
+  TDialogTopic.dataList.Add(newTopic);
+
+  DialogTabSearchTopic.Text := '';
+  DialogTabRefreshList;
+end;
+
+procedure TMainForm.DialogTabNextAddClick(Sender: TObject);
+begin
+  if DialogTabNextSelect.ItemIndex < 0 then begin
+    ShowMessage('Select a topic before adding it');
+    Exit;
+  end;
+
+  selectedTopic.nextTopics.Add(DialogTabNextSelect.Items.Strings[DialogTabNextSelect.ItemIndex]);
+
+  DialogTabNextList.AddItem(DialogTabNextSelect.Items[DialogTabNextSelect.ItemIndex],
+                            DialogTabNextSelect.Items.Objects[DialogTabNextSelect.ItemIndex]);
+  DialogTabNextSelect.DeleteSelected;
+  //selectedTopic.nextTopics.Delete(selectedTopic.nextTopics.IndexOf(DialogTabNextList.Items[DialogTabNextList.ItemIndex]));
+end;
+
+procedure TMainForm.DialogTabNextRemoveClick(Sender: TObject);
+begin
+  if DialogTabNextList.ItemIndex < 0 then begin
+    ShowMessage('Select a topic before removing it');
+    Exit;
+  end;
+
+  selectedTopic.nextTopics.Delete(selectedTopic.nextTopics.IndexOf(DialogTabNextList.Items.Strings[DialogTabNextList.ItemIndex]));
+
+  DialogTabNextSelect.AddItem(DialogTabNextList.Items[DialogTabNextList.ItemIndex],
+                              DialogTabNextList.Items.Objects[DialogTabNextList.ItemIndex]);
+  DialogTabNextList.DeleteSelected;
+end;
+
+procedure TMainForm.DialogTabNextSelectFilterChange(Sender: TObject);
+begin
+  DialogTabRefreshNextSelect;
+end;
+
+procedure TMainForm.DialogTabPromptEditingDone(Sender: TObject);
+begin
+
+end;
+
+procedure TMainForm.DialogTabTriggerNameEditingDone(Sender: TObject);
+begin
+
+end;
+
+procedure TMainForm.DialogTabTriggerQuestEditingDone(Sender: TObject);
+begin
+
+end;
+
+procedure TMainForm.DialogTabTypeChange(Sender: TObject);
+begin
+  case DialogTabType.Text of
+    'topic': selectedTopic.dialogType := dialogTopic;
+    'import-single': selectedTopic.dialogType := dialogSingle;
+    'import-multiple': selectedTopic.dialogType := dialogMulti;
+  end;
+
+  DialogTabStrings.Enabled := selectedTopic.dialogType = dialogTopic;
 end;
 
 procedure TMainForm.MenuItemQuitClick(Sender: TObject);
@@ -1095,6 +1379,7 @@ end;
 initialization
 begin
   questCollection := TQuestCollection.Create;
+  dialogCollection := TDialogCollection.Create;
 
   selectedQuest := nil;
   selectedVariable := nil;

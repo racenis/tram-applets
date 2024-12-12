@@ -5,9 +5,36 @@ unit TramDialogAsset;
 interface
 
 uses
-  Classes, SysUtils, TramAssetMetadata, FileUtil, TramAssetParser;
+  Classes, SysUtils, TramAssetMetadata, FileUtil, TramAssetParser, fgl;
 
 type
+  TDialog = class;
+  TDialogTopic = class;
+  TDialogTopicList = specialize TFPGList<TDialogTopic>;
+  TDialogTopicType = (dialogTopic, dialogSingle, dialogMulti);
+  TDialogTopic = class
+  public
+     constructor Create;
+  public
+    name: string;
+    dialogType: TDialogTopicType;
+    prompt: string;
+    answer: string;
+
+    conditionQuest: string;
+    conditionVariable: string;
+
+    triggerQuest: string;
+    triggerTrigger: string;
+
+    //nextTopics: TStringArray;
+    nextTopics: TStringList;
+
+    parent: TDialog;
+
+    dataList: TDialogTopicList; static;
+  end;
+
   TDialogCollection = class;
   TDialog = class(TAssetMetadata)
   public
@@ -21,6 +48,7 @@ type
       function GetPropertyList: TAssetPropertyList; override;
 
       procedure LoadMetadata(); override;
+      procedure LoadFromDisk(); override;
   protected
       procedure SetDateInDB(date: Integer);
       procedure SetDateOnDisk(date: Integer);
@@ -41,6 +69,11 @@ type
   end;
 
 implementation
+
+constructor TDialogTopic.Create;
+begin
+  self.nextTopics := TStringList.Create;
+end;
 
 constructor TDialog.Create(dialogName: string; collection: TDialogCollection);
 begin
@@ -87,6 +120,62 @@ begin
 
 end;
 
+procedure TDialog.LoadFromDisk();
+var
+  assetFile: TAssetParser;
+  rowIndex: Integer;
+  topic: TDialogTopic;
+begin
+  assetFile := TAssetParser.Create(GetPath);
+
+  if not assetFile.IsOpen then
+  begin
+    WriteLn('was not loaded!!!!!');
+    Exit;
+  end;
+
+  if assetFile.GetRowCount < 1 then
+  begin
+    WriteLn('was not loaded!!!!!');
+    Exit;
+  end;
+
+  if assetFile.GetValue(0, 0) <> 'DIALOGv1' then
+  begin
+    WriteLn('INCORRECT HEADER!!!');
+    Exit;
+  end;
+
+  for rowIndex := 1 to assetFile.GetRowCount - 1 do
+  case assetFile.GetValue(rowIndex, 0) of
+    'dialog': begin
+      topic := TDialogTopic.Create;
+
+      case assetFile.GetValue(rowIndex, 1) of
+        'import-single': topic.dialogType := dialogSingle;
+        'import-multiple': topic.dialogType := dialogMulti;
+        else topic.dialogType := dialogTopic;
+      end;
+
+      topic.name := assetFile.GetValue(rowIndex, 2);
+      topic.prompt := assetFile.GetValue(rowIndex, 3);
+      topic.answer := assetFile.GetValue(rowIndex, 4);
+
+      topic.parent := self;
+
+      TDialogTopic.dataList.Add(topic);
+    end;
+    'next': begin
+      for topic in TDialogTopic.dataList do
+          if topic.name = assetFile.GetValue(rowIndex, 1) then begin
+            topic.nextTopics.Add(assetFile.GetValue(rowIndex, 2));
+            //SetLength(topic.nextTopics, Length(topic.nextTopics) + 1);
+            //topic.nextTopics[High(topic.nextTopics)] := assetFile.GetValue(rowIndex, 2);
+          end;
+    end;
+    else WriteLn(assetFile.GetValue(rowIndex, 0));
+  end;
+end;
 
 constructor TDialogCollection.Create;
 begin
@@ -198,6 +287,12 @@ begin
 
   for i := 0 to High(self.dialogs) do
       Result[i] := self.dialogs[i];
+end;
+
+
+initialization
+begin
+  TDialogTopic.dataList := TDialogTopicList.Create;
 end;
 
 end.
