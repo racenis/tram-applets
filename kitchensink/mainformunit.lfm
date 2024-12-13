@@ -3,7 +3,7 @@ object MainForm: TMainForm
   Height = 456
   Top = 255
   Width = 791
-  Caption = 'MainForm'
+  Caption = 'Kitchensink Editor v0.0.9'
   ClientHeight = 456
   ClientWidth = 791
   Menu = MainMenu
@@ -1810,6 +1810,7 @@ object MainForm: TMainForm
         Width = 144
         TabOrder = 0
         TextHint = 'Search for an item.'
+        OnChange = DialogTabSearchTopicChange
       end
       object DialogTabItemList: TListBox
         Left = 8
@@ -2068,6 +2069,7 @@ object MainForm: TMainForm
           Width = 148
           ItemHeight = 0
           TabOrder = 1
+          OnDblClick = DialogTabNextListDblClick
         end
         object DialogTabNextSelectFilter: TEdit
           Left = 8
@@ -2117,6 +2119,7 @@ object MainForm: TMainForm
       end
       object MenuItemSaveFiles: TMenuItem
         Caption = 'Save Files'
+        OnClick = MenuItemSaveFilesClick
       end
       object Separator1: TMenuItem
         Caption = '-'

@@ -280,14 +280,17 @@ type
     procedure DialogTabNameEditingDone(Sender: TObject);
     procedure DialogTabNewItemClick(Sender: TObject);
     procedure DialogTabNextAddClick(Sender: TObject);
+    procedure DialogTabNextListDblClick(Sender: TObject);
     procedure DialogTabNextRemoveClick(Sender: TObject);
     procedure DialogTabNextSelectFilterChange(Sender: TObject);
     procedure DialogTabPromptEditingDone(Sender: TObject);
+    procedure DialogTabSearchTopicChange(Sender: TObject);
     procedure DialogTabTriggerNameEditingDone(Sender: TObject);
     procedure DialogTabTriggerQuestEditingDone(Sender: TObject);
     procedure DialogTabTypeChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure MenuItemQuitClick(Sender: TObject);
+    procedure MenuItemSaveFilesClick(Sender: TObject);
     procedure QuestTabDeleteItemClick(Sender: TObject);
     procedure QuestTabFileChange(Sender: TObject);
     procedure QuestTabGeneralNameEditingDone(Sender: TObject);
@@ -329,6 +332,8 @@ type
     procedure DialogTabRefreshList;
     procedure DialogTabRefresh;
     procedure DialogTabRefreshNextSelect;
+    procedure DialogTabRefreshCondition;
+    procedure DialogTabRefreshTrigger;
     procedure ItemTabDeleteAttributeClick(Sender: TObject);
     procedure QuestTabItemListClick(Sender: TObject);
     procedure MenuItemLoadDatabaseClick(Sender: TObject);
@@ -674,7 +679,6 @@ end;
 
 procedure TMainForm.DialogTabRefreshList;
 var
-  asset: TAssetMetadata;
   topic: TDialogTopic;
 begin
   DialogTabItemList.Clear;
@@ -682,7 +686,8 @@ begin
 
   for topic in TDialogTopic.dataList do
       if (DialogTabFile.Items.Objects[DialogTabFile.ItemIndex] as TDialog) = topic.parent then
-         DialogTabItemList.AddItem(topic.name, topic);
+         if (DialogTabSearchTopic.Text = '') or topic.name.Contains(DialogTabSearchTopic.Text) then
+            DialogTabItemList.AddItem(topic.name, topic);
 end;
 
 procedure TMainForm.DialogTabFileChange(Sender: TObject);
@@ -695,6 +700,7 @@ var
   topic: TDialogTopic;
   nextTopic: string;
   hasNext: Boolean;
+  quest: TQuestData;
 begin
   DialogTabGeneral.Enabled := selectedTopic <> nil;
   DialogTabStrings.Enabled := selectedTopic <> nil;
@@ -720,11 +726,6 @@ begin
 
   DialogTabPrompt.Text := selectedTopic.prompt;
   DialogTabAnswer.Text := selectedTopic.answer;
-  DialogTabConditionQuest.Text := selectedTopic.conditionQuest;
-  DialogTabConditionVariable.Text := selectedTopic.conditionVariable;
-
-  DialogTabTriggerQuest.Text := selectedTopic.triggerQuest;
-  DialogTabTriggerName.Text := selectedTopic.triggerTrigger;
 
   DialogTabNextSelect.Clear;
   DialogTabNextList.Clear;
@@ -740,6 +741,46 @@ begin
       else
          DialogTabNextSelect.AddItem(topic.name, topic);
   end;
+
+
+  DialogTabConditionQuest.Items.Clear;
+  DialogTabTriggerQuest.Items.Clear;
+
+  for quest in TQuestData.dataList do begin
+      DialogTabConditionQuest.AddItem(quest.name, quest);
+      DialogTabTriggerQuest.AddItem(quest.name, quest);
+  end;
+
+  DialogTabConditionQuest.Text := selectedTopic.conditionQuest;
+  DialogTabConditionVariable.Text := selectedTopic.conditionVariable;
+
+  DialogTabTriggerQuest.Text := selectedTopic.triggerQuest;
+  DialogTabTriggerName.Text := selectedTopic.triggerTrigger;
+
+  DialogTabRefreshCondition;
+  DialogTabRefreshTrigger;
+end;
+
+procedure TMainForm.DialogTabRefreshCondition;
+var
+  variable: TQuestVariable;
+begin
+  DialogTabConditionVariable.Items.Clear;
+  if DialogTabConditionQuest.ItemIndex >= 0 then
+     for variable in (DialogTabConditionQuest.Items.Objects[DialogTabConditionQuest.ItemIndex] as TQuestData).variables do
+         if variable.variableType <> 'objective' then
+            DialogTabConditionVariable.AddItem(variable.name, variable);
+end;
+
+procedure TMainForm.DialogTabRefreshTrigger;
+var
+  trigger: TQuestTrigger;
+begin
+  DialogTabTriggerName.Items.Clear;
+  if DialogTabTriggerQuest.ItemIndex >= 0 then
+     for trigger in (DialogTabTriggerQuest.Items.Objects[DialogTabConditionQuest.ItemIndex] as TQuestData).triggers do
+         if DialogTabTriggerName.Items.IndexOf(trigger.name) < 0 then
+            DialogTabTriggerName.AddItem(trigger.name, trigger);
 end;
 
 procedure TMainForm.DialogTabRefreshNextSelect;
@@ -810,24 +851,19 @@ begin
 end;
 
 procedure TMainForm.DialogTabAnswerEditingDone(Sender: TObject);
-var
-  index: Integer;
 begin
-  index := DialogTabItemList.Items.IndexOfObject(selectedTopic);
-  if index >= 0 then
-     DialogTabItemList.Items.Strings[index] := DialogTabName.Text;
-  selectedTopic.name := DialogTabName.Text;
-  //DialogTabRefreshList;
+  selectedTopic.answer := DialogTabAnswer.Text;
 end;
 
 procedure TMainForm.DialogTabConditionQuestEditingDone(Sender: TObject);
 begin
-
+  selectedTopic.conditionQuest := DialogTabConditionQuest.Text;
+  DialogTabRefreshCondition;
 end;
 
 procedure TMainForm.DialogTabConditionVariableEditingDone(Sender: TObject);
 begin
-
+  selectedTopic.conditionVariable := DialogTabConditionVariable.Text;
 end;
 
 procedure TMainForm.DialogTabNewItemClick(Sender: TObject);
@@ -878,6 +914,13 @@ begin
   //selectedTopic.nextTopics.Delete(selectedTopic.nextTopics.IndexOf(DialogTabNextList.Items[DialogTabNextList.ItemIndex]));
 end;
 
+procedure TMainForm.DialogTabNextListDblClick(Sender: TObject);
+begin
+  if DialogTabNextList.ItemIndex < 0 then Exit;
+  selectedTopic := DialogTabNextList.Items.Objects[DialogTabNextList.ItemIndex] as TDialogTopic;
+  DialogTabRefresh;
+end;
+
 procedure TMainForm.DialogTabNextRemoveClick(Sender: TObject);
 begin
   if DialogTabNextList.ItemIndex < 0 then begin
@@ -899,17 +942,23 @@ end;
 
 procedure TMainForm.DialogTabPromptEditingDone(Sender: TObject);
 begin
+  selectedTopic.prompt := DialogTabPrompt.Text;
+end;
 
+procedure TMainForm.DialogTabSearchTopicChange(Sender: TObject);
+begin
+  DialogTabRefreshList;
 end;
 
 procedure TMainForm.DialogTabTriggerNameEditingDone(Sender: TObject);
 begin
-
+  selectedTopic.triggerTrigger := DialogTabTriggerName.Text;
 end;
 
 procedure TMainForm.DialogTabTriggerQuestEditingDone(Sender: TObject);
 begin
-
+  selectedTopic.triggerQuest := DialogTabTriggerQuest.Text;
+  DialogTabRefreshTrigger;
 end;
 
 procedure TMainForm.DialogTabTypeChange(Sender: TObject);
@@ -926,6 +975,19 @@ end;
 procedure TMainForm.MenuItemQuitClick(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TMainForm.MenuItemSaveFilesClick(Sender: TObject);
+var
+  asset: TAssetMetadata;
+begin
+  for asset in questCollection.GetAssets do begin
+      asset.SaveToDisk;
+  end;
+
+  for asset in dialogCollection.GetAssets do begin
+      asset.SaveToDisk;
+  end;
 end;
 
 procedure TMainForm.QuestTabDeleteItemClick(Sender: TObject);

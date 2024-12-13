@@ -24,8 +24,9 @@ type
 
      procedure LoadMetadata(); virtual;
      procedure LoadFromDisk(); virtual;
+
+     procedure SaveToDisk(); virtual;
      // TODO: yeet DateInSource
-     // TODO: add source reference / setsource/getsource idk
 
      procedure Remove;
 
@@ -133,6 +134,11 @@ begin
 end;
 
 procedure TAssetMetadata.LoadFromDisk();
+begin
+  ;
+end;
+
+procedure TAssetMetadata.SaveToDisk();
 begin
   ;
 end;
