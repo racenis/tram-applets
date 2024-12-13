@@ -182,7 +182,6 @@ end;
 procedure TDialog.SaveToDisk();
 var
   output: TAssetWriter;
-  line: TStringArray;
   topic: TDialogTopic;
   typeAsString: string;
   nextTopic: string;
@@ -210,12 +209,13 @@ begin
                    topic.name,
                    topic.prompt,
                    topic.answer]);
-    //SetLength(line, 8);
   end;
 
   for topic in TDialogTopic.dataList do
     for nextTopic in topic.nextTopics do
         output.Append(['next', topic.name, nextTopic]);
+
+  output.Free;
 end;
 
 constructor TDialogCollection.Create;

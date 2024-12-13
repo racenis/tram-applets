@@ -15,8 +15,8 @@ object MainForm: TMainForm
     Height = 456
     Top = 0
     Width = 791
-    ActivePage = DialogTab
-    TabIndex = 8
+    ActivePage = QuestTab
+    TabIndex = 7
     TabOrder = 0
     OnChange = TabsChange
     object GeneralTab: TTabSheet
