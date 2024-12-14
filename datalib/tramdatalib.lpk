@@ -116,6 +116,10 @@
         <Filename Value="tramcollisionmodelasset.pas"/>
         <UnitName Value="tramcollisionmodelasset"/>
       </Item>
+      <Item>
+        <Filename Value="tramitemasset.pas"/>
+        <UnitName Value="tramitemasset"/>
+      </Item>
     </Files>
     <RequiredPkgs>
       <Item>

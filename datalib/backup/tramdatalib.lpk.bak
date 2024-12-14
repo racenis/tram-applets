@@ -106,11 +106,15 @@
       </Item>
       <Item>
         <Filename Value="tramshaderasset.pas"/>
-        <UnitName Value="tramshaderasset"/>
+        <UnitName Value="TramShaderAsset"/>
       </Item>
       <Item>
         <Filename Value="tramscriptasset.pas"/>
-        <UnitName Value="tramscriptasset"/>
+        <UnitName Value="TramScriptAsset"/>
+      </Item>
+      <Item>
+        <Filename Value="tramcollisionmodelasset.pas"/>
+        <UnitName Value="tramcollisionmodelasset"/>
       </Item>
     </Files>
     <RequiredPkgs>
