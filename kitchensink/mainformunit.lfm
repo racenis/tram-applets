@@ -493,7 +493,7 @@ object MainForm: TMainForm
         TabOrder = 8
         OnClick = ItemTabDeleteItemClick
       end
-      object GroupBox1: TGroupBox
+      object ItemTabAttributeEffectGroup: TGroupBox
         Left = 416
         Height = 232
         Top = 8
@@ -556,6 +556,7 @@ object MainForm: TMainForm
             Checked = True
             TabOrder = 1
             TabStop = True
+            OnClick = ItemTabAttributeRadioChange
           end
           object ItemTabEffectRadio: TRadioButton
             Left = 109
@@ -564,6 +565,7 @@ object MainForm: TMainForm
             Width = 89
             Caption = 'Effect'
             TabOrder = 0
+            OnClick = ItemTabEffectRadioChange
           end
         end
         object ItemTabAttribute: TComboBox
@@ -575,6 +577,7 @@ object MainForm: TMainForm
           TabOrder = 4
           Text = 'none'
           TextHint = 'Select an attribute.'
+          OnEditingDone = ItemTabAttributeChange
         end
         object ItemTabAttributeValue: TFloatSpinEdit
           Left = 200
@@ -582,6 +585,7 @@ object MainForm: TMainForm
           Hint = 'Attribute modification, in whatever units the'#13#10'selected attribute is using.'
           Top = 24
           Width = 146
+          OnEditingDone = ItemTabAttributeEditingDone
           TabOrder = 5
         end
         object ItemTabEffectTag: TEdit
@@ -592,6 +596,7 @@ object MainForm: TMainForm
           Width = 144
           TabOrder = 6
           TextHint = 'Identification tag (optional)'
+          OnEditingDone = ItemTabAttributeEditingDone
         end
         object ItemTabEffectType: TComboBox
           Left = 200
@@ -601,6 +606,7 @@ object MainForm: TMainForm
           ItemHeight = 13
           TabOrder = 7
           TextHint = 'Effect action type'
+          OnEditingDone = ItemTabAttributeEditingDone
         end
         object ItemTabEffectDuration: TFloatSpinEdit
           Left = 200
@@ -608,6 +614,7 @@ object MainForm: TMainForm
           Hint = 'If set to a positive value, then the effect will last'#13#10'this Duration, set in seconds.'#13#10#13#10'The attribute modification will be applied at a rate'#13#10'of *Value* units per second.'#13#10#13#10'If set to negative, then the attribute modification'#13#10'specified by Value will be applied in a single tick and'#13#10'the effect will expire immediately.'
           Top = 120
           Width = 144
+          OnEditingDone = ItemTabAttributeEditingDone
           TabOrder = 8
         end
         object Label10: TLabel
@@ -672,6 +679,7 @@ object MainForm: TMainForm
           Width = 144
           TabOrder = 9
           TextHint = 'Display name (optional)'
+          OnEditingDone = ItemTabAttributeEditingDone
         end
       end
     end

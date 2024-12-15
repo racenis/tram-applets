@@ -195,7 +195,7 @@ type
     ItemTabAttributeValue: TFloatSpinEdit;
     ItemTabEffectDuration: TFloatSpinEdit;
     ItemTabItemWeight: TFloatSpinEdit;
-    GroupBox1: TGroupBox;
+    ItemTabAttributeEffectGroup: TGroupBox;
     ItemTabLayoutGroup: TGroupBox;
     ItemTabGeneralGroup: TGroupBox;
     ItemTab2DGroup: TGroupBox;
@@ -290,9 +290,13 @@ type
     procedure DialogTabTriggerQuestEditingDone(Sender: TObject);
     procedure DialogTabTypeChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure ItemTabAttributeChange(Sender: TObject);
     procedure ItemTabAttributeListClick(Sender: TObject);
+    procedure ItemTabAttributeRadioChange(Sender: TObject);
+    procedure ItemTabAttributeEditingDone(Sender: TObject);
     procedure ItemTabClassNameChange(Sender: TObject);
     procedure ItemTabDeleteItemClick(Sender: TObject);
+    procedure ItemTabEffectRadioChange(Sender: TObject);
     procedure ItemTabFieldChange(Sender: TObject);
     procedure ItemTabFileChange(Sender: TObject);
     procedure ItemTabItemListClick(Sender: TObject);
@@ -416,7 +420,22 @@ end;
 
 procedure TMainForm.ItemTabDeleteAttributeClick(Sender: TObject);
 begin
+  if selectedEffect = nil then begin
+    ShowMessage('Select an attribute before removing it!');
+    Exit;
+  end;
 
+  if MessageDlg('Removing attribute/effect', 'Do you want to remove '
+                + selectedEffect.attributeType + ' from ' + selectedItem.name
+                + '?', mtConfirmation,
+   [mbYes, mbNo], 0) = mrYes
+  then begin
+    selectedItem.effects.Remove(selectedEffect);
+    selectedEffect := nil;
+
+    ItemTabRefresh;
+    ItemTabRefreshEffect;
+  end;
 end;
 
 procedure TMainForm.QuestTabRefreshList;
@@ -701,6 +720,14 @@ begin
   DialogTabCondition.Enabled := False;
   DialogTabTrigger.Enabled := False;
   DialogTabNextTopics.Enabled := False;
+
+  ItemTabRefresh;
+end;
+
+procedure TMainForm.ItemTabAttributeChange(Sender: TObject);
+begin
+  selectedEffect.attributeType := ItemTabAttribute.Text;
+  ItemTabRefresh;
 end;
 
 procedure TMainForm.ItemTabAttributeListClick(Sender: TObject);
@@ -713,6 +740,22 @@ begin
   selectedEffect := ItemTabAttributeList.Items.Objects[ItemTabAttributeList.ItemIndex] as TItemAttributeEffect;
 
   ItemTabRefreshEffect;
+end;
+
+procedure TMainForm.ItemTabAttributeRadioChange(Sender: TObject);
+begin
+  selectedEffect.recordType := itemAttribute;
+  ItemTabRefreshEffect;
+end;
+
+procedure TMainForm.ItemTabAttributeEditingDone(Sender: TObject);
+begin
+  selectedEffect.value := ItemTabAttributeValue.Text;
+  if selectedEffect.recordType = itemAttribute then Exit;
+  selectedEffect.name := ItemTabEffectName.Text;
+  selectedEffect.tag := ItemTabEffectTag.Text;
+  selectedEffect.effectType := ItemTabEffectType.Text;
+  selectedEffect.duration := ItemTabEffectDuration.Text;
 end;
 
 procedure TMainForm.ItemTabClassNameChange(Sender: TObject);
@@ -737,7 +780,17 @@ end;
 procedure TMainForm.ItemTabRefresh;
 var
   effect: TItemAttributeEffect;
+  enable: Boolean;
 begin
+
+  enable := selectedItem <> nil;
+
+  ItemTabGeneralGroup.Enabled := enable;
+  ItemTab3DGroup.Enabled := enable;
+  ItemTab2DGroup.Enabled := enable;
+  ItemTabLayoutGroup.Enabled := enable;
+  ItemTabAttributeEffectGroup.Enabled := enable;
+
   if selectedItem = nil then begin
     Exit;
   end;
@@ -788,9 +841,17 @@ begin
   then begin
     TItemData.dataList.Remove(selectedItem);
     selectedItem := nil;
+    selectedEffect := nil;
 
+    ItemTabRefresh;
     ItemTabRefreshList;
   end;
+end;
+
+procedure TMainForm.ItemTabEffectRadioChange(Sender: TObject);
+begin
+  selectedEffect.recordType := itemEffect;
+  ItemTabRefreshEffect;
 end;
 
 procedure TMainForm.ItemTabFieldChange(Sender: TObject);
@@ -821,7 +882,10 @@ procedure TMainForm.ItemTabItemListClick(Sender: TObject);
 begin
   if ItemTabItemList.ItemIndex < 0 then begin
     selectedItem := nil;
+    selectedEffect := nil;
 
+    ItemTabRefresh;
+    ItemTabRefreshEffect;
     //QuestsTabGeneral.Enabled := False;
    // QuestsTabStages.Enabled := False;
     //QuestsTabVariables.Enabled := False;
@@ -830,8 +894,9 @@ begin
     Exit;
   end;
 
-  selectedItem := ItemTabItemList.Items.Objects[ItemTabItemList.ItemIndex] as TItemData;
 
+  selectedItem := ItemTabItemList.Items.Objects[ItemTabItemList.ItemIndex] as TItemData;
+  selectedEffect := nil;
 
   //ItemTabGeneral.Enabled := True;
   //QuestsTabStages.Enabled := True;
@@ -840,6 +905,7 @@ begin
 
 
   ItemTabRefresh;
+  ItemTabRefreshEffect;
 end;
 
 procedure TMainForm.ItemTabRefreshEffect;
@@ -868,12 +934,26 @@ begin
   ItemTabEffectType.Enabled := selectedEffect.recordType = itemEffect;
   ItemTabEffectDuration.Enabled := selectedEffect.recordType = itemEffect;
 
-  if selectedEffect.recordType = itemAttribute then Exit;
+  //ItemTabAttributeRadio.Checked := selectedEffect.recordType = itemAttribute;
+  //ItemTabEffectRadio.Checked := selectedEffect.recordType = itemEffect;
 
-  ItemTabEffectName.Text := selectedEffect.name;
-  ItemTabEffectTag.Text := selectedEffect.tag;
-  ItemTabEffectType.Text := selectedEffect.effectType;
-  ItemTabEffectDuration.Text := selectedEffect.duration;
+  if selectedEffect.recordType = itemAttribute then begin
+    ItemTabEffectName.Text := 'Not applicable.';
+    ItemTabEffectTag.Text := 'Not applicable.';
+    ItemTabEffectType.Text := 'Not applicable.';
+    ItemTabEffectDuration.Text := 'Not applicable.';
+
+    ItemTabAttributeRadio.Checked := True;
+  end else begin
+    ItemTabEffectName.Text := selectedEffect.name;
+    ItemTabEffectTag.Text := selectedEffect.tag;
+    ItemTabEffectType.Text := selectedEffect.effectType;
+    ItemTabEffectDuration.Text := selectedEffect.duration;
+
+    ItemTabEffectRadio.Checked := True;
+  end;
+
+
 end;
 
 procedure TMainForm.ItemTabNewAttributeClick(Sender: TObject);
@@ -886,6 +966,8 @@ begin
 
   selectedItem.effects.Add(selectedEffect);
   ItemTabAttributeList.AddItem(selectedEffect.attributeType, selectedEffect);
+
+  ItemTabRefreshEffect;
 end;
 
 procedure TMainForm.ItemTabNewItemClick(Sender: TObject);
@@ -916,6 +998,9 @@ begin
   newItem.parent := itemFile;
 
   TItemData.dataList.Add(newItem);
+
+  selectedItem := newItem;
+  ItemTabRefresh;
 
   ItemTabSearchItem.Text := '';
   ItemTabRefreshList;
