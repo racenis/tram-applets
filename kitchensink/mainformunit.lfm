@@ -169,6 +169,7 @@ object MainForm: TMainForm
         Width = 144
         ItemHeight = 0
         TabOrder = 1
+        OnClick = ItemTabItemListClick
       end
       object ItemTabGeneralGroup: TGroupBox
         Left = 160
@@ -186,6 +187,7 @@ object MainForm: TMainForm
           Width = 144
           TabOrder = 0
           Text = 'none'
+          OnEditingDone = ItemTabClassNameChange
         end
         object Label1: TLabel
           Left = 8
@@ -213,6 +215,7 @@ object MainForm: TMainForm
           ItemHeight = 13
           TabOrder = 1
           Text = 'none'
+          OnEditingDone = ItemTabFieldChange
         end
         object ItemTabEquipmentSlot: TComboBox
           Left = 88
@@ -222,6 +225,7 @@ object MainForm: TMainForm
           ItemHeight = 13
           TabOrder = 2
           Text = 'none'
+          OnEditingDone = ItemTabFieldChange
         end
         object Label9: TLabel
           Left = 8
@@ -250,12 +254,14 @@ object MainForm: TMainForm
           ItemHeight = 13
           TabOrder = 0
           Text = 'none'
+          OnEditingDone = ItemTabFieldChange
         end
         object ItemTabSpriteFrame: TSpinEdit
           Left = 88
           Height = 21
           Top = 24
           Width = 144
+          OnEditingDone = ItemTabFieldChange
           TabOrder = 1
         end
         object ItemTabIconFrame: TSpinEdit
@@ -263,6 +269,7 @@ object MainForm: TMainForm
           Height = 21
           Top = 72
           Width = 144
+          OnEditingDone = ItemTabFieldChange
           TabOrder = 2
         end
         object ItemTabIcon: TComboBox
@@ -273,6 +280,7 @@ object MainForm: TMainForm
           ItemHeight = 13
           TabOrder = 3
           Text = 'none'
+          OnEditingDone = ItemTabFieldChange
         end
         object Label5: TLabel
           Left = 8
@@ -346,6 +354,7 @@ object MainForm: TMainForm
           ItemHeight = 13
           TabOrder = 0
           Text = 'none'
+          OnEditingDone = ItemTabFieldChange
         end
         object ItemTabWorldmodel: TComboBox
           Left = 88
@@ -355,6 +364,7 @@ object MainForm: TMainForm
           ItemHeight = 13
           TabOrder = 1
           Text = 'none'
+          OnEditingDone = ItemTabFieldChange
         end
       end
       object ItemTabFile: TComboBox
@@ -363,8 +373,10 @@ object MainForm: TMainForm
         Top = 8
         Width = 144
         ItemHeight = 13
+        Style = csDropDownList
         TabOrder = 5
         TextHint = 'Select a file.'
+        OnChange = ItemTabFileChange
       end
       object ItemTabLayoutGroup: TGroupBox
         Left = 160
@@ -425,6 +437,7 @@ object MainForm: TMainForm
           Height = 21
           Top = 8
           Width = 66
+          OnEditingDone = ItemTabFieldChange
           TabOrder = 0
         end
         object ItemTabItemHeight: TSpinEdit
@@ -432,6 +445,7 @@ object MainForm: TMainForm
           Height = 21
           Top = 32
           Width = 66
+          OnEditingDone = ItemTabFieldChange
           TabOrder = 1
         end
         object ItemTabItemStack: TSpinEdit
@@ -439,6 +453,7 @@ object MainForm: TMainForm
           Height = 21
           Top = 56
           Width = 66
+          OnEditingDone = ItemTabFieldChange
           TabOrder = 2
         end
         object ItemTabItemWeight: TFloatSpinEdit
@@ -446,6 +461,7 @@ object MainForm: TMainForm
           Height = 21
           Top = 80
           Width = 66
+          OnEditingDone = ItemTabFieldChange
           TabOrder = 3
         end
         object ItemTabItemCompartment: TComboBox
@@ -456,6 +472,7 @@ object MainForm: TMainForm
           ItemHeight = 13
           TabOrder = 4
           Text = 'none'
+          OnEditingDone = ItemTabFieldChange
         end
       end
       object ItemTabNewItem: TButton
@@ -465,6 +482,7 @@ object MainForm: TMainForm
         Width = 72
         Caption = 'Add New'
         TabOrder = 7
+        OnClick = ItemTabNewItemClick
       end
       object ItemTabDeleteItem: TButton
         Left = 80
@@ -473,6 +491,7 @@ object MainForm: TMainForm
         Width = 72
         Caption = 'Remove'
         TabOrder = 8
+        OnClick = ItemTabDeleteItemClick
       end
       object GroupBox1: TGroupBox
         Left = 416
@@ -490,6 +509,7 @@ object MainForm: TMainForm
           Width = 64
           Caption = 'Add New'
           TabOrder = 0
+          OnClick = ItemTabNewAttributeClick
         end
         object ItemTabDeleteAttribute: TButton
           Left = 72
@@ -507,6 +527,7 @@ object MainForm: TMainForm
           Width = 120
           ItemHeight = 0
           TabOrder = 2
+          OnClick = ItemTabAttributeListClick
         end
         object ItemTabAttributeEffectSwitch: TRadioGroup
           Left = 136
@@ -2126,12 +2147,15 @@ object MainForm: TMainForm
       end
       object MenuItemNewQuest: TMenuItem
         Caption = 'New Quest'
+        OnClick = MenuItemNewQuestClick
       end
       object MenuItemNewDialog: TMenuItem
         Caption = 'New Dialog'
+        OnClick = MenuItemNewDialogClick
       end
       object MenuItemNewItem: TMenuItem
         Caption = 'New Item'
+        OnClick = MenuItemNewItemClick
       end
       object MenuItemNewCharacter: TMenuItem
         Caption = 'New Character'

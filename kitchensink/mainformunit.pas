@@ -9,7 +9,8 @@ uses
   StdCtrls, ExtCtrls, Spin, EditBtn,
 
   TramAssetParser, TramAssetWriter, TramAssetMetadata, Tram3DModelAsset,
-  TramWorldCellAsset, TramDialogAsset, TramQuestAsset, TramLanguageAsset
+  TramWorldCellAsset, TramDialogAsset, TramQuestAsset, TramLanguageAsset,
+  TramItemAsset
 
   ;
 
@@ -289,6 +290,17 @@ type
     procedure DialogTabTriggerQuestEditingDone(Sender: TObject);
     procedure DialogTabTypeChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure ItemTabAttributeListClick(Sender: TObject);
+    procedure ItemTabClassNameChange(Sender: TObject);
+    procedure ItemTabDeleteItemClick(Sender: TObject);
+    procedure ItemTabFieldChange(Sender: TObject);
+    procedure ItemTabFileChange(Sender: TObject);
+    procedure ItemTabItemListClick(Sender: TObject);
+    procedure ItemTabNewAttributeClick(Sender: TObject);
+    procedure ItemTabNewItemClick(Sender: TObject);
+    procedure MenuItemNewDialogClick(Sender: TObject);
+    procedure MenuItemNewItemClick(Sender: TObject);
+    procedure MenuItemNewQuestClick(Sender: TObject);
     procedure MenuItemQuitClick(Sender: TObject);
     procedure MenuItemSaveFilesClick(Sender: TObject);
     procedure QuestTabDeleteItemClick(Sender: TObject);
@@ -334,6 +346,10 @@ type
     procedure DialogTabRefreshNextSelect;
     procedure DialogTabRefreshCondition;
     procedure DialogTabRefreshTrigger;
+    procedure ItemTabRefreshList;
+    procedure ItemTabRefresh;
+    procedure ItemTabRefreshAttributes;
+    procedure ItemTabRefreshEffect;
     procedure ItemTabDeleteAttributeClick(Sender: TObject);
     procedure QuestTabItemListClick(Sender: TObject);
     procedure MenuItemLoadDatabaseClick(Sender: TObject);
@@ -348,11 +364,14 @@ var
   MainForm: TMainForm;
   questCollection: TQuestCollection;
   dialogCollection: TDialogCollection;
+  itemCollection: TItemCollection;
 
   selectedQuest: TQuestData;
   selectedVariable: TQuestVariable;
   selectedObjective: TQuestVariable;
   selectedTrigger: TQuestTrigger;
+  selectedItem: TItemData;
+  selectedEffect: TItemAttributeEffect;
 
   selectedTopic: TDialogTopic;
 
@@ -378,6 +397,13 @@ begin
   for asset in dialogCollection.GetAssets do begin
       asset.LoadFromDisk;
       MainForm.DialogTabFile.AddItem(asset.GetName, asset);
+  end;
+
+  itemCollection.ScanFromDisk;
+
+  for asset in itemCollection.GetAssets do begin
+      asset.LoadFromDisk;
+      MainForm.ItemTabFile.AddItem(asset.GetName, asset);
   end;
 
   //MainForm.QuestTabRefreshList;
@@ -675,6 +701,260 @@ begin
   DialogTabCondition.Enabled := False;
   DialogTabTrigger.Enabled := False;
   DialogTabNextTopics.Enabled := False;
+end;
+
+procedure TMainForm.ItemTabAttributeListClick(Sender: TObject);
+begin
+  if ItemTabAttributeList.ItemIndex < 0 then begin
+    selectedEffect := nil;
+    Exit;
+  end;
+
+  selectedEffect := ItemTabAttributeList.Items.Objects[ItemTabAttributeList.ItemIndex] as TItemAttributeEffect;
+
+  ItemTabRefreshEffect;
+end;
+
+procedure TMainForm.ItemTabClassNameChange(Sender: TObject);
+begin
+  selectedItem.name := ItemTabClassName.Text;
+  ItemTabRefreshList;
+end;
+
+procedure TMainForm.ItemTabRefreshList;
+var
+  asset: TAssetMetadata;
+  item: TItemData;
+begin
+  ItemTabItemList.Clear;
+  ItemTabItemList.ClearSelection;
+
+  for item in TItemData.dataList do
+      if (ItemTabFile.Items.Objects[ItemTabFile.ItemIndex] as TItem) = item.parent then
+         ItemTabItemList.AddItem(item.name, item);
+end;
+
+procedure TMainForm.ItemTabRefresh;
+var
+  effect: TItemAttributeEffect;
+begin
+  if selectedItem = nil then begin
+    Exit;
+  end;
+
+  ItemTabClassName.Text := selectedItem.name;
+  ItemTabBaseClass.Text := selectedItem.base;
+
+  ItemTabViewmodel.Text := selectedItem.viewmodel;
+  ItemTabWorldmodel.Text := selectedItem.worldmodel;
+
+  ItemTabSprite.Text := selectedItem.sprite;
+  ItemTabSpriteFrame.Text := selectedItem.spriteFrame;
+  ItemTabIcon.Text := selectedItem.icon;
+  ItemTabIconFrame.Text := selectedItem.iconFrame;
+
+  ItemTabItemWidth.Text := selectedItem.width;
+  ItemTabItemHeight.Text := selectedItem.height;
+  ItemTabItemStack.Text := selectedItem.stack;
+  ItemTabItemWeight.Text := selectedItem.weight;
+  ItemTabItemCompartment.Text := selectedItem.compartment;
+
+  ItemTabAttributeList.Clear;
+  for effect in selectedItem.effects do
+      ItemTabAttributeList.AddItem(effect.attributeType, effect);
+end;
+
+procedure TMainForm.ItemTabRefreshAttributes;
+var
+  effect: TItemAttributeEffect;
+begin
+  ItemTabAttributeList.Clear;
+
+  for effect in selectedItem.effects do
+      ItemTabAttributeList.AddItem(effect.name, effect);
+end;
+
+procedure TMainForm.ItemTabDeleteItemClick(Sender: TObject);
+begin
+  if selectedItem = nil then begin
+    ShowMessage('Select a item before removing it!');
+    Exit;
+  end;
+
+  if MessageDlg('Removing item', 'Do you want to remove '
+                + selectedItem.name + ' from ' + selectedItem.parent.GetName
+                + '?', mtConfirmation,
+   [mbYes, mbNo], 0) = mrYes
+  then begin
+    TItemData.dataList.Remove(selectedItem);
+    selectedItem := nil;
+
+    ItemTabRefreshList;
+  end;
+end;
+
+procedure TMainForm.ItemTabFieldChange(Sender: TObject);
+begin
+  selectedItem.base := ItemTabBaseClass.Text;
+
+  selectedItem.viewmodel := ItemTabViewmodel.Text;
+  selectedItem.worldmodel := ItemTabWorldmodel.Text;
+
+  selectedItem.sprite := ItemTabSprite.Text;
+  selectedItem.spriteFrame := ItemTabSpriteFrame.Text;
+  selectedItem.icon := ItemTabIcon.Text;
+  selectedItem.iconFrame := ItemTabIconFrame.Text;
+
+  selectedItem.width := ItemTabItemWidth.Text;
+  selectedItem.height := ItemTabItemHeight.Text;
+  selectedItem.stack := ItemTabItemStack.Text;
+  selectedItem.weight := ItemTabItemWeight.Text;
+  selectedItem.compartment := ItemTabItemCompartment.Text;
+end;
+
+procedure TMainForm.ItemTabFileChange(Sender: TObject);
+begin
+  ItemTabRefreshList;
+end;
+
+procedure TMainForm.ItemTabItemListClick(Sender: TObject);
+begin
+  if ItemTabItemList.ItemIndex < 0 then begin
+    selectedItem := nil;
+
+    //QuestsTabGeneral.Enabled := False;
+   // QuestsTabStages.Enabled := False;
+    //QuestsTabVariables.Enabled := False;
+    //QuestsTabTriggers.Enabled := False;
+
+    Exit;
+  end;
+
+  selectedItem := ItemTabItemList.Items.Objects[ItemTabItemList.ItemIndex] as TItemData;
+
+
+  //ItemTabGeneral.Enabled := True;
+  //QuestsTabStages.Enabled := True;
+  //QuestsTabVariables.Enabled := True;
+  //QuestsTabTriggers.Enabled := True;
+
+
+  ItemTabRefresh;
+end;
+
+procedure TMainForm.ItemTabRefreshEffect;
+begin
+  if selectedEffect = nil then begin
+    ItemTabAttribute.Enabled := False;
+    ItemTabAttributeValue.Enabled := False;
+    ItemTabEffectName.Enabled := False;
+    ItemTabEffectTag.Enabled := False;
+    ItemTabEffectType.Enabled := False;
+    ItemTabEffectDuration.Enabled := False;
+    ItemTabAttributeEffectSwitch.Enabled := False;
+
+    Exit;
+  end;
+
+  ItemTabAttribute.Enabled := True;
+  ItemTabAttributeValue.Enabled := True;
+  ItemTabAttributeEffectSwitch.Enabled := True;
+
+  ItemTabAttribute.Text := selectedEffect.attributeType;
+  ItemTabAttributeValue.Text := selectedEffect.value;
+
+  ItemTabEffectName.Enabled := selectedEffect.recordType = itemEffect;
+  ItemTabEffectTag.Enabled := selectedEffect.recordType = itemEffect;
+  ItemTabEffectType.Enabled := selectedEffect.recordType = itemEffect;
+  ItemTabEffectDuration.Enabled := selectedEffect.recordType = itemEffect;
+
+  if selectedEffect.recordType = itemAttribute then Exit;
+
+  ItemTabEffectName.Text := selectedEffect.name;
+  ItemTabEffectTag.Text := selectedEffect.tag;
+  ItemTabEffectType.Text := selectedEffect.effectType;
+  ItemTabEffectDuration.Text := selectedEffect.duration;
+end;
+
+procedure TMainForm.ItemTabNewAttributeClick(Sender: TObject);
+begin
+  selectedEffect := TItemAttributeEffect.Create;
+
+  selectedEffect.attributeType := 'new-effect';
+  selectedEffect.value := '';
+  selectedEffect.recordType := itemAttribute;
+
+  selectedItem.effects.Add(selectedEffect);
+  ItemTabAttributeList.AddItem(selectedEffect.attributeType, selectedEffect);
+end;
+
+procedure TMainForm.ItemTabNewItemClick(Sender: TObject);
+var
+  itemFile: TItem;
+  newItem: TItemData;
+  itemName: string;
+begin
+  if ItemTabFile.ItemIndex < 0 then begin
+    ShowMessage('Select a Item file, then you can add a item to it!');
+    Exit;
+  end;
+
+  itemFile := (ItemTabFile.Items.Objects[ItemTabFile.ItemIndex] as TItem);
+
+  itemName := ItemTabSearchItem.Text;
+  itemName := itemName.Trim;
+
+  // TODO: add more validation (no spaces, unique, etc.)
+  if itemName = '' then begin
+    ShowMessage('Type in the quest name into the search box.'
+                + 'This name will be used for the quest name.');
+    Exit;
+  end;
+
+  newItem := TItemData.Create;
+  newItem.name := itemName;
+  newItem.parent := itemFile;
+
+  TItemData.dataList.Add(newItem);
+
+  ItemTabSearchItem.Text := '';
+  ItemTabRefreshList;
+end;
+
+procedure TMainForm.MenuItemNewDialogClick(Sender: TObject);
+var
+  newAsset: TAssetMetadata;
+  assetName: string;
+begin
+  // TODO: validate
+  assetName := InputBox('Create New Dialog File', 'What to call it?', 'new-dialog');
+
+  newAsset := dialogCollection.InsertFromDB(assetName, 0);
+  DialogTabFile.AddItem(assetName, newAsset);
+end;
+
+procedure TMainForm.MenuItemNewItemClick(Sender: TObject);
+var
+  newAsset: TAssetMetadata;
+  assetName: string;
+begin
+  // TODO: validate
+  assetName := InputBox('Create New Item File', 'What to call it?', 'new-item');
+
+  newAsset := itemCollection.InsertFromDB(assetName, 0);
+  ItemTabFile.AddItem(assetName, newAsset);
+end;
+
+procedure TMainForm.MenuItemNewQuestClick(Sender: TObject);
+var
+  newAsset: TAssetMetadata;
+  assetName: string;
+begin
+  // TODO: validate
+  assetName := InputBox('Create New Quest File', 'What to call it?', 'new-quest');
+
+  newAsset := questCollection.InsertFromDB(assetName, 0);
+  QuestTabFile.AddItem(assetName, newAsset);
 end;
 
 procedure TMainForm.DialogTabRefreshList;
@@ -986,6 +1266,10 @@ begin
   end;
 
   for asset in dialogCollection.GetAssets do begin
+      asset.SaveToDisk;
+  end;
+
+  for asset in itemCollection.GetAssets do begin
       asset.SaveToDisk;
   end;
 end;
@@ -1442,11 +1726,14 @@ initialization
 begin
   questCollection := TQuestCollection.Create;
   dialogCollection := TDialogCollection.Create;
+  itemCollection := TItemCollection.Create;
 
   selectedQuest := nil;
   selectedVariable := nil;
   selectedObjective := nil;
   selectedTrigger := nil;
+  selectedItem := nil;
+  selectedEffect := nil;
 end;
 
 end.

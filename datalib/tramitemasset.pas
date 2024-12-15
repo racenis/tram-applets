@@ -46,10 +46,11 @@ type
     height: string;
     stack: string;
     weight: string;
-
     compartment: string;
 
     effects: TItemAttributeEffectList;
+
+    parent: TItem;
 
     dataList: TItemDataList; static;
   end;
@@ -117,7 +118,7 @@ end;
 
 function TItem.GetPath: string;
 begin
-  Result := 'data/' + name + '.dialog';
+  Result := 'data/' + name + '.item';
 end;
 
 procedure TItem.SetDateInDB(date: Integer);
@@ -185,13 +186,15 @@ begin
       item.base := assetFile.GetValue(rowIndex, 2);
       item.equipmentSlot := assetFile.GetValue(rowIndex, 3);
 
+      item.parent := self;
+
       TItemData.dataList.Add(item);
     end;
     'world-display': begin
       item := item.FindInDataList(assetFile.GetValue(rowIndex, 1));
 
       item.viewmodel := assetFile.GetValue(rowIndex, 2);
-      item.viewmodel := assetFile.GetValue(rowIndex, 3);
+      item.worldmodel := assetFile.GetValue(rowIndex, 3);
     end;
     'gui-display': begin
       item := item.FindInDataList(assetFile.GetValue(rowIndex, 1));
@@ -248,6 +251,12 @@ begin
   if Result = '' then Result := 'none';
 end;
 
+function ZeroIfBlank(param: string): string;
+begin
+  Result := param.Trim;
+  if Result = '' then Result := '0';
+end;
+
 function IsNotNone(param: string): Boolean;
 begin
   Result := NoneIfBlank(param) <> 'none';
@@ -268,7 +277,7 @@ begin
   output.Append(['# Generated on: ' + DateTimeToStr(Now)]);
   output.Append(nil);
 
-  output.Append(['DIALOGv1']);
+  output.Append(['ITEMv1']);
   output.Append(nil);
 
   for item in TItemData.dataList do begin
@@ -286,15 +295,15 @@ begin
       output.Append(['gui-display',
                      NoneIfBlank(item.name),
                      NoneIfBlank(item.sprite),
-                     item.spriteFrame,
+                     ZeroIfBlank(item.spriteFrame),
                      NoneIfBlank(item.icon),
-                     item.iconFrame]);
+                     ZeroIfBlank(item.iconFrame)]);
     output.Append(['item-layout',
                    NoneIfBlank(item.name),
-                   item.width,
-                   item.height,
-                   item.stack,
-                   item.weight,
+                   ZeroIfBlank(item.width),
+                   ZeroIfBlank(item.height),
+                   ZeroIfBlank(item.stack),
+                   ZeroIfBlank(item.weight),
                    NoneIfBlank(item.compartment)]);
 
     for effect in item.effects do
@@ -302,17 +311,17 @@ begin
         itemAttribute:
           output.Append(['item-attribute',
                          NoneIfBlank(item.name),
-                         effect.attributeType,
-                         effect.value]);
+                         NoneIfBlank(effect.attributeType),
+                         ZeroIfBlank(effect.value)]);
         itemEffect:
           output.Append(['item-effect',
                          NoneIfBlank(item.name),
-                         effect.attributeType,
-                         effect.value,
+                         NoneIfBlank(effect.attributeType),
+                         ZeroIfBlank(effect.value),
                          NoneIfBlank(effect.name),
                          NoneIfBlank(effect.tag),
-                         effect.effectType,
-                         effect.duration]);
+                         NoneIfBlank(effect.effectType),
+                         ZeroIfBlank(effect.duration)]);
       end;
 
   end;
@@ -354,7 +363,7 @@ var
   dialog: TItem;
   dialogCandidate: TItem;
 begin
-  files := FindAllFiles('data/', '*.dialog', true);
+  files := FindAllFiles('data/', '*.item', true);
 
   for dialog in dialogs do
       dialog.SetDateOnDisk(0);
@@ -367,7 +376,7 @@ begin
     dialogName := dialogFile.Replace('\', '/');
     dialogName := dialogName.Replace('data/', '');
 
-    dialogName := dialogName.Replace('.dialog', '');
+    dialogName := dialogName.Replace('.item', '');
 
     // check if dialog already exists in database
     for dialogCandidate in dialogs do
