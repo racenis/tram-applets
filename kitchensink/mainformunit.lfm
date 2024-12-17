@@ -604,6 +604,10 @@ object MainForm: TMainForm
           Top = 96
           Width = 146
           ItemHeight = 13
+          Items.Strings = (
+            'raise-attribute'
+            'negate-change'
+          )
           TabOrder = 7
           TextHint = 'Effect action type'
           OnEditingDone = ItemTabAttributeEditingDone

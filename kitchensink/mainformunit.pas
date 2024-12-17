@@ -1819,6 +1819,8 @@ begin
   selectedTrigger := nil;
   selectedItem := nil;
   selectedEffect := nil;
+
+  DefaultFormatSettings.DecimalSeparator := '.';
 end;
 
 end.
