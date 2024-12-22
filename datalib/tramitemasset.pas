@@ -46,6 +46,7 @@ type
     height: string;
     stack: string;
     weight: string;
+    value: string;
     compartment: string;
 
     effects: TItemAttributeEffectList;
@@ -185,6 +186,7 @@ begin
       item.name := assetFile.GetValue(rowIndex, 1);
       item.base := assetFile.GetValue(rowIndex, 2);
       item.equipmentSlot := assetFile.GetValue(rowIndex, 3);
+      item.compartment := assetFile.GetValue(rowIndex, 4);
 
       item.parent := self;
 
@@ -211,7 +213,7 @@ begin
       item.height := assetFile.GetValue(rowIndex, 3);
       item.stack := assetFile.GetValue(rowIndex, 4);
       item.weight := assetFile.GetValue(rowIndex, 5);
-      item.compartment := assetFile.GetValue(rowIndex, 6);
+      item.value := assetFile.GetValue(rowIndex, 6);
     end;
     'item-attribute': begin
       item := item.FindInDataList(assetFile.GetValue(rowIndex, 1));
@@ -284,7 +286,8 @@ begin
     output.Append(['item-class',
                    NoneIfBlank(item.name),
                    NoneIfBlank(item.base),
-                   NoneIfBlank(item.equipmentSlot)]);
+                   NoneIfBlank(item.equipmentSlot),
+                   NoneIfBlank(item.compartment)]);
 
     if IsNotNone(item.viewmodel) and IsNotNone(item.worldmodel) then
       output.Append(['world-display',
@@ -304,7 +307,7 @@ begin
                    ZeroIfBlank(item.height),
                    ZeroIfBlank(item.stack),
                    ZeroIfBlank(item.weight),
-                   NoneIfBlank(item.compartment)]);
+                   ZeroIfBlank(item.value)]);
 
     for effect in item.effects do
       case effect.recordType of

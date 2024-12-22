@@ -28,6 +28,7 @@ type
 
      protected
         collection3Dmodel: T3DModelCollection;
+        collectionMaterial: TMaterialCollection;
         collectionAnimation: TAnimationCollection;
         collectionAudio: TAudioCollection;
         collectionAudioSource: TAudioSourceCollection;
@@ -51,6 +52,7 @@ implementation
 constructor TAssetDatabase.Create;
 begin
   collection3Dmodel := T3DModelCollection.Create;
+  collectionMaterial := TMaterialCollection.Create;
   collectionAnimation := TAnimationCollection.Create;
   collectionAudio := TAudioCollection.Create;
 
@@ -83,6 +85,7 @@ end;
 procedure TAssetDatabase.ScanFromDisk;
 begin
   collection3Dmodel.ScanFromDisk;
+  collectionMaterial.ScanFromDisk;
   collectionAnimation.ScanFromDisk;
   collectionAudio.ScanFromDisk;
 
@@ -105,6 +108,7 @@ end;
 procedure TAssetDatabase.Remove(asset: TAssetMetadata);
 begin
   collection3Dmodel.Remove(asset);
+  collectionMaterial.Remove(asset);
   collectionAnimation.Remove(asset);
   collectionAudio.Remove(asset);
 
@@ -127,6 +131,7 @@ end;
 function TAssetDatabase.GetAssets: TAssetMetadataArray;
 begin
   Result := collection3Dmodel.GetAssets;
+  Result := Concat(Result, collectionMaterial.GetAssets);
   Result := Concat(Result, collectionAnimation.GetAssets);
   Result := Concat(Result, collectionAudio.GetAssets);
 
@@ -151,6 +156,7 @@ begin
   WriteLn(assetType);
   case assetType of
        'STMDL', 'DYMDL', 'MDMDL': Result := collection3Dmodel.InsertFromDB(name, date);
+       'MATERIAL': Result := collectionMaterial.InsertFromDB(name, date);
        'ANIM': Result := collectionAnimation.InsertFromDB(name, date);
        'AUDIO': Result := collectionAudio.InsertFromDB(name, date);
        'AUDIOSRC': Result := collectionAudioSource.InsertFromDB(name, date);

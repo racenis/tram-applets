@@ -797,6 +797,7 @@ begin
 
   ItemTabClassName.Text := selectedItem.name;
   ItemTabBaseClass.Text := selectedItem.base;
+  ItemTabEquipmentSlot.Text := selectedItem.equipmentSlot;
 
   ItemTabViewmodel.Text := selectedItem.viewmodel;
   ItemTabWorldmodel.Text := selectedItem.worldmodel;
@@ -857,6 +858,7 @@ end;
 procedure TMainForm.ItemTabFieldChange(Sender: TObject);
 begin
   selectedItem.base := ItemTabBaseClass.Text;
+  selectedItem.equipmentSlot := ItemTabEquipmentSlot.Text;
 
   selectedItem.viewmodel := ItemTabViewmodel.Text;
   selectedItem.worldmodel := ItemTabWorldmodel.Text;
