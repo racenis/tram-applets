@@ -70,6 +70,7 @@ type
     Label50: TLabel;
     Label51: TLabel;
     QuestTabObjectiveName: TEdit;
+    QuestTabObjectiveState: TComboBox;
     QuestTabTriggerConditionVariable: TComboBox;
     QuestTabTriggerValue: TEdit;
     Label34: TLabel;
@@ -260,7 +261,6 @@ type
     Separator1: TMenuItem;
     Separator2: TMenuItem;
     Separator3: TMenuItem;
-    QuestTabObjectiveState: TSpinEdit;
     FactionTabDisposition: TSpinEdit;
     Tabs: TPageControl;
     GeneralTab: TTabSheet;

@@ -44,7 +44,7 @@ object AboutDialog: TAboutDialog
     Height = 16
     Top = 88
     Width = 104
-    Caption = 'Version 0.0.9'
+    Caption = 'Version 0.1.0'
     Font.CharSet = BALTIC_CHARSET
     Font.Height = -13
     Font.Name = 'Courier New'
@@ -59,7 +59,7 @@ object AboutDialog: TAboutDialog
     Top = 112
     Width = 183
     Alignment = taCenter
-    Caption = 'Tramway SDK © racenis 2022 — 2024'#13#10'Asset Manager Applet © racenis 2024'#13#10#13#10'Available under GPL license'#13#10#13#10'https://racenis.github.io/tram-sdk/'
+    Caption = 'Tramway SDK © racenis 2022 — 2025'#13#10'Asset Manager Applet © racenis 2025'#13#10#13#10'Available under GPL license'#13#10#13#10'https://racenis.github.io/tram-sdk/'
   end
   object CloseDialog: TButton
     Left = 120
