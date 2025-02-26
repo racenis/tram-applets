@@ -64,7 +64,7 @@ end;
 
 function T3DModelSource.GetPath: string;
 begin
-  Result := 'source/' + name + fileExtension;
+  Result := 'assets/' + name + fileExtension;
 end;
 
 procedure T3DModelSource.SetDateInDB(date: Integer);
@@ -83,7 +83,13 @@ begin
 end;
 function T3DModelSource.GetMetadata(const prop: string): Variant;
 begin
-  Result := nil;
+  case prop of
+       'EXTENSION': Result := fileExtension;
+       'FILE_NAME': Result := 'assets/' + name + fileExtension;
+
+       else Result := nil;
+  end;
+
 end;
 
 function T3DModelSource.GetPropertyList: TAssetPropertyList;
@@ -123,28 +129,16 @@ begin
   SetLength(modelSources, 0);
 end;
 
-procedure TrySet(var name: string; out format: string; formats: array of string);
-var
-  candidate: string;
-begin
-  for candidate in formats do
-      if name.EndsWith(candidate) then begin
-        format := candidate;
-        name.Replace(candidate, '');
-        Exit;
-      end;
-end;
-
 procedure T3DModelSourceCollection.ScanFromDisk;
 var
   files: TStringList;
   modelSourceFile: string;
-  audioName: string;
+  sourceName: string;
   fileExtension: string;
   modelSource: T3DModelSource;
   modelSourceCandidate: T3DModelSource;
 begin
-  files := FindAllFiles('data/', '*.blend;*.gltf;*.obj;*.fbx;*.dae', true);
+  files := FindAllFiles('assets/', '*.map;*.blend;*.gltf;*.obj;*.fbx;*.dae', true);
 
   for modelSource in modelSources do
       modelSource.SetDateOnDisk(0);
@@ -154,14 +148,15 @@ begin
     modelSource := nil;
 
     // extract asset name from path
-    audioName := modelSourceFile.Replace('\', '/');
-    audioName := audioName.Replace('data/audio/', '');
+    sourceName := modelSourceFile.Replace('\', '/');
+    sourceName := sourceName.Replace('assets/', '');
 
-    TrySet(audioName, fileExtension, ['.blend', '.gltf', '.obj', '.fbx', '.dae']);
+    fileExtension := ExtractFileExt(sourceName);
+    sourceName := ChangeFileExt(sourceName, '');
 
     // check if model source already exists in database
     for modelSourceCandidate in modelSources do
-      if modelSourceCandidate.GetName() = audioName then
+      if modelSourceCandidate.GetName() = sourceName then
       begin
         modelSource := modelSourceCandidate;
         Break;
@@ -175,7 +170,7 @@ begin
     end;
 
     // otherwise add it to database
-    modelSource := T3DModelSource.Create(fileExtension, audioName, self);
+    modelSource := T3DModelSource.Create(fileExtension, sourceName, self);
     modelSource.SetDateOnDisk(FileAge(modelSourceFile));
 
     SetLength(self.modelSources, Length(self.modelSources) + 1);
@@ -204,15 +199,17 @@ begin
     Exit(modelSource);
   end;
 
-  if FileExists('source/' + name + '.blend') then
+  if FileExists('assets/' + name + '.map') then
+     fileExtension := '.map'
+  else if FileExists('assets/' + name + '.blend') then
      fileExtension := '.blend'
-  else if FileExists('source/' + name + '.gltf') then
+  else if FileExists('assets/' + name + '.gltf') then
      fileExtension := '.gltf'
-  else if FileExists('source/' + name + '.obj') then
+  else if FileExists('assets/' + name + '.obj') then
      fileExtension := '.obj'
-  else if FileExists('source/' + name + '.fbx') then
+  else if FileExists('assets/' + name + '.fbx') then
      fileExtension := '.fbx'
-  else if FileExists('source/' + name + '.dae') then
+  else if FileExists('assets/' + name + '.dae') then
      fileExtension := '.dae'
   else
      fileExtension := '.idk';

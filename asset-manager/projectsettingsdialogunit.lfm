@@ -35,8 +35,8 @@ object ProjectSettingsDialog: TProjectSettingsDialog
     Height = 312
     Top = 8
     Width = 464
-    ActivePage = TabSheet1
-    TabIndex = 0
+    ActivePage = TabSheet4
+    TabIndex = 3
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = 'Project'
@@ -151,7 +151,7 @@ object ProjectSettingsDialog: TProjectSettingsDialog
       object LevelEditor: TLabeledEdit
         Left = 8
         Height = 21
-        Top = 16
+        Top = 24
         Width = 200
         EditLabel.Height = 13
         EditLabel.Width = 200
@@ -162,6 +162,28 @@ object ProjectSettingsDialog: TProjectSettingsDialog
     end
     object TabSheet4: TTabSheet
       Caption = 'Converters'
+      ClientHeight = 286
+      ClientWidth = 456
+      object BlenderCommand: TLabeledEdit
+        Left = 8
+        Height = 21
+        Top = 24
+        Width = 200
+        EditLabel.Height = 13
+        EditLabel.Width = 200
+        EditLabel.Caption = 'Blender Command'
+        TabOrder = 0
+      end
+      object ImageCommand: TLabeledEdit
+        Left = 8
+        Height = 21
+        Top = 64
+        Width = 200
+        EditLabel.Height = 13
+        EditLabel.Width = 200
+        EditLabel.Caption = 'Image Command'
+        TabOrder = 1
+      end
     end
   end
 end

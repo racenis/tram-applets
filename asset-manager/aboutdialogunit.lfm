@@ -44,7 +44,7 @@ object AboutDialog: TAboutDialog
     Height = 16
     Top = 88
     Width = 104
-    Caption = 'Version 0.1.0'
+    Caption = 'Version 0.1.1'
     Font.CharSet = BALTIC_CHARSET
     Font.Height = -13
     Font.Name = 'Courier New'

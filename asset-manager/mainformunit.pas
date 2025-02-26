@@ -325,6 +325,7 @@ var
   date: string;
 begin
   MainForm.StringGrid.RowCount := 1;
+  MainForm.StringGrid.Selection.Empty;
 
   row := 1;
     for asset in database.GetAssets do

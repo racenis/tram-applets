@@ -18,6 +18,7 @@ type
   { TProjectSettingsDialog }
 
   TProjectSettingsDialog = class(TForm)
+    ImageCommand: TLabeledEdit;
     Cancel: TButton;
     CompileCommand: TLabeledEdit;
     LevelEditor: TLabeledEdit;
@@ -35,6 +36,7 @@ type
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     TabSheet3: TTabSheet;
+    BlenderCommand: TLabeledEdit;
     procedure CancelClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure SaveClick(Sender: TObject);
@@ -71,6 +73,9 @@ begin
   TMAPCommand.Text := GetSetting('TMAP_COMMAND');
   TRADCommand.Text := GetSetting('TRAD_COMMAND');
 
+  ImageCommand.Text := GetSetting('IMAGE_COMMAND');
+  BlenderCommand.Text := GetSetting('BLENDER_COMMAND');
+
   LevelEditor.Text := GetSetting('LEVEL_EDITOR_COMMAND');
 end;
 
@@ -86,6 +91,9 @@ begin
   SetSetting('TMAP_COMMAND', TMAPCommand.Text);
   SetSetting('TRAD_COMMAND', TRADCommand.Text);
 
+  SetSetting('IMAGE_COMMAND', ImageCommand.Text);
+  SetSetting('BLENDER_COMMAND', BlenderCommand.Text);
+
   SetSetting('LEVEL_EDITOR_COMMAND', LevelEditor.Text);
 end;
 
@@ -100,11 +108,14 @@ begin
   SetDefault('RUN_COMMAND', 'tram-template.exe');
   SetDefault('COMPILE_COMMAND', 'make project');
 
-  SetDefault('TBSP_COMMAND', 'idk');
-  SetDefault('TMAP_COMMAND', '..\tram-template\tmap %model %size %padding');
-  SetDefault('TRAD_COMMAND', 'idk');
+  SetDefault('TBSP_COMMAND', '../tram-binary/tbsp %level');
+  SetDefault('TMAP_COMMAND', '../tram-binary/tmap %model %size %padding');
+  SetDefault('TRAD_COMMAND', '../tram-binary/trad %cell');
 
-  SetDefault('LEVEL_EDITOR_COMMAND', '..\tram-template\leveleditor');
+  SetDefault('IMAGE_COMMAND', '../tram-binary/magick %source -layers flatten data/textures/%dest');
+  SetDefault('BLENDER_COMMAND', 'blender %filename -b -P ../tram-sdk/devtools/exporters/tram_file_export.py');
+
+  SetDefault('LEVEL_EDITOR_COMMAND', '../tram-binary/tedit');
 end;
 
 procedure TProjectSettingsDialog.FormCreate(Sender: TObject);

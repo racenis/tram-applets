@@ -28,6 +28,11 @@ var
 
 procedure AddToQueue(asset: TAssetMetadata);
 begin
+  case asset.GetType of
+       'STMDL', 'MDLSRC', 'TEXSRC', 'WORLDCELL':;
+       else Exit;
+  end;
+
   SetLength(assetQueue, Length(assetQueue) + 1);
   assetQueue[High(assetQueue)] := asset;
 
@@ -170,6 +175,44 @@ begin
 
   for asset in assetQueue do
   begin
+
+
+    // prepare the command
+    case asset.GetType of
+         'STMDL': command := GetSetting('TMAP_COMMAND')
+                               .Replace('%model', asset.GetName)
+                               .Replace('%size', asset.GetMetadata('LIGHTMAP_WIDTH'))
+                               .Replace('%padding', ''); // TODO: add padding
+
+
+         'MDLSRC': begin
+           if asset.GetMetadata('EXTENSION') = '.blend' then
+              command := GetSetting('BLENDER_COMMAND')
+                           .Replace('%filename', asset.GetPath)
+
+           else if asset.GetMetadata('EXTENSION') = '.map' then
+              command := GetSetting('TBSP_COMMAND')
+                           .Replace('%level', asset.GetName)
+           else begin
+             ShowMessage('Currently ' + asset.GetMetadata('EXTENSION') + ' model imports not supported!');
+             Continue;
+           end;
+         end;
+
+         'TEXSRC': command := GetSetting('IMAGE_COMMAND')
+                                .Replace('%source', asset.GetPath)
+                                .Replace('%dest', asset.GetName + '.png');
+
+         'WORLDCELL': command := GetSetting('TRAD_COMMAND')
+                                   .Replace('%cell', asset.GetName);
+
+         else begin
+           ShowMessage('Asset type ' + asset.GetType + ' cannot be processed!');
+           Continue;
+         end;
+    end;
+
+
     process := TProcess.Create(nil);
 
     // update progress bar value
@@ -181,13 +224,7 @@ begin
     AssetQueueDialog.Caption := 'Processing... ' + asset.GetName;
     AssetQueueDialog.AssetName.Caption := 'Processing... ' + asset.GetName;
 
-    // prepare the command
-    case asset.GetType of
-         'STMDL': command := GetSetting('TMAP_COMMAND')
-                               .Replace('%model', asset.GetName)
-                               .Replace('%size', asset.GetMetadata('LIGHTMAP_WIDTH'))
-                               .Replace('%padding', ''); // TODO: add padding
-    end;
+
 
     splitCommand := SplitCommandline(command);
 

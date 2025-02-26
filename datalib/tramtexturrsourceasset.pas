@@ -62,7 +62,7 @@ end;
 
 function TTextureSource.GetPath: string;
 begin
-  Result := 'source/' + name + fileExtension;
+  Result := 'assets/' + name + fileExtension;
 end;
 
 procedure TTextureSource.SetDateInDB(date: Integer);
@@ -81,7 +81,12 @@ begin
 end;
 function TTextureSource.GetMetadata(const prop: string): Variant;
 begin
-  Result := nil;
+  case prop of
+       'EXTENSION': Result := fileExtension;
+       'FILE_NAME': Result := 'assets/' + name + fileExtension;
+
+       else Result := nil;
+  end;
 end;
 
 function TTextureSource.GetPropertyList: TAssetPropertyList;
@@ -121,28 +126,16 @@ begin
   SetLength(textureSources, 0);
 end;
 
-procedure TrySet(var name: string; out format: string; formats: array of string);
-var
-  candidate: string;
-begin
-  for candidate in formats do
-      if name.EndsWith(candidate) then begin
-        format := candidate;
-        name.Replace(candidate, '');
-        Exit;
-      end;
-end;
-
 procedure TTextureSourceCollection.ScanFromDisk;
 var
   files: TStringList;
   textureSourceFile: string;
-  audioName: string;
+  sourceName: string;
   fileExtension: string;
   textureSource: TTextureSource;
   textureSourceCandidate: TTextureSource;
 begin
-  files := FindAllFiles('source/', '*.bmp;*.jpg;*.jpeg;*.svg;*.gif;*.tga;*.xcf;*.psd', true);
+  files := FindAllFiles('assets/', '*.bmp;*.jpg;*.jpeg;*.svg;*.gif;*.tga;*.xcf;*.psd', true);
 
   for textureSource in textureSources do
       textureSource.SetDateOnDisk(0);
@@ -152,16 +145,16 @@ begin
     textureSource := nil;
 
     // extract asset name from path
-    audioName := textureSourceFile.Replace('\', '/');
-    audioName := audioName.Replace('data/audio/', '');
+    sourceName := textureSourceFile.Replace('\', '/');
+    sourceName := sourceName.Replace('assets/', '');
 
+    fileExtension := ExtractFileExt(sourceName);
+    sourceName := ChangeFileExt(sourceName, '');
 
-    TrySet(audioName, fileExtension, ['.bmp', '.jpg', '.jpeg', '.svg', '.gif',
-                                      '.tga', '.xcf', '.psd']);
 
     // check if texture source already exists in database
     for textureSourceCandidate in textureSources do
-      if textureSourceCandidate.GetName() = audioName then
+      if textureSourceCandidate.GetName() = sourceName then
       begin
         textureSource := textureSourceCandidate;
         Break;
@@ -175,7 +168,7 @@ begin
     end;
 
     // otherwise add it to database
-    textureSource := TTextureSource.Create(fileExtension, audioName, self);
+    textureSource := TTextureSource.Create(fileExtension, sourceName, self);
     textureSource.SetDateOnDisk(FileAge(textureSourceFile));
 
     SetLength(self.textureSources, Length(self.textureSources) + 1);
@@ -204,21 +197,21 @@ begin
     Exit(textureSource);
   end;
 
-  if FileExists('source/' + name + '.bmp') then
+  if FileExists('assets/' + name + '.bmp') then
      fileExtension := '.bmp'
-  else if FileExists('source/' + name + '.jpg') then
+  else if FileExists('assets/' + name + '.jpg') then
      fileExtension := '.jpg'
-  else if FileExists('source/' + name + '.jpeg') then
+  else if FileExists('assets/' + name + '.jpeg') then
      fileExtension := '.jpeg'
-  else if FileExists('source/' + name + '.svg') then
+  else if FileExists('assets/' + name + '.svg') then
      fileExtension := '.svg'
-  else if FileExists('source/' + name + '.gif') then
+  else if FileExists('assets/' + name + '.gif') then
      fileExtension := '.gif'
-  else if FileExists('source/' + name + '.tga') then
+  else if FileExists('assets/' + name + '.tga') then
      fileExtension := '.tga'
-  else if FileExists('source/' + name + '.xcf') then
+  else if FileExists('assets/' + name + '.xcf') then
      fileExtension := '.xcf'
-  else if FileExists('source/' + name + '.psd') then
+  else if FileExists('assets/' + name + '.psd') then
      fileExtension := '.psd'
   else
      fileExtension := '.idk';

@@ -1,0 +1,201 @@
+object MainFrame: TMainFrame
+  Left = 0
+  Height = 480
+  Top = 0
+  Width = 640
+  ClientHeight = 480
+  ClientWidth = 640
+  TabOrder = 0
+  DesignLeft = 397
+  DesignTop = 314
+  object BackgroundImage: TImage
+    Left = 0
+    Height = 480
+    Top = 0
+    Width = 640
+  end
+  object NewProjectLinkShadow: TLabel
+    Cursor = crHandPoint
+    Left = 32
+    Height = 45
+    Top = 256
+    Width = 219
+    Caption = 'New Project'
+    Font.CharSet = BALTIC_CHARSET
+    Font.Color = clBlack
+    Font.Height = -32
+    Font.Name = 'Arial Black'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold, fsItalic]
+    ParentFont = False
+    OnMouseEnter = NewProjectLinkMouseEnter
+    OnMouseLeave = NewProjectLinkMouseLeave
+  end
+  object NewProjectLink: TLabel
+    Cursor = crHandPoint
+    Left = 24
+    Height = 45
+    Top = 248
+    Width = 219
+    Caption = 'New Project'
+    Font.CharSet = BALTIC_CHARSET
+    Font.Color = clBlack
+    Font.Height = -32
+    Font.Name = 'Arial Black'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold, fsItalic]
+    ParentFont = False
+    OnClick = NewProjectLinkClick
+    OnMouseEnter = NewProjectLinkMouseEnter
+    OnMouseLeave = NewProjectLinkMouseLeave
+  end
+  object TitleShadow: TLabel
+    Left = 304
+    Height = 52
+    Top = 12
+    Width = 287
+    Caption = 'Tramway SDK'
+    Font.CharSet = BALTIC_CHARSET
+    Font.Color = clBlack
+    Font.Height = -37
+    Font.Name = 'Arial Black'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Title: TLabel
+    Left = 296
+    Height = 52
+    Top = 8
+    Width = 287
+    Caption = 'Tramway SDK'
+    Font.CharSet = BALTIC_CHARSET
+    Font.Color = clGray
+    Font.Height = -37
+    Font.Name = 'Arial Black'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object SubtitleShadow: TLabel
+    Left = 374
+    Height = 37
+    Top = 52
+    Width = 250
+    Caption = 'Project Manager'
+    Font.CharSet = BALTIC_CHARSET
+    Font.Height = -32
+    Font.Name = 'Arial'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Subtitle: TLabel
+    Left = 368
+    Height = 37
+    Top = 48
+    Width = 250
+    Caption = 'Project Manager'
+    Font.CharSet = BALTIC_CHARSET
+    Font.Color = clGray
+    Font.Height = -32
+    Font.Name = 'Arial'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object OpenProjectLinkShadow: TLabel
+    Cursor = crHandPoint
+    Left = 64
+    Height = 45
+    Top = 320
+    Width = 231
+    Caption = 'Open Project'
+    Font.CharSet = BALTIC_CHARSET
+    Font.Color = clBlack
+    Font.Height = -32
+    Font.Name = 'Arial Black'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold, fsItalic]
+    ParentFont = False
+    OnMouseEnter = NewProjectLinkMouseEnter
+    OnMouseLeave = NewProjectLinkMouseLeave
+  end
+  object OpenProjectLink: TLabel
+    Cursor = crHandPoint
+    Left = 56
+    Height = 45
+    Top = 312
+    Width = 231
+    Caption = 'Open Project'
+    Font.CharSet = BALTIC_CHARSET
+    Font.Color = clBlack
+    Font.Height = -32
+    Font.Name = 'Arial Black'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold, fsItalic]
+    ParentFont = False
+    OnMouseEnter = OpenProjectLinkMouseEnter
+    OnMouseLeave = OpenProjectLinkMouseLeave
+  end
+  object DocumentationLinkShadow: TLabel
+    Cursor = crHandPoint
+    Left = 96
+    Height = 45
+    Top = 384
+    Width = 267
+    Caption = 'Documentation'
+    Font.CharSet = BALTIC_CHARSET
+    Font.Color = clBlack
+    Font.Height = -32
+    Font.Name = 'Arial Black'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold, fsItalic]
+    ParentFont = False
+    OnMouseEnter = NewProjectLinkMouseEnter
+    OnMouseLeave = NewProjectLinkMouseLeave
+  end
+  object DocumentationLink: TLabel
+    Cursor = crHandPoint
+    Left = 88
+    Height = 45
+    Top = 376
+    Width = 267
+    Caption = 'Documentation'
+    Font.CharSet = BALTIC_CHARSET
+    Font.Color = clBlack
+    Font.Height = -32
+    Font.Name = 'Arial Black'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold, fsItalic]
+    ParentFont = False
+    OnMouseEnter = DocumentationLinkMouseEnter
+    OnMouseLeave = DocumentationLinkMouseLeave
+  end
+  object VersionNumber: TLabel
+    Left = 368
+    Height = 16
+    Top = 464
+    Width = 272
+    Caption = 'Tramway SDK Project Manager v0.1.1'
+    Color = clBlack
+    Font.CharSet = BALTIC_CHARSET
+    Font.Height = -13
+    Font.Name = 'Courier New'
+    Font.Pitch = fpFixed
+    Font.Quality = fqDraft
+    ParentColor = False
+    ParentFont = False
+    Transparent = False
+  end
+end

@@ -1,0 +1,18 @@
+object MainForm: TMainForm
+  Left = 946
+  Height = 480
+  Top = 424
+  Width = 640
+  Caption = 'MainForm'
+  ClientHeight = 480
+  ClientWidth = 640
+  OnCreate = FormCreate
+  Position = poDesktopCenter
+  LCLVersion = '3.0.0.3'
+  object BackgroundImage: TImage
+    Left = 0
+    Height = 480
+    Top = 0
+    Width = 640
+  end
+end
