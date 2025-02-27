@@ -26,11 +26,13 @@ type
     NewProjectLinkShadow: TLabel;
     Subtitle: TLabel;
     TitleShadow: TLabel;
+    procedure DocumentationLinkClick(Sender: TObject);
     procedure DocumentationLinkMouseEnter(Sender: TObject);
     procedure DocumentationLinkMouseLeave(Sender: TObject);
     procedure NewProjectLinkClick(Sender: TObject);
     procedure NewProjectLinkMouseEnter(Sender: TObject);
     procedure NewProjectLinkMouseLeave(Sender: TObject);
+    procedure OpenProjectLinkClick(Sender: TObject);
     procedure OpenProjectLinkMouseEnter(Sender: TObject);
     procedure OpenProjectLinkMouseLeave(Sender: TObject);
   public
@@ -67,10 +69,20 @@ begin
   DocumentationLink.Font.Underline := True;
 end;
 
+procedure TMainFrame.DocumentationLinkClick(Sender: TObject);
+begin
+  documentationProject;
+end;
+
 procedure TMainFrame.NewProjectLinkMouseLeave(Sender: TObject);
 begin
   NewProjectLink.Font.Color := TColor($00A5FF);
   NewProjectLink.Font.Underline := False;
+end;
+
+procedure TMainFrame.OpenProjectLinkClick(Sender: TObject);
+begin
+  openProject;
 end;
 
 procedure TMainFrame.OpenProjectLinkMouseLeave(Sender: TObject);
@@ -87,10 +99,7 @@ end;
 
 procedure TMainFrame.NewProjectLinkClick(Sender: TObject);
 begin
-  newProject();
-  //TThread.ForceQueue(nil, newProject);
-  //Application.QueueAsyncCall();
-  //TThread.Queue(nil, newProject);
+  newProject;
 end;
 
 

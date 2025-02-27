@@ -6,8 +6,8 @@ object MainFrame: TMainFrame
   ClientHeight = 480
   ClientWidth = 640
   TabOrder = 0
-  DesignLeft = 397
-  DesignTop = 314
+  DesignLeft = 224
+  DesignTop = 174
   object BackgroundImage: TImage
     Left = 0
     Height = 480
@@ -143,6 +143,7 @@ object MainFrame: TMainFrame
     Font.Quality = fqDraft
     Font.Style = [fsBold, fsItalic]
     ParentFont = False
+    OnClick = OpenProjectLinkClick
     OnMouseEnter = OpenProjectLinkMouseEnter
     OnMouseLeave = OpenProjectLinkMouseLeave
   end
@@ -179,6 +180,7 @@ object MainFrame: TMainFrame
     Font.Quality = fqDraft
     Font.Style = [fsBold, fsItalic]
     ParentFont = False
+    OnClick = DocumentationLinkClick
     OnMouseEnter = DocumentationLinkMouseEnter
     OnMouseLeave = DocumentationLinkMouseLeave
   end

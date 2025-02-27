@@ -1,9 +1,9 @@
 object MainForm: TMainForm
-  Left = 946
+  Left = 637
   Height = 480
-  Top = 424
+  Top = 375
   Width = 640
-  Caption = 'MainForm'
+  Caption = 'Tramway SDK Project Manager'
   ClientHeight = 480
   ClientWidth = 640
   OnCreate = FormCreate

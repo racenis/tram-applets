@@ -8,13 +8,96 @@ object NewProjectFrame: TNewProjectFrame
   TabOrder = 0
   DesignLeft = 304
   DesignTop = 132
-  object Button1: TButton
+  object BackgroundImage: TImage
+    Left = 0
+    Height = 480
+    Top = 0
+    Width = 640
+  end
+  object Back: TButton
     Left = 8
     Height = 25
     Top = 448
-    Width = 75
-    Caption = 'Button1'
+    Width = 200
+    Caption = 'Back'
     TabOrder = 0
-    OnClick = Button1Click
+    OnClick = BackClick
+  end
+  object TemplateList: TListBox
+    Left = 8
+    Height = 432
+    Top = 8
+    Width = 200
+    ItemHeight = 0
+    TabOrder = 1
+    OnSelectionChange = TemplateListSelectionChange
+  end
+  object TemplateGroup: TGroupBox
+    Left = 216
+    Height = 144
+    Top = 8
+    Width = 416
+    Caption = 'Template Info'
+    ClientHeight = 126
+    ClientWidth = 412
+    ParentBackground = False
+    TabOrder = 2
+    object TemplateImage: TImage
+      Left = 8
+      Height = 120
+      Top = 0
+      Width = 160
+    end
+    object TemplateName: TEdit
+      Left = 176
+      Height = 21
+      Top = 0
+      Width = 232
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object TemplateDescription: TMemo
+      Left = 176
+      Height = 96
+      Top = 24
+      Width = 232
+      ReadOnly = True
+      TabOrder = 1
+    end
+  end
+  object InstanceGroup: TGroupBox
+    Left = 216
+    Height = 280
+    Top = 160
+    Width = 416
+    Caption = 'New Project Parameters'
+    ClientHeight = 262
+    ClientWidth = 412
+    TabOrder = 3
+    object ProjectName: TEdit
+      Left = 8
+      Height = 21
+      Top = 8
+      Width = 256
+      TabOrder = 0
+      TextHint = 'Project Name'
+    end
+  end
+  object Finish: TButton
+    Left = 557
+    Height = 25
+    Top = 448
+    Width = 75
+    Caption = 'Let''s go!'
+    TabOrder = 4
+    OnClick = FinishClick
+  end
+  object GetMoreTemplates: TButton
+    Left = 216
+    Height = 25
+    Top = 448
+    Width = 112
+    Caption = 'Get More Templates'
+    TabOrder = 5
   end
 end

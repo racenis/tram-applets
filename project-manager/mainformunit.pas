@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
-  StdCtrls, MainFrameUnit, NewProjectFrameUnit;
+  StdCtrls, MainFrameUnit, NewProjectFrameUnit, OpenProjectFrameUnit;
 
 type
 
@@ -31,6 +31,7 @@ var
 
   mainFrame: TMainFrame;
   newProjectFrame: TNewProjectFrame;
+  openProjectFrame: TOpenProjectFrame;
 
 implementation
 
@@ -50,6 +51,9 @@ begin
   newProjectFrame := TNewProjectFrame.Create(self);
   newProjectFrame.backToMain := @self.BackToMain;
 
+  openProjectFrame := TOpenProjectFrame.Create(self);
+  openProjectFrame.backToMain := @self.BackToMain;
+
   activeFrame := mainFrame;
 
   mainFrame.Parent := self;
@@ -67,7 +71,9 @@ end;
 
 procedure TMainForm.OpenProject;
 begin
-
+  activeFrame.Parent := nil;
+  activeFrame := openProjectFrame;
+  activeFrame.Parent := self;
 end;
 
 procedure TMainForm.Documentation;

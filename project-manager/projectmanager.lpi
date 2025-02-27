@@ -26,6 +26,9 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="tramdatalib"/>
+      </Item>
+      <Item>
         <PackageName Value="LCL"/>
       </Item>
     </RequiredPackages>
@@ -62,8 +65,17 @@
         <Filename Value="newprojectframeunit.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="NewProjectFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="NewProjectFrameUnit"/>
+      </Unit>
+      <Unit>
+        <Filename Value="openprojectframeunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="OpenProjectFrame"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="OpenProjectFrameUnit"/>
       </Unit>
     </Units>
   </ProjectOptions>
