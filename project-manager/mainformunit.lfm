@@ -3,6 +3,7 @@ object MainForm: TMainForm
   Height = 480
   Top = 375
   Width = 640
+  BorderStyle = bsDialog
   Caption = 'Tramway SDK Project Manager'
   ClientHeight = 480
   ClientWidth = 640

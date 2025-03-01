@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
-  StdCtrls, MainFrameUnit, NewProjectFrameUnit, OpenProjectFrameUnit;
+  StdCtrls, MainFrameUnit, NewProjectFrameUnit, OpenProjectFrameUnit, lclintf;
 
 type
 
@@ -78,7 +78,7 @@ end;
 
 procedure TMainForm.Documentation;
 begin
-
+  OpenURL('https://racenis.github.io/tram-sdk/documentation.html');
 end;
 
 procedure TMainForm.BackToMain;

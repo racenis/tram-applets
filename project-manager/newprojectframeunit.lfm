@@ -67,11 +67,11 @@ object NewProjectFrame: TNewProjectFrame
   end
   object InstanceGroup: TGroupBox
     Left = 216
-    Height = 280
-    Top = 160
+    Height = 80
+    Top = 360
     Width = 416
     Caption = 'New Project Parameters'
-    ClientHeight = 262
+    ClientHeight = 62
     ClientWidth = 412
     TabOrder = 3
     object ProjectName: TEdit
@@ -80,7 +80,15 @@ object NewProjectFrame: TNewProjectFrame
       Top = 8
       Width = 256
       TabOrder = 0
-      TextHint = 'Project Name'
+      TextHint = 'Project directory name (no spaces, only ASCII)'
+    end
+    object ProjectFancyName: TEdit
+      Left = 8
+      Height = 21
+      Top = 32
+      Width = 256
+      TabOrder = 1
+      TextHint = 'Full project name'
     end
   end
   object Finish: TButton
@@ -99,5 +107,6 @@ object NewProjectFrame: TNewProjectFrame
     Width = 112
     Caption = 'Get More Templates'
     TabOrder = 5
+    OnClick = GetMoreTemplatesClick
   end
 end

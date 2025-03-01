@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, StdCtrls, ExtCtrls, FileUtil, Dialogs, fgl,
-  TramAssetParser, LCLType;
+  TramAssetParser, LCLType, Process, lclintf;
 
 type
 
@@ -25,6 +25,7 @@ type
   TNewProjectFrame = class(TFrame)
     Back: TButton;
     BackgroundImage: TImage;
+    ProjectFancyName: TEdit;
     ProjectName: TEdit;
     Finish: TButton;
     GetMoreTemplates: TButton;
@@ -36,6 +37,7 @@ type
     TemplateDescription: TMemo;
     procedure BackClick(Sender: TObject);
     procedure FinishClick(Sender: TObject);
+    procedure GetMoreTemplatesClick(Sender: TObject);
     procedure TemplateListSelectionChange(Sender: TObject; User: boolean);
   private
     templates: TProjectList;
@@ -58,12 +60,15 @@ end;
 
 procedure TNewProjectFrame.FinishClick(Sender: TObject);
 var
-  newProjectName : string;
-  template : TProjectTemplate;
+  newProjectName: string;
+  template: TProjectTemplate;
 
-  fileToCopy : string;
-  filePath : string;
-  fileDir : string;
+  fileToCopy: string;
+  filePath: string;
+  fileDir: string;
+
+  projectProcess: TProcess;
+  projectConfig: TextFile;
 begin
   newProjectName := ProjectName.Text;
 
@@ -140,8 +145,37 @@ begin
 
   end;
 
-  ShowMessage('New project created!');
 
+  AssignFile(projectConfig, '../' + newProjectName + '/project.cfg');
+
+  rewrite(projectConfig);
+
+  writeln(projectConfig, '# Tramway SDK Project Settings');
+  writeln(projectConfig, '# Gemerated by: Tramway SDK Project Manager Applet');
+  writeln(projectConfig, '');
+
+  writeln(projectConfig, 'SDK_VERSION          "0.1.1"');
+  writeln(projectConfig, 'PROJECT_NAME         "', ProjectFancyName.Text, '"');
+
+  CloseFile(projectConfig);
+
+  if IDYES = Application.MessageBox('New project created! Open it now?', '', MB_YESNO + MB_ICONQUESTION) then begin
+    projectProcess := TProcess.Create(nil);
+    projectProcess.CurrentDirectory := '../' + newProjectName;
+    projectProcess.Executable := 'assetmanager';
+    projectProcess.Execute;
+
+    Halt;
+
+  end;
+
+  Halt;
+
+end;
+
+procedure TNewProjectFrame.GetMoreTemplatesClick(Sender: TObject);
+begin
+  OpenURL('https://racenis.github.io/tram-sdk/templates.html');
 end;
 
 procedure TNewProjectFrame.TemplateListSelectionChange(Sender: TObject;

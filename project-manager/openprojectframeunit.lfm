@@ -6,21 +6,71 @@ object OpenProjectFrame: TOpenProjectFrame
   ClientHeight = 480
   ClientWidth = 640
   TabOrder = 0
-  DesignLeft = 809
-  DesignTop = 183
+  DesignLeft = 760
+  DesignTop = 195
   object BackgroundImage: TImage
     Left = 0
     Height = 480
     Top = 0
     Width = 640
   end
-  object Button1: TButton
+  object Back: TButton
     Left = 8
     Height = 25
     Top = 448
-    Width = 75
-    Caption = 'Button1'
+    Width = 203
+    Caption = 'Back'
     TabOrder = 0
-    OnClick = Button1Click
+    OnClick = BackClick
+  end
+  object ProjectList: TListBox
+    Left = 8
+    Height = 432
+    Top = 8
+    Width = 200
+    ItemHeight = 0
+    TabOrder = 1
+    OnSelectionChange = ProjectListSelectionChange
+  end
+  object ProjectGroup: TGroupBox
+    Left = 216
+    Height = 144
+    Top = 8
+    Width = 416
+    Caption = 'Project Info'
+    ClientHeight = 126
+    ClientWidth = 412
+    TabOrder = 2
+    object ProjectImage: TImage
+      Left = 8
+      Height = 120
+      Top = 0
+      Width = 160
+    end
+    object ProjectName: TEdit
+      Left = 176
+      Height = 21
+      Top = 0
+      Width = 232
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object ProjectDesc: TMemo
+      Left = 176
+      Height = 96
+      Top = 24
+      Width = 232
+      ReadOnly = True
+      TabOrder = 1
+    end
+  end
+  object Finish: TButton
+    Left = 544
+    Height = 25
+    Top = 448
+    Width = 88
+    Caption = 'Open Selected'
+    TabOrder = 3
+    OnClick = FinishClick
   end
 end
