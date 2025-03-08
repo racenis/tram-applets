@@ -21,6 +21,8 @@ type
       procedure SetMetadata(const prop: string; value: Variant); override;
       function GetMetadata(const prop: string): Variant; override;
 
+      function IsProcessable: Boolean; override;
+
       function GetPropertyList: TAssetPropertyList; override;
 
       procedure LoadMetadata(); override;
@@ -69,6 +71,11 @@ end;
 procedure TShader.SetDateOnDisk(date: Integer);
 begin
   self.dateOnDisk := date;
+end;
+
+function TShader.IsProcessable: Boolean;
+begin
+  Result := False;
 end;
 
 procedure TShader.SetMetadata(const prop: string; value: Variant);
@@ -136,8 +143,7 @@ begin
 
     // extract asset name from path
     shaderName := shaderFile.Replace('\', '/');
-    shaderName := shaderName.Replace('shaders/opengl3/', '');
-    shaderName := shaderName.Replace('shaders/gles3/', '');
+    shaderName := shaderName.Replace('shaders/', '');
 
     shaderName := shaderName.Remove(Length(shaderName) - Length('.glsl'));
 

@@ -22,6 +22,8 @@ type
       procedure SetMetadata(const prop: string; value: Variant); override;
       function GetMetadata(const prop: string): Variant; override;
 
+      function IsProcessable: Boolean; override;
+
       function GetPropertyList: TAssetPropertyList; override;
 
       procedure LoadMetadata(); override;
@@ -70,6 +72,11 @@ end;
 procedure TScript.SetDateOnDisk(date: Integer);
 begin
   self.dateOnDisk := date;
+end;
+
+function TScript.IsProcessable: Boolean;
+begin
+  Result := False;
 end;
 
 procedure TScript.SetMetadata(const prop: string; value: Variant);

@@ -25,6 +25,8 @@ type
       procedure SetMetadata(const prop: string; value: Variant); override;
       function GetMetadata(const prop: string): Variant; override;
 
+      function IsProcessable: Boolean; override;
+
       function GetPropertyList: TAssetPropertyList; override;
 
       procedure LoadMetadata(); override;
@@ -75,13 +77,19 @@ begin
   self.dateOnDisk := date;
 end;
 
+function TAnimation.IsProcessable: Boolean;
+begin
+  Result := False;
+end;
+
 procedure TAnimation.SetMetadata(const prop: string; value: Variant);
 begin
 
 end;
+
 function TAnimation.GetMetadata(const prop: string): Variant;
 begin
-
+     Result := nil;
 end;
 
 function TAnimation.GetPropertyList: TAssetPropertyList;

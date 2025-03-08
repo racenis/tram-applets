@@ -254,11 +254,12 @@ begin
          newAssets := Concat(newAssets, [asset])
       else if asset.GetDateOnDisk = 0 then
          removedAssets := Concat(removedAssets, [asset])
-      else if asset.GetDateInDB < asset.GetDateOnDisk then
+      else if asset.GetDateInDB < asset.GetDateOnDisk then begin
          if asset.GetAlwaysProcess then
             AddToQueue(asset)
-         else if not asset.GetIgnoreModified then
+         else if not asset.GetIgnoreModified and asset.IsProcessable then
             modifiedAssets := Concat(modifiedAssets, [asset])
+      end
       else if asset.GetDateInDB <> asset.GetDateOnDisk then
          ShowMessage('Asset ' + asset.GetName + ' has a date of '
                             + FormatDateTime('yyyy-mm-dd hh:nn:ss',
@@ -270,10 +271,13 @@ begin
                             + ' something, but I do not really know'
                             + ' what exactly.');
 
+
   if Length(newAssets) > 0 then
   begin
     RefreshNewFileDialog := TRefreshNewFileDialog.Create(MainForm, newAssets);
     RefreshNewFileDialog.ShowModal;
+    for asset in RefreshNewFileDialog.addedFiles do
+        if asset.IsProcessable then modifiedAssets := Concat(modifiedAssets, [asset]);
     FreeAndNil(RefreshNewFileDialog);
   end;
 
@@ -531,6 +535,28 @@ begin
 
       case fileExt of
         '.stmdl', '.dymdl', '.mdmdl': fileNewPath := 'data/models/';
+        '.anim': fileNewPath := 'data/animations/';
+        '.ogg': fileNewPath := 'data/audio/';
+
+        '.png': fileNewPath := 'data/textures/';
+
+
+        '.cell': fileNewPath := 'data/worldcells/';
+
+        '.wav', '.wma', '.flac', '.mp3': fileNewPath := 'assets/';
+        '.map', '.blend', '.gltf', '.obj', '.fbx', '.dae': fileNewPath := 'assets/';
+        '.bmp', '.jpg', '.jpeg', '.svg', '.gif', '.tga', '.xcf', '.psd': fileNewPath := 'assets/';
+
+        // need to check if needs to go into opengl4 or gles3
+        //'.vert', '.frag', '.glsl': fileNewPath := 'shaders/';
+
+        '.nav': fileNewPath := 'data/navmeshes/';
+        '.path': fileNewPath := 'data/paths/';
+        '.spr': fileNewPath := 'data/sprites/';
+
+
+        '.dialog', '.quest', '.lang', '.entdef': fileNewPath := 'data/';
+
         else
           begin
             ShowMessage('File ' + filePath + ' unknown extension: ' + fileExt);
@@ -674,22 +700,27 @@ begin
     params := command.Substring(command.IndexOf(' '));
     command := command.Substring(0, command.IndexOf(' '));
   end;
+  command := FindDefaultExecutablePath(command);
 end;
 
 procedure TMainForm.AssetEditClick(Sender: TObject);
 var
   path: string;
   command: string;
+  executable: string;
   parameters: string;
 begin
   path := selectedAsset.GetPath;
   // TODO: add windows check
   path := path.Replace('/', '\');
 
-  ExtractCommandline(GetPreference('OPEN_FILE'), command, parameters);
-  parameters := parameters.Replace('%path', path);
+  case selectedAsset.GetType of
+      'SCRIPT', 'SHADER', 'MDMDL', 'SPRITE': command := GetSetting('CODE_EDITOR_COMMAND').Replace('%file', path);
+      else command := GetPreference('OPEN_FILE').Replace('%path', path);
+  end;
 
-  ExecuteProcess(command, parameters, []);
+  ExtractCommandline(command, executable, parameters);
+  ExecuteProcess(executable, parameters, []);
 end;
 
 procedure TMainForm.AssetShowDirectoryClick(Sender: TObject);

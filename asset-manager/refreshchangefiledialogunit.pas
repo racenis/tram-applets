@@ -49,7 +49,7 @@ begin
 
   for assetFile in self.files do
   begin
-    FileChecklist.AddItem(assetFile.GetName, assetFile);
+    FileChecklist.AddItem(assetFile.GetPath.Substring(assetFile.GetPath.IndexOf(assetFile.GetName)), assetFile);
   end;
 
   FileCheckList.CheckAll(cbChecked);
@@ -60,7 +60,8 @@ var
   i: Integer;
 begin
  for i := 0 to FileChecklist.Count - 1 do
-   AddToQueue(FileChecklist.Items.Objects[i] as TAssetMetadata);
+     if FileChecklist.Checked[i] then
+        AddToQueue(FileChecklist.Items.Objects[i] as TAssetMetadata);
 
  self.Close;
 end;
@@ -70,7 +71,8 @@ var
   i: Integer;
 begin
  for i := 0 to FileChecklist.Count - 1 do
-   (FileChecklist.Items.Objects[i] as TAssetMetadata).SetDateInDBAsOnDisk;
+     if FileChecklist.Checked[i] then
+        (FileChecklist.Items.Objects[i] as TAssetMetadata).SetDateInDBAsOnDisk;
 
  self.Close;
 end;

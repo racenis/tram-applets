@@ -18,6 +18,8 @@ type
       procedure SetMetadata(const prop: string; value: Variant); override;
       function GetMetadata(const prop: string): Variant; override;
 
+      function IsProcessable: Boolean; override;
+
       function GetPropertyList: TAssetPropertyList; override;
 
       procedure LoadMetadata(); override;
@@ -66,6 +68,11 @@ end;
 procedure TCollisionModel.SetDateOnDisk(date: Integer);
 begin
   self.dateOnDisk := date;
+end;
+
+function TCollisionModel.IsProcessable: Boolean;
+begin
+  Result := False;
 end;
 
 procedure TCollisionModel.SetMetadata(const prop: string; value: Variant);

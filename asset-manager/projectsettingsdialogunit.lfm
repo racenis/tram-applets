@@ -35,8 +35,8 @@ object ProjectSettingsDialog: TProjectSettingsDialog
     Height = 312
     Top = 8
     Width = 464
-    ActivePage = TabSheet4
-    TabIndex = 3
+    ActivePage = TabSheet3
+    TabIndex = 2
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = 'Project'
@@ -158,6 +158,17 @@ object ProjectSettingsDialog: TProjectSettingsDialog
         EditLabel.Caption = 'Level Editor Command'
         TabOrder = 0
         Text = 'LevelEditor'
+      end
+      object CodeEditor: TLabeledEdit
+        Left = 8
+        Height = 21
+        Top = 64
+        Width = 200
+        EditLabel.Height = 13
+        EditLabel.Width = 200
+        EditLabel.Caption = 'Code Editor Command'
+        TabOrder = 1
+        Text = 'CodeEditor'
       end
     end
     object TabSheet4: TTabSheet

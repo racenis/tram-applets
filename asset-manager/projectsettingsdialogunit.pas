@@ -22,6 +22,7 @@ type
     Cancel: TButton;
     CompileCommand: TLabeledEdit;
     LevelEditor: TLabeledEdit;
+    CodeEditor: TLabeledEdit;
     TabSheet4: TTabSheet;
     TMapCommand: TLabeledEdit;
     TRadCommand: TLabeledEdit;
@@ -77,6 +78,7 @@ begin
   BlenderCommand.Text := GetSetting('BLENDER_COMMAND');
 
   LevelEditor.Text := GetSetting('LEVEL_EDITOR_COMMAND');
+  CodeEditor.Text := GetSetting('CODE_EDITOR_COMMAND');
 end;
 
 procedure TProjectSettingsDialog.Dereset;
@@ -95,6 +97,7 @@ begin
   SetSetting('BLENDER_COMMAND', BlenderCommand.Text);
 
   SetSetting('LEVEL_EDITOR_COMMAND', LevelEditor.Text);
+  SetSetting('CODE_EDITOR_COMMAND', CodeEditor.Text);
 end;
 
 procedure SetDefault(pref: string; val: string);
@@ -116,6 +119,7 @@ begin
   SetDefault('BLENDER_COMMAND', 'blender %filename -b -P ../tram-sdk/devtools/exporters/tram_file_export.py');
 
   SetDefault('LEVEL_EDITOR_COMMAND', '../tram-binary/tedit');
+  SetDefault('CODE_EDITOR_COMMAND', 'notepad++ %file');
 end;
 
 procedure TProjectSettingsDialog.FormCreate(Sender: TObject);

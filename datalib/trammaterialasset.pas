@@ -18,6 +18,8 @@ type
       procedure SetMetadata(const prop: string; value: Variant); override;
       function GetMetadata(const prop: string): Variant; override;
 
+      function IsProcessable: Boolean; override;
+
       function GetPropertyList: TAssetPropertyList; override;
 
       procedure LoadMetadata(); override;
@@ -64,6 +66,11 @@ end;
 procedure TMaterial.SetDateOnDisk(date: Integer);
 begin
   self.dateOnDisk := date;
+end;
+
+function TMaterial.IsProcessable: Boolean;
+begin
+  Result := False;
 end;
 
 procedure TMaterial.SetMetadata(const prop: string; value: Variant);

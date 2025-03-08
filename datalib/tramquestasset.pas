@@ -71,6 +71,8 @@ type
       procedure SetMetadata(const prop: string; value: Variant); override;
       function GetMetadata(const prop: string): Variant; override;
 
+      function IsProcessable: Boolean; override;
+
       function GetPropertyList: TAssetPropertyList; override;
 
       procedure LoadMetadata(); override;
@@ -122,6 +124,11 @@ end;
 procedure TQuest.SetDateOnDisk(date: Integer);
 begin
   self.dateOnDisk := date;
+end;
+
+function TQuest.IsProcessable: Boolean;
+begin
+  Result := False;
 end;
 
 procedure TQuest.SetMetadata(const prop: string; value: Variant);
@@ -430,8 +437,6 @@ begin
   for questFile in files do
   begin
     quest := nil;
-
-    WriteLn('helloo');
 
     // extract asset name from Sprite
     questName := questFile.Replace('\', '/');

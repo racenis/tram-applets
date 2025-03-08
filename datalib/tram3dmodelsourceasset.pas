@@ -25,6 +25,8 @@ type
       procedure SetMetadata(const prop: string; value: Variant); override;
       function GetMetadata(const prop: string): Variant; override;
 
+      function IsProcessable: Boolean; override;
+
       function GetPropertyList: TAssetPropertyList; override;
 
       procedure LoadMetadata(); override;
@@ -75,6 +77,11 @@ end;
 procedure T3DModelSource.SetDateOnDisk(date: Integer);
 begin
   self.dateOnDisk := date;
+end;
+
+function T3DModelSource.IsProcessable: Boolean;
+begin
+  Result := True;
 end;
 
 procedure T3DModelSource.SetMetadata(const prop: string; value: Variant);

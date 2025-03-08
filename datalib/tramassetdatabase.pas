@@ -153,7 +153,6 @@ end;
 
 function TAssetDatabase.InsertFromDB(assetType: string; name: string; date: Integer): TAssetMetadata;
 begin
-  WriteLn(assetType);
   case assetType of
        'STMDL', 'DYMDL', 'MDMDL': Result := collection3Dmodel.InsertFromDB(name, date);
        'MATERIAL': Result := collectionMaterial.InsertFromDB(name, date);

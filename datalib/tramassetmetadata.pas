@@ -37,6 +37,8 @@ type
      function GetDateOnDisk: Integer;
      function GetDateInSource: Integer;
 
+     function IsProcessable: Boolean; virtual;
+
      function GetAlwaysProcess: Boolean;
      function GetIgnoreModified: Boolean;
      function GetAuthor: string;
@@ -157,6 +159,12 @@ end;
 function TAssetMetadata.GetDateInSource: Integer;
 begin
   Result := self.dateInSource;
+end;
+
+
+function TAssetMetadata.IsProcessable: Boolean;
+begin
+  Result := True;
 end;
 
 

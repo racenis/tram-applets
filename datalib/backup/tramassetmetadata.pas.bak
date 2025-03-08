@@ -17,6 +17,8 @@ type
      function GetPath: string; virtual;
      function GetType: string; virtual;
 
+     function GetFileExt: string; virtual;
+
      procedure SetMetadata(const {%H-}prop: string; {%H-}value: Variant); virtual;
      function GetMetadata(const {%H-}prop: string): Variant; virtual;
 
@@ -36,6 +38,8 @@ type
      function GetDateInDB: Integer;
      function GetDateOnDisk: Integer;
      function GetDateInSource: Integer;
+
+     function IsProcessable: Boolean; virtual;
 
      function GetAlwaysProcess: Boolean;
      function GetIgnoreModified: Boolean;
@@ -107,6 +111,11 @@ begin
   Result := self.path;
 end;
 
+function TAssetMetadata.GetFileExt: string;
+begin
+  Result := '';
+end;
+
 function TAssetMetadata.GetType: string;
 begin
   Result := 'NONE';
@@ -138,6 +147,11 @@ begin
   ;
 end;
 
+procedure TAssetMetadata.SaveToDisk();
+begin
+  ;
+end;
+
 
 function TAssetMetadata.GetDateInDB: Integer;
 begin
@@ -152,6 +166,12 @@ end;
 function TAssetMetadata.GetDateInSource: Integer;
 begin
   Result := self.dateInSource;
+end;
+
+
+function TAssetMetadata.IsProcessable: Boolean;
+begin
+  Result := True;
 end;
 
 

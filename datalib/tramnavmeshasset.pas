@@ -21,6 +21,8 @@ type
       procedure SetMetadata(const prop: string; value: Variant); override;
       function GetMetadata(const prop: string): Variant; override;
 
+      function IsProcessable: Boolean; override;
+
       function GetPropertyList: TAssetPropertyList; override;
 
       procedure LoadMetadata(); override;
@@ -69,6 +71,11 @@ end;
 procedure TNavmesh.SetDateOnDisk(date: Integer);
 begin
   self.dateOnDisk := date;
+end;
+
+function TNavmesh.IsProcessable: Boolean;
+begin
+  Result := False;
 end;
 
 procedure TNavmesh.SetMetadata(const prop: string; value: Variant);

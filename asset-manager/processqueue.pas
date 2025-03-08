@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Dialogs, Process, TramAssetMetadata, AssetQueueDialogUnit,
-  ProjectSettingsDialogUnit, Character;
+  ProjectSettingsDialogUnit, Character, FileUtil;
 
 type
   TQueueCallback = Procedure of object;
@@ -237,7 +237,7 @@ begin
       command := command + ' ' + splitCommand[parm];
 
       if parm = 0 then
-        process.Executable := splitCommand[parm]
+        process.Executable := FindDefaultExecutablePath(splitCommand[parm])
       else
         process.Parameters.Add(splitCommand[parm]);
     end;
