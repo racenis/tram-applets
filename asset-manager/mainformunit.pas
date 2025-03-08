@@ -631,7 +631,7 @@ begin
     Exit;
   end;
 
-  dialogResult := MessageDlg('Save asset database before shitting quitting?',
+  dialogResult := MessageDlg('Save asset database before quitting?',
                              mtConfirmation,
                              [mbYes, mbNo, mbCancel], 0);
   case dialogResult of

@@ -164,6 +164,7 @@ procedure T3DModel.LoadMetadata();
 var
   modelFile: TAssetParser;
   materialCount: Integer;
+  metadataCount: Integer;
   mat: Integer;
 begin
   modelFile := TAssetParser.Create(self.GetPath, 30);
@@ -173,7 +174,20 @@ begin
        Exit;
   end;
 
-  if modelFile.GetValue(0, 0) = 'DYMDLv1' then begin
+  if modelFile.GetValue(0, 0) = 'STMDLv1' then begin
+    vertexCount := modelFile.GetValue(0, 1).ToInteger;
+    triangleCount := modelFile.GetValue(0, 2).ToInteger;
+    materialCount := modelFile.GetValue(0, 3).ToInteger;
+    metadataCount := modelFile.GetValue(0, 4).ToInteger;
+
+    if materialCount > modelFile.GetRowCount - metadataCount - 1 then materialCount := 0;
+
+    SetLength(materials, materialCount);
+
+    for mat := 0 to materialCount - 1 do
+        materials[mat] := modelFile.GetValue(mat + metadataCount + 1, 0);
+
+  end else if modelFile.GetValue(0, 0) = 'DYMDLv1' then begin
     modelHeader := 'DYMDLv1';
 
     vertexCount := modelFile.GetValue(0, 1).ToInteger;
@@ -206,9 +220,7 @@ begin
 
   end else begin
     // here we will assume that if there is no header, then the model is a
-    // static model. if we ever add a header to static models, we could check
-    // here for STMDLv1 or whatever and then we could have another case where
-    // we don't parse anything else, but only save the header, whatever that is
+    // static model, but using an ancient format with no header
 
     vertexCount := modelFile.GetValue(0, 0).ToInteger;
     triangleCount := modelFile.GetValue(0, 1).ToInteger;
