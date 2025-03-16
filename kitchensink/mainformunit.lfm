@@ -3,7 +3,7 @@ object MainForm: TMainForm
   Height = 456
   Top = 255
   Width = 791
-  Caption = 'Kitchensink Editor v0.1.0'
+  Caption = 'Kitchensink Editor v0.1.1'
   ClientHeight = 456
   ClientWidth = 791
   Menu = MainMenu
