@@ -108,7 +108,7 @@ end;
 procedure SetDefaults;
 begin
   // TODO: setup linux versions of defaults
-  SetDefault('RUN_COMMAND', 'tram-template.exe');
+  SetDefault('RUN_COMMAND', 'template');
   SetDefault('COMPILE_COMMAND', 'make project');
 
   SetDefault('TBSP_COMMAND', '../tram-binary/tbsp %level');

@@ -98,7 +98,8 @@ var
   pair: array of string;
 begin
   inherited Create(TheOwner);
-  BackgroundImage.Picture.LoadFromFile('C:\Users\Poga\Desktop\painis\tram-binary\resources\background.jpg');
+  if FileExists('resources/background.jpg') then
+     BackgroundImage.Picture.LoadFromFile('resources/background.jpg');
 
   if FileExists('resources/noimage.png') then
          ProjectImage.Picture.LoadFromFile('resources/noimage.png');

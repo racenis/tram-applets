@@ -107,7 +107,8 @@ end;
 constructor TMainFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
-  BackgroundImage.Picture.LoadFromFile('C:\Users\Poga\Desktop\painis\tram-binary\resources\background.jpg');
+  if FileExists('resources/background.jpg') then
+     BackgroundImage.Picture.LoadFromFile('resources/background.jpg');
 
 
   Title.Font.Color := TColor($00A5FF);
