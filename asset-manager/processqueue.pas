@@ -264,7 +264,9 @@ begin
       executionFailed := False;
     except
       on E : Exception do ShowMessage('An error occured when trying to convert'
-                       + ' asset ' + asset.GetPath + ', with a message of:'
+                       + ' asset ' + asset.GetPath
+                       + ' by program "' + process.Executable + '"'
+                       + ', with a message of:'
                        + #10#10 + E.ToString);
     end;
 
