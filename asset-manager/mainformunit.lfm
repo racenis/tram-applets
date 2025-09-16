@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 396
+  Left = 389
   Height = 581
-  Top = 300
+  Top = 272
   Width = 800
   AllowDropFiles = True
   BorderStyle = bsSingle
@@ -46,6 +46,7 @@ object MainForm: TMainForm
     TabOrder = 1
     TitleStyle = tsNative
     OnAfterSelection = StringGridAfterSelection
+    OnMouseDown = StringGridMouseDown
     ColWidths = (
       64
       226
@@ -392,6 +393,13 @@ object MainForm: TMainForm
   object StringGridPopupMenu: TPopupMenu
     Left = 328
     Top = 80
+    object PopupCopyName: TMenuItem
+      Caption = 'Copy'
+      OnClick = PopupCopyNameClick
+    end
+    object Separator15: TMenuItem
+      Caption = '-'
+    end
     object PopUpQueue: TMenuItem
       Caption = 'Add To Queue'
       OnClick = PopUpQueueClick
@@ -400,7 +408,7 @@ object MainForm: TMainForm
       Caption = 'Process Now'
       OnClick = PopupProcessClick
     end
-    object Separator13: TMenuItem
+    object Separator14: TMenuItem
       Caption = '-'
     end
     object PopupShowInExplorer: TMenuItem

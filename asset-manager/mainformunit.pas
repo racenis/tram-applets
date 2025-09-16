@@ -15,13 +15,13 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBGrids, Menus,
   ComCtrls, ExtCtrls, StdCtrls, Grids, TramAssetDatabase, TramAssetMetadata,
-  DateUtils, XMLConf, TramAssetWriter, TramAssetParser, Process,
+  DateUtils, XMLConf, TramAssetWriter, TramAssetParser, Process, Clipbrd,
   RefreshNewFileDialogUnit, RefreshMissingFileDialogUnit,
   RefreshChangeFileDialogUnit, LCLType, LCLIntf, IniPropStorage, FileUtil,
   ImportFileDialogUnit, MetadataStaticModelUnit, AboutDialogUnit,
   MetadataDynamicModelUnit, MetadataModificationModelUnit, ProcessQueue,
   PreferencesDialogUnit, ProjectSettingsDialogUnit, AssetAuthorDialogUnit,
-  AssetSourceDialogUnit;
+  AssetSourceDialogUnit, Types;
 
 type
 
@@ -57,6 +57,7 @@ type
     AddToAsyncQueue: TMenuItem;
     AssetSources: TMenuItem;
     AssetAuthors: TMenuItem;
+    PopupCopyName: TMenuItem;
     PopupShowInExplorer: TMenuItem;
     PopupProcess: TMenuItem;
     PopUpQueue: TMenuItem;
@@ -66,7 +67,8 @@ type
     PopupView: TMenuItem;
     PopupEdit: TMenuItem;
     Separator12: TMenuItem;
-    Separator13: TMenuItem;
+    Separator14: TMenuItem;
+    Separator15: TMenuItem;
     StringGridPopupMenu: TPopupMenu;
     Separator10: TMenuItem;
     ShowInExplorer: TMenuItem;
@@ -122,6 +124,7 @@ type
     procedure ImportAssetClick(Sender: TObject);
     procedure ImportClick(Sender: TObject);
     procedure LoadDBClick(Sender: TObject);
+    procedure PopupCopyNameClick(Sender: TObject);
     procedure MoveAssetClick(Sender: TObject);
     procedure OpenLevelEditorClick(Sender: TObject);
     procedure PopupEditClick(Sender: TObject);
@@ -144,6 +147,11 @@ type
     procedure SetSelectedAsset(asset: TAssetMetadata);
     procedure ResetStatusBar;
     procedure ResetSourceDropdown;
+    procedure StringGridClick(Sender: TObject);
+    procedure StringGridContextPopup(Sender: TObject; MousePos: TPoint;
+      var Handled: Boolean);
+    procedure StringGridMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
     procedure ViewAssetClick(Sender: TObject);
     function AssetSelected: Boolean;
   private
@@ -654,6 +662,12 @@ begin
 
   SharedProperty.Enabled := False;
   StringGrid.ClearSelections;
+
+  if StringGrid.RowCount >= 2 then
+  begin
+    StringGrid.Row := 1;
+    StringGridAfterSelection(StringGrid, StringGrid.Col, 1);
+  end;
 end;
 
 procedure TMainForm.AssetAlwaysProcessChange(Sender: TObject);
@@ -758,6 +772,34 @@ begin
       AssetSource.Items.Add(source.Identifier);
 end;
 
+procedure TMainForm.StringGridClick(Sender: TObject);
+begin
+
+end;
+
+procedure TMainForm.StringGridContextPopup(Sender: TObject; MousePos: TPoint;
+  var Handled: Boolean);
+begin
+
+end;
+
+procedure TMainForm.StringGridMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+var
+  GridCoord: TGridCoord;
+begin
+  if Button <> mbRight then exit;
+
+  // Convert mouse position to grid coordinates
+  GridCoord := StringGrid.MouseCoord(X, Y);
+
+  // Select the row if it's valid
+  if (GridCoord.Y >= StringGrid.FixedRows) and (GridCoord.Y < StringGrid.RowCount) then
+  begin
+    StringGrid.Row := GridCoord.Y;
+  end;
+end;
+
 procedure TMainForm.AssetSourcesClick(Sender: TObject);
 
 begin
@@ -811,6 +853,13 @@ begin
   //LoadDatabaseFromFile;
   RefreshDatabase;
   RefreshAssetList;
+end;
+
+procedure TMainForm.PopupCopyNameClick(Sender: TObject);
+begin
+  if not AssetSelected then Exit;
+
+  Clipboard.AsText := selectedAsset.GetName;
 end;
 
 procedure TMainForm.MoveAssetClick(Sender: TObject);
