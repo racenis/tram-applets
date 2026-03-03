@@ -9,7 +9,7 @@ __declspec(dllexport) void* tramsdk_component_animation_get_model(void* componen
 __declspec(dllexport) void* tramsdk_component_animation_get_pose(void* component);
 
 __declspec(dllexport) void tramsdk_component_animation_set_keyframe(void* component,
-                                                                     float frame,
+                                                                     const char* bone, float frame,
 																	 float l_x, float l_y, float l_z,
 																	 float r_x, float r_y, float r_z,
 																	 float s_x, float s_y, float s_z);
@@ -39,8 +39,8 @@ __declspec(dllexport) void tramsdk_component_animation_reparent(void* component,
 __declspec(dllexport) void* tramsdk_component_animation_make();
 __declspec(dllexport) void tramsdk_component_animation_yeet(void* component);
 
-__declspec(dllexport) int tramsdk_component_animation_is_debug_info_draw(void* component);
-__declspec(dllexport) void tramsdk_component_animation_set_debug_info_draw(void* component, int draw);
+__declspec(dllexport) int tramsdk_component_animation_is_debug_info_draw();
+__declspec(dllexport) void tramsdk_component_animation_set_debug_info_draw( int draw);
 
 #ifdef __cplusplus
 }

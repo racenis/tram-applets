@@ -1,11 +1,13 @@
 #pragma once
 
+#include "model.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 // just new and delete
-__declspec(dllexport) void* tramsdk_components_mesh_vertex_make();
+__declspec(dllexport) void* tramsdk_components_mesh_vertex_make(int vertex_type);
 __declspec(dllexport) void tramsdk_components_mesh_vertex_yeet(void* vertex);
 
 __declspec(dllexport) void tramsdk_components_mesh_vertex_set_position(void* vertex, float x, float y, float z);
@@ -14,7 +16,20 @@ __declspec(dllexport) void tramsdk_components_mesh_vertex_set_color(void* vertex
 __declspec(dllexport) void tramsdk_components_mesh_vertex_set_texture_uv(void* vertex, float u, float v);
 __declspec(dllexport) void tramsdk_components_mesh_vertex_set_lightmap_uv(void* vertex, float u, float v);
 
-// TODO: add set_attribute!! (later)
+__declspec(dllexport) void tramsdk_components_mesh_vertex_set_attribute_name(void* vertex, int index, const char* value);
+__declspec(dllexport) void tramsdk_components_mesh_vertex_set_attribute_bool(void* vertex, int index, bool value);
+__declspec(dllexport) void tramsdk_components_mesh_vertex_set_attribute_int(void* vertex, int index, int value);
+__declspec(dllexport) void tramsdk_components_mesh_vertex_set_attribute_float(void* vertex, int index, float value);
+__declspec(dllexport) void tramsdk_components_mesh_vertex_set_attribute_vec2(void* vertex, int index, float x, float y);
+__declspec(dllexport) void tramsdk_components_mesh_vertex_set_attribute_vec3(void* vertex, int index, float x, float y, float z);
+__declspec(dllexport) void tramsdk_components_mesh_vertex_set_attribute_vec4(void* vertex, int index, float x, float y, float z, float w);
+__declspec(dllexport) void tramsdk_components_mesh_vertex_set_attribute_quat(void* vertex, int index, float x, float y, float z, float w);
+__declspec(dllexport) void tramsdk_components_mesh_vertex_set_attribute_ivec2(void* vertex, int index, int x, int y);
+__declspec(dllexport) void tramsdk_components_mesh_vertex_set_attribute_ivec3(void* vertex, int index, int x, int y, int z);
+__declspec(dllexport) void tramsdk_components_mesh_vertex_set_attribute_ivec4(void* vertex, int index, int x, int y, int z, int w);
+__declspec(dllexport) void tramsdk_components_mesh_vertex_set_attribute_uvec2(void* vertex, int index, int x, int y);
+__declspec(dllexport) void tramsdk_components_mesh_vertex_set_attribute_uvec3(void* vertex, int index, int x, int y, int z);
+__declspec(dllexport) void tramsdk_components_mesh_vertex_set_attribute_uvec4(void* vertex, int index, int x, int y, int z, int w);
 
 __declspec(dllexport) void* tramsdk_components_mesh_make();
 __declspec(dllexport) void tramsdk_components_mesh_yeet(void* component);
@@ -52,11 +67,11 @@ __declspec(dllexport) void tramsdk_components_mesh_draw_aabb(void* component);
 __declspec(dllexport) int tramsdk_components_mesh_find_all_from_ray(void* component,
                                                                     float p_x, float p_y, float p_z,
 																	float d_x, float d_y, float d_z,
-																	AABBTriangle* tris, int tri_size);
+																	TSDKAABBTriangle* tris, int tri_size);
 __declspec(dllexport) int tramsdk_components_mesh_find_all_from_aabb(void* component,
                                                                     float min_x, float min_y, float min_z,
 																	float max_x, float max_y, float max_z,
-																	AABBTriangle* tris, int tri_size);
+																	TSDKAABBTriangle* tris, int tri_size);
 
 #ifdef __cplusplus
 }

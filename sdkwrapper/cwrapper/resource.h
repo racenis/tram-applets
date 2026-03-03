@@ -4,7 +4,6 @@
 extern "C" {
 #endif
 
-// Resource::Status
 enum {
 	RESOURCE_UNLOADED,
 	RESOURCE_LOADED,

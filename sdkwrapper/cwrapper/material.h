@@ -83,8 +83,8 @@ __declspec(dllexport) void tramsdk_render_material_set_texture_type(void* materi
 __declspec(dllexport) void tramsdk_render_material_set_source(void* material, void* source);
 __declspec(dllexport) void tramsdk_render_material_set_texture_image(void* material, char* data,
                                                                      char channels, short width, short height);
-__declspec(dllexport) void tramsdk_render_material_find(void* material, const char* name);
-__declspec(dllexport) void tramsdk_render_material_make(void* material, const char* name, int type);
+__declspec(dllexport) void* tramsdk_render_material_find(void* material, const char* name);
+__declspec(dllexport) void* tramsdk_render_material_make(void* material, const char* name, int type);
 
 __declspec(dllexport) void tramsdk_render_material_load_material_info(const char* filename);
 
