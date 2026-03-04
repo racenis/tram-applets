@@ -4,10 +4,10 @@
 
 using namespace tram;
 
-void* sdk_render_animation_find(const char* name) {
+void* tramsdk_render_animation_find(const char* name) {
 	return Render::Animation::Find(name);
 }
 
-void sdk_render_animation_load_all() {
-	Render::Animation::LoadAll();
+void tramsdk_render_animation_load_all() {
+	/*Render::Animation::LoadAll();*/
 }

@@ -41,7 +41,7 @@ __declspec(dllexport) void tramsdk_render_model_set_far_distance(void* component
 __declspec(dllexport) void tramsdk_render_model_load_as_modification_model(void* component, void* source,
                                                                            void** mapping, int size);
 
-__declspec(dllexport) float tramsdk_render_model_find(const char* name);
+__declspec(dllexport) void* tramsdk_render_model_find(const char* name);
 
 #ifdef __cplusplus
 }
