@@ -274,7 +274,7 @@ begin
                               FileDateToDateTime(asset.GetDateInDB))
                             + ' in the database, but a date of '
                             + FormatDateTime('yyyy-mm-dd hh:nn:ss',
-                              FileDateToDateTime(asset.GetDateInDB))
+                              FileDateToDateTime(asset.GetDateOnDisk))
                             + ' on disk. I think that this means'
                             + ' something, but I do not really know'
                             + ' what exactly.');
