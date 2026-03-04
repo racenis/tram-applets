@@ -159,13 +159,13 @@ begin
     // if exists, update date on disk
     if script <> nil then
     begin
-      script.SetDateOnDisk(FileAge(scriptFile));
+      script.SetDateOnDisk(ActualFileAge(scriptFile));
       Continue;
     end;
 
     // otherwise add it to database
     script := TScript.Create( scriptName, self);
-    script.SetDateOnDisk(FileAge(scriptFile));
+    script.SetDateOnDisk(ActualFileAge(scriptFile));
 
     SetLength(self.scripts, Length(self.scripts) + 1);
     self.scripts[High(self.scripts)] := script;

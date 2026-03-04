@@ -155,13 +155,13 @@ begin
     // if exists, update date on disk
     if collisionModel <> nil then
     begin
-      collisionModel.SetDateOnDisk(FileAge(collisionModelFile));
+      collisionModel.SetDateOnDisk(ActualFileAge(collisionModelFile));
       Continue;
     end;
 
     // otherwise add it to database
     collisionModel := TCollisionModel.Create( collisionModelName, self);
-    collisionModel.SetDateOnDisk(FileAge(collisionModelFile));
+    collisionModel.SetDateOnDisk(ActualFileAge(collisionModelFile));
 
     SetLength(self.collisionModels, Length(self.collisionModels) + 1);
     self.collisionModels[High(self.collisionModels)] := collisionModel;

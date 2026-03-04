@@ -5,7 +5,9 @@ unit TramAssetMetadata;
 interface
 
 uses
-  Classes, SysUtils;
+  Classes, SysUtils, DateUtils;
+
+function ActualFileAge(filePath: string): Integer;
 
 type
   TAssetCollection = class;
@@ -72,6 +74,14 @@ type
   end;
 
 implementation
+
+function ActualFileAge(filePath: string): Integer;
+var
+  ActualDate: TDateTime;
+begin
+  ActualDate := LocalTimeToUniversal(FileDateToDateTime(FileAge(filePath)));
+  Result := DateTimeToUnix(ActualDate);
+end;
 
 constructor TAssetMetadata.Create(const path: string; const name: string; parent: TAssetCollection = nil);
 begin

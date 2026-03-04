@@ -155,13 +155,13 @@ begin
     // if exists, update date on disk
     if sprite <> nil then
     begin
-      sprite.SetDateOnDisk(FileAge(spriteFile));
+      sprite.SetDateOnDisk(ActualFileAge(spriteFile));
       Continue;
     end;
 
     // otherwise add it to database
     sprite := TSprite.Create( spriteName, self);
-    sprite.SetDateOnDisk(FileAge(spriteFile));
+    sprite.SetDateOnDisk(ActualFileAge(spriteFile));
 
     SetLength(self.sprites, Length(self.sprites) + 1);
     self.sprites[High(self.sprites)] := sprite;

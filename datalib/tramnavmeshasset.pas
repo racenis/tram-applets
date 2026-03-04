@@ -158,13 +158,13 @@ begin
     // if exists, update date on disk
     if navmesh <> nil then
     begin
-      navmesh.SetDateOnDisk(FileAge(navmeshFile));
+      navmesh.SetDateOnDisk(ActualFileAge(navmeshFile));
       Continue;
     end;
 
     // otherwise add it to database
     navmesh := TNavmesh.Create( navmeshName, self);
-    navmesh.SetDateOnDisk(FileAge(navmeshFile));
+    navmesh.SetDateOnDisk(ActualFileAge(navmeshFile));
 
     SetLength(self.navmeshes, Length(self.navmeshes) + 1);
     self.navmeshes[High(self.navmeshes)] := navmesh;

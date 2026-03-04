@@ -158,13 +158,13 @@ begin
     // if exists, update date on disk
     if shader <> nil then
     begin
-      shader.SetDateOnDisk(FileAge(shaderFile));
+      shader.SetDateOnDisk(ActualFileAge(shaderFile));
       Continue;
     end;
 
     // otherwise add it to database
     shader := TShader.Create( shaderName, self);
-    shader.SetDateOnDisk(FileAge(shaderFile));
+    shader.SetDateOnDisk(ActualFileAge(shaderFile));
 
     SetLength(self.shaders, Length(self.shaders) + 1);
     self.shaders[High(self.shaders)] := shader;

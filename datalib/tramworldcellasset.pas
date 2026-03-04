@@ -155,13 +155,13 @@ begin
     // if exists, update date on disk
     if worldCell <> nil then
     begin
-      worldCell.SetDateOnDisk(FileAge(worldCellFile));
+      worldCell.SetDateOnDisk(ActualFileAge(worldCellFile));
       Continue;
     end;
 
     // otherwise add it to database
     worldCell := TWorldCell.Create( worldCellName, self);
-    worldCell.SetDateOnDisk(FileAge(worldCellFile));
+    worldCell.SetDateOnDisk(ActualFileAge(worldCellFile));
 
     SetLength(self.worldCells, Length(self.worldCells) + 1);
     self.worldCells[High(self.worldCells)] := worldCell;

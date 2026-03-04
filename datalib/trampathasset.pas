@@ -155,13 +155,13 @@ begin
     // if exists, update date on disk
     if path <> nil then
     begin
-      path.SetDateOnDisk(FileAge(pathFile));
+      path.SetDateOnDisk(ActualFileAge(pathFile));
       Continue;
     end;
 
     // otherwise add it to database
     path := TPath.Create( pathName, self);
-    path.SetDateOnDisk(FileAge(pathFile));
+    path.SetDateOnDisk(ActualFileAge(pathFile));
 
     SetLength(self.paths, Length(self.paths) + 1);
     self.paths[High(self.paths)] := path;

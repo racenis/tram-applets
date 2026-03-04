@@ -308,13 +308,13 @@ begin
     // if exists, update date on disk
     if model <> nil then
     begin
-      model.SetDateOnDisk(FileAge(modelFile));
+      model.SetDateOnDisk(ActualFileAge(modelFile));
       Continue;
     end;
 
     // otherwise add it to database
     model := T3DModel.Create(modelType, modelName, self);
-    model.SetDateOnDisk(FileAge(modelFile));
+    model.SetDateOnDisk(ActualFileAge(modelFile));
 
     SetLength(self.models, Length(self.models) + 1);
     self.models[High(self.models)] := model;

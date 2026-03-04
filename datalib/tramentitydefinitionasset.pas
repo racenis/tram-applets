@@ -155,13 +155,13 @@ begin
     // if exists, update date on disk
     if entityDefinition <> nil then
     begin
-      entityDefinition.SetDateOnDisk(FileAge(entityDefinitionFile));
+      entityDefinition.SetDateOnDisk(ActualFileAge(entityDefinitionFile));
       Continue;
     end;
 
     // otherwise add it to database
     entityDefinition := TEntityDefinition.Create( entityDefinitionName, self);
-    entityDefinition.SetDateOnDisk(FileAge(entityDefinitionFile));
+    entityDefinition.SetDateOnDisk(ActualFileAge(entityDefinitionFile));
 
     SetLength(self.entityDefinitions, Length(self.entityDefinitions) + 1);
     self.entityDefinitions[High(self.entityDefinitions)] := entityDefinition;

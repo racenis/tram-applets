@@ -185,13 +185,13 @@ begin
     // if exists, update date on disk
     if audioSource <> nil then
     begin
-      audioSource.SetDateOnDisk(FileAge(audioSourceFile));
+      audioSource.SetDateOnDisk(ActualFileAge(audioSourceFile));
       Continue;
     end;
 
     // otherwise add it to database
     audioSource := TAudioSource.Create(fileExtension, audioName, self);
-    audioSource.SetDateOnDisk(FileAge(audioSourceFile));
+    audioSource.SetDateOnDisk(ActualFileAge(audioSourceFile));
 
     SetLength(self.audioSources, Length(self.audioSources) + 1);
     self.audioSources[High(self.audioSources)] := audioSource;

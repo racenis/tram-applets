@@ -286,13 +286,13 @@ begin
     // if exists, update date on disk
     if dialog <> nil then
     begin
-      dialog.SetDateOnDisk(FileAge(dialogFile));
+      dialog.SetDateOnDisk(ActualFileAge(dialogFile));
       Continue;
     end;
 
     // otherwise add it to database
     dialog := TDialog.Create( dialogName, self);
-    dialog.SetDateOnDisk(FileAge(dialogFile));
+    dialog.SetDateOnDisk(ActualFileAge(dialogFile));
 
     SetLength(self.dialogs, Length(self.dialogs) + 1);
     self.dialogs[High(self.dialogs)] := dialog;

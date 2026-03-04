@@ -163,13 +163,13 @@ begin
     // if exists, update date on disk
     if animation <> nil then
     begin
-      animation.SetDateOnDisk(FileAge(animationFile));
+      animation.SetDateOnDisk(ActualFileAge(animationFile));
       Continue;
     end;
 
     // otherwise add it to database
     animation := TAnimation.Create( animationName, self);
-    animation.SetDateOnDisk(FileAge(animationFile));
+    animation.SetDateOnDisk(ActualFileAge(animationFile));
 
     SetLength(self.animations, Length(self.animations) + 1);
     self.animations[High(self.animations)] := animation;

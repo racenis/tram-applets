@@ -153,13 +153,13 @@ begin
     // if exists, update date on disk
     if material <> nil then
     begin
-      material.SetDateOnDisk(FileAge(materialFile));
+      material.SetDateOnDisk(ActualFileAge(materialFile));
       Continue;
     end;
 
     // otherwise add it to database
     material := TMaterial.Create(materialName, self);
-    material.SetDateOnDisk(FileAge(materialFile));
+    material.SetDateOnDisk(ActualFileAge(materialFile));
 
     SetLength(self.materials, Length(self.materials) + 1);
     self.materials[High(self.materials)] := material;

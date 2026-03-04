@@ -170,13 +170,13 @@ begin
     // if exists, update date on disk
     if textureSource <> nil then
     begin
-      textureSource.SetDateOnDisk(FileAge(textureSourceFile));
+      textureSource.SetDateOnDisk(ActualFileAge(textureSourceFile));
       Continue;
     end;
 
     // otherwise add it to database
     textureSource := TTextureSource.Create(fileExtension, sourceName, self);
-    textureSource.SetDateOnDisk(FileAge(textureSourceFile));
+    textureSource.SetDateOnDisk(ActualFileAge(textureSourceFile));
 
     SetLength(self.textureSources, Length(self.textureSources) + 1);
     self.textureSources[High(self.textureSources)] := textureSource;

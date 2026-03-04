@@ -7,10 +7,10 @@ interface
 uses
   Classes, SysUtils, TramAssetMetadata, Tram3DModelAsset, TramAnimationAsset,
   TramAudioAsset, TramAudioSourceAsset, TramNavmeshAsset, TramPathAsset,
-  TramSpriteAsset, TramMaterialAsset, TramWorldCellAsset, TramDialogAsset,
+  TramSpriteAsset,  TramWorldCellAsset, TramDialogAsset,
   TramEntityDefinitionAsset, TramLanguageAsset, TramQuestAsset,
   Tram3DModelSourceAsset, TramTexturrSourceAsset, TramShaderAsset,
-  TramScriptAsset, TramCollisionModelAsset;
+  TramScriptAsset, TramCollisionModelAsset, TramTextureAsset, TramMaterialAsset;
 
 type
   TAssetDatabase = class
@@ -41,6 +41,7 @@ type
         collectionLanguage: TLanguageCollection;
         collectionQuest: TQuestCollection;
         collection3DModelSource: T3DModelSourceCollection;
+        collectionTexture: TTextureCollection;
         collectionTextureSource: TTextureSourceCollection;
         collectionShader: TShaderCollection;
         collectionScript: TScriptCollection;
@@ -66,6 +67,7 @@ begin
   collectionLanguage := TLanguageCollection.Create;
   collectionQuest := TQuestCollection.Create;
   collection3DModelSource := T3DModelSourceCollection.Create;
+  collectionTexture := TTextureCollection.Create;
   collectionTextureSource := TTextureSourceCollection.Create;
   collectionShader := TShaderCollection.Create;
   collectionScript := TScriptCollection.Create;
@@ -99,6 +101,7 @@ begin
   collectionLanguage.ScanFromDisk;
   collectionQuest.ScanFromDisk;
   collection3DModelSource.ScanFromDisk;
+  collectionTexture.ScanFromDisk;
   collectionTextureSource.ScanFromDisk;
   collectionShader.ScanFromDisk;
   collectionScript.ScanFromDisk;
@@ -122,6 +125,7 @@ begin
   collectionLanguage.Remove(asset);
   collectionQuest.Remove(asset);
   collection3DModelSource.Remove(asset);
+  collectionTexture.Remove(asset);
   collectionTextureSource.Remove(asset);
   collectionShader.Remove(asset);
   collectionScript.Remove(asset);
@@ -145,6 +149,7 @@ begin
   Result := Concat(Result, collectionLanguage.GetAssets);
   Result := Concat(Result, collectionQuest.GetAssets);
   Result := Concat(Result, collection3DModelSource.GetAssets);
+  Result := Concat(Result, collectionTexture.GetAssets);
   Result := Concat(Result, collectionTextureSource.GetAssets);
   Result := Concat(Result, collectionShader.GetAssets);
   Result := Concat(Result, collectionScript.GetAssets);
@@ -166,6 +171,7 @@ begin
        'DIALOG': Result := collectionDialog.InsertFromDB(name, date);
        'QUEST': Result := collectionQuest.InsertFromDB(name, date);
        'MDLSRC': Result := collection3DModelSource.InsertFromDB(name, date);
+       'TEXTURE': Result := collectionTexture.InsertFromDB(name, date);
        'TEXSRC': Result := collectionTextureSource.InsertFromDB(name, date);
        'SHADER': Result := collectionShader.InsertFromDB(name, date);
        'SCRIPT': Result := collectionScript.InsertFromDB(name, date);

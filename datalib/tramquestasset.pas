@@ -455,13 +455,13 @@ begin
     // if exists, update date on disk
     if quest <> nil then
     begin
-      quest.SetDateOnDisk(FileAge(questFile));
+      quest.SetDateOnDisk(ActualFileAge(questFile));
       Continue;
     end;
 
     // otherwise add it to database
     quest := TQuest.Create( questName, self);
-    quest.SetDateOnDisk(FileAge(questFile));
+    quest.SetDateOnDisk(ActualFileAge(questFile));
 
     SetLength(self.quests, Length(self.quests) + 1);
     self.quests[High(self.quests)] := quest;

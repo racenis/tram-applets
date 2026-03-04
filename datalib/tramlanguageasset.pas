@@ -155,13 +155,13 @@ begin
     // if exists, update date on disk
     if language <> nil then
     begin
-      language.SetDateOnDisk(FileAge(languageFile));
+      language.SetDateOnDisk(ActualFileAge(languageFile));
       Continue;
     end;
 
     // otherwise add it to database
     language := TLanguage.Create( languageName, self);
-    language.SetDateOnDisk(FileAge(languageFile));
+    language.SetDateOnDisk(ActualFileAge(languageFile));
 
     SetLength(self.languages, Length(self.languages) + 1);
     self.languages[High(self.languages)] := language;
