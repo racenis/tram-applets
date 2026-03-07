@@ -1,0 +1,313 @@
+object MainForm: TMainForm
+  Left = 505
+  Height = 460
+  Top = 224
+  Width = 635
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  Caption = 'Material Editor'
+  ClientHeight = 460
+  ClientWidth = 635
+  Menu = MainMenu1
+  OnCreate = FormCreate
+  LCLVersion = '3.0.0.3'
+  object RenderPanel: TPanel
+    Left = 435
+    Height = 200
+    Top = 0
+    Width = 200
+    BevelOuter = bvLowered
+    Caption = 'RenderPanel'
+    TabOrder = 0
+    OnMouseDown = RenderPanelMouseDown
+    OnMouseMove = RenderPanelMouseMove
+    OnMouseUp = RenderPanelMouseUp
+  end
+  object MaterialFileSelect: TComboBox
+    Left = 0
+    Height = 21
+    Top = 0
+    Width = 433
+    ItemHeight = 13
+    ReadOnly = True
+    Style = csDropDownList
+    TabOrder = 1
+    OnChange = MaterialFileSelectChange
+  end
+  object MaterialList: TListView
+    Left = 0
+    Height = 437
+    Top = 24
+    Width = 433
+    Columns = <    
+      item
+        Caption = 'Name'
+        Width = 200
+      end    
+      item
+        Caption = 'Type'
+      end    
+      item
+        Caption = 'Filter'
+      end    
+      item
+        Caption = 'Property'
+      end    
+      item
+        Caption = 'Source'
+      end>
+    PopupMenu = MaterialListMenu
+    ReadOnly = True
+    RowSelect = True
+    TabOrder = 2
+    ViewStyle = vsReport
+    OnSelectItem = MaterialListSelectItem
+  end
+  object MaterialDataPanel: TPanel
+    Left = 435
+    Height = 260
+    Top = 200
+    Width = 204
+    BevelOuter = bvNone
+    ClientHeight = 260
+    ClientWidth = 204
+    Enabled = False
+    TabOrder = 3
+    object MaterialFilterLabel: TLabel
+      Left = 1
+      Height = 13
+      Top = 31
+      Width = 24
+      Caption = 'Filter'
+    end
+    object MaterialTypeLabel: TLabel
+      Left = 1
+      Height = 13
+      Top = 7
+      Width = 24
+      Caption = 'Type'
+    end
+    object MaterialReflectivitySelect: TFloatSpinEdit
+      Left = 76
+      Height = 21
+      Top = 172
+      Width = 124
+      Increment = 0.2
+      MaxValue = 1
+      OnChange = MaterialReflectivitySelectChange
+      TabOrder = 0
+    end
+    object MaterialTransparencySelect: TFloatSpinEdit
+      Left = 76
+      Height = 21
+      Top = 148
+      Width = 124
+      Increment = 0.2
+      MaxValue = 1
+      OnChange = MaterialTransparencySelectChange
+      TabOrder = 1
+    end
+    object MaterialSpecularitySelect: TFloatSpinEdit
+      Left = 76
+      Height = 21
+      Top = 100
+      Width = 124
+      Increment = 0.2
+      MaxValue = 16
+      OnChange = MaterialSpecularitySelectChange
+      TabOrder = 2
+    end
+    object MaterialSourceSelect: TComboBox
+      Left = 76
+      Height = 21
+      Top = 196
+      Width = 124
+      ItemHeight = 13
+      ItemIndex = 1
+      Items.Strings = (
+        'none'
+        'same'
+        'normal'
+      )
+      TabOrder = 3
+      Text = 'same'
+      OnChange = MaterialSourceSelectChange
+      OnEditingDone = MaterialSourceSelectEditingDone
+    end
+    object MaterialExponentSelect: TFloatSpinEdit
+      Left = 76
+      Height = 21
+      Top = 124
+      Width = 124
+      MaxValue = 128
+      MinValue = 1
+      OnChange = MaterialExponentSelectChange
+      TabOrder = 4
+      Value = 1
+    end
+    object MaterialColorSelect: TColorBox
+      Left = 76
+      Height = 22
+      Top = 76
+      Width = 124
+      Selected = clDefault
+      Style = [cbStandardColors, cbExtendedColors, cbCustomColor]
+      ItemHeight = 16
+      OnChange = MaterialColorSelectChange
+      TabOrder = 5
+    end
+    object MaterialPropertySelect: TComboBox
+      Left = 76
+      Height = 21
+      Top = 52
+      Width = 124
+      ItemHeight = 13
+      ItemIndex = 0
+      Items.Strings = (
+        'metal'
+        'metal-thin'
+        'slime'
+        'tile'
+        'grate'
+        'wood'
+        'computer'
+        'glass'
+        'snow'
+        'grass'
+        'concrete'
+        'flesh'
+      )
+      Style = csDropDownList
+      TabOrder = 6
+      Text = 'metal'
+      OnChange = MaterialPropertySelectChange
+    end
+    object MaterialFilterSelect: TComboBox
+      Left = 76
+      Height = 21
+      Top = 28
+      Width = 124
+      ItemHeight = 13
+      ItemIndex = 1
+      Items.Strings = (
+        'linear'
+        'nearest'
+      )
+      Style = csDropDownList
+      TabOrder = 7
+      Text = 'nearest'
+      OnChange = MaterialFilterSelectChange
+    end
+    object MaterialPropertyLabel: TLabel
+      Left = 1
+      Height = 13
+      Top = 55
+      Width = 42
+      Caption = 'Property'
+    end
+    object MaterialColorLabel: TLabel
+      Left = 1
+      Height = 13
+      Top = 79
+      Width = 25
+      Caption = 'Color'
+    end
+    object MaterialExponentLabel: TLabel
+      Left = 1
+      Height = 13
+      Top = 127
+      Width = 46
+      Caption = 'Exponent'
+    end
+    object MaterialTransparencyLabel: TLabel
+      Left = 1
+      Height = 13
+      Top = 151
+      Width = 59
+      Caption = 'Transparent'
+    end
+    object MaterialTypeSelect: TComboBox
+      Left = 76
+      Height = 21
+      Top = 4
+      Width = 124
+      ItemHeight = 13
+      ItemIndex = 0
+      Items.Strings = (
+        'flat'
+        'alpha'
+        'blend'
+        'lightmap'
+        'glyph'
+      )
+      Style = csDropDownList
+      TabOrder = 8
+      Text = 'flat'
+      OnChange = MaterialTypeSelectChange
+    end
+    object MaterialSourceLabel: TLabel
+      Left = 1
+      Height = 13
+      Top = 199
+      Width = 33
+      Caption = 'Source'
+    end
+    object MaterialSpecularityLabel: TLabel
+      Left = 1
+      Height = 13
+      Top = 103
+      Width = 53
+      Caption = 'Specularity'
+    end
+    object MaterialReflectivityLabel: TLabel
+      Left = 1
+      Height = 13
+      Top = 175
+      Width = 54
+      Caption = 'Reflectivity'
+    end
+  end
+  object MainMenu1: TMainMenu
+    Left = 344
+    Top = 8
+    object MenuItem1: TMenuItem
+      Caption = 'FileMenu'
+      object MenuItem7: TMenuItem
+        Caption = 'NewMaterialFile'
+      end
+      object Separator2: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem3: TMenuItem
+        Caption = 'OpenProject'
+      end
+      object MenuItem4: TMenuItem
+        Caption = 'SaveProject'
+      end
+      object Separator1: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem5: TMenuItem
+        Caption = 'ExitProgram'
+      end
+    end
+    object MenuItem2: TMenuItem
+      Caption = 'HelpMenu'
+      object MenuItem6: TMenuItem
+        Caption = 'AboutProgram'
+      end
+    end
+  end
+  object MaterialListMenu: TPopupMenu
+    Left = 288
+    Top = 64
+    object MaterialListMenuAdd: TMenuItem
+      Caption = 'MaterialListMenuAdd'
+      OnClick = MaterialListMenuAddClick
+    end
+    object MaterialListMenuRemove: TMenuItem
+      Caption = 'MaterialListMenuRemove'
+      OnClick = MaterialListMenuRemoveClick
+    end
+  end
+end
