@@ -80,10 +80,10 @@ void tramsdk_init() {
 	Ext::Scripting::Lua::Init();
 	Script::Init();
 
-	Material::LoadMaterialInfo("material");
+	//Material::LoadMaterialInfo("material");
 	Language::Load("en");
 	
-	Script::LoadScript("init");
+	//Script::LoadScript("init");
 }
 
 void tramsdk_yeet() {
@@ -95,6 +95,8 @@ void tramsdk_yeet() {
 }
 
 void tramsdk_update() {
+	//std::cout << "ticking: " << GetTick() << std::endl;
+	
     Core::Update();
 	UI::Update();
 	Physics::Update();	
@@ -109,6 +111,8 @@ void tramsdk_update() {
 	GUI::Update();
 	
 //#ifdef __EMSCRIPTEN__
+	Async::LoadResourcesFromDisk();
+	Async::LoadResourcesFromDisk();
 	Async::LoadResourcesFromDisk();
 //#endif
 	Async::LoadResourcesFromMemory();

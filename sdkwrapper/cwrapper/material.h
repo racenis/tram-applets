@@ -71,6 +71,8 @@ __declspec(dllexport) float tramsdk_render_material_get_specular_weight(void* ma
 __declspec(dllexport) float tramsdk_render_material_get_specular_exponent(void* material);
 __declspec(dllexport) float tramsdk_render_material_get_specular_transparency(void* material);
 __declspec(dllexport) float tramsdk_render_material_get_reflectivity(void* material);
+__declspec(dllexport) int tramsdk_render_material_get_texture_type(void* material);
+__declspec(dllexport) void* tramsdk_render_material_get_source(void* material);
 
 __declspec(dllexport) void tramsdk_render_material_set_material_type(void* material, int type);
 __declspec(dllexport) void tramsdk_render_material_set_material_filter(void* material, int filter);

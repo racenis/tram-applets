@@ -53,6 +53,15 @@ float tramsdk_render_material_get_reflectivity(void* material) {
 	return ((Material*)material)->GetReflectivity();
 }
 
+int tramsdk_render_material_get_texture_type(void* material) {
+	return ((Material*)material)->GetTextureType();
+}
+
+void* tramsdk_render_material_get_source(void* material) {
+	return ((Material*)material)->GetSource();
+}
+
+
 void tramsdk_render_material_set_material_type(void* material, int type) {
 	((Material*)material)->SetMaterialType((materialtype_t)type);
 }

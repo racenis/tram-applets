@@ -73,6 +73,33 @@ type
   TSDKUpdate = procedure(); cdecl;
   TSDKPlatformWindowScreenResize = procedure(width, height: Integer); cdecl;
 
+  // RENDER SYSTEM
+  TSDKRenderProject = procedure(x, y, z: Single; p_x, p_y, p_z: PSingle; layer: Integer); cdecl;
+  TSDKRenderProjectInverse = procedure(p_x, p_y, p_z: Single; x, y, z: PSingle; layer: Integer); cdecl;
+  TSDKRenderSetSunDirection = procedure(x, y, z: Single; layer: Integer); cdecl;
+  TSDKRenderSetSunColor = procedure(r, g, b: Single; layer: Integer); cdecl;
+  TSDKRenderSetSunAmbientColor = procedure(r, g, b: Single; layer: Integer); cdecl;
+  TSDKRenderSetBackgroundColor = procedure(r, g, b: Single); cdecl;
+  TSDKRenderSetFogDistance = procedure(near, far: Single; layer: Integer); cdecl;
+  TSDKRenderSetFogColor = procedure(r, g, b: Single; layer: Integer); cdecl;
+  TSDKRenderSetOrthoRatio = procedure(ratio: Single; layer: Integer); cdecl;
+  TSDKRenderSetViewFov = procedure(fov: Single; layer: Integer); cdecl;
+  TSDKRenderGetViewFov = function(layer: Integer): Single; cdecl;
+  TSDKRenderSetViewDistance = procedure(dist: Single; layer: Integer); cdecl;
+  TSDKRenderGetViewDistance = function(layer: Integer): Single; cdecl;
+  TSDKRenderSetViewPosition = procedure(x, y, z: Single; layer: Integer); cdecl;
+  TSDKRenderSetViewRotation = procedure(x, y, z: Single; layer: Integer); cdecl;
+  TSDKRenderGetViewPosition = procedure(x, y, z: PSingle; layer: Integer); cdecl;
+  TSDKRenderGetViewRotation = procedure(x, y, z: PSingle; layer: Integer); cdecl;
+  TSDKRenderAddLine = procedure(f_x, f_y, f_z, t_x, t_y, t_z, r, g, b: Single); cdecl;
+  TSDKRenderAddLineMarker = procedure(x, y, z, r, g, b: Single); cdecl;
+  TSDKRenderAddAABB = procedure(min_x, min_y, min_z, max_x, max_y, max_z, c_x, c_y, c_z, r_x, r_y, r_z, r, g, b: Single); cdecl;
+  TSDKRenderAddSphere = procedure(x, y, z, radius, r, g, b: Single); cdecl;
+  TSDKRenderAddCylinder = procedure(x, y, z, height, radius, r, g, b: Single); cdecl;
+  TSDKRenderAddCube = procedure(x, y, z, extent, r, g, b: Single); cdecl;
+  TSDKRenderAddText = procedure(x, y, z: Single; text: PAnsiChar; r, g, b: Single); cdecl;
+  TSDKRenderAddText2D = procedure(x, y: Single; text: PAnsiChar; r, g, b: Single); cdecl;
+
   // RESOURCE SHARED
   TSDKResourceGetStatus = function(resource: Pointer): Integer; cdecl;
   TSDKResourceGetName = function(resource: Pointer): PAnsiChar; cdecl;
@@ -87,7 +114,7 @@ type
   TSDKAnimGetModel = function(component: Pointer): Pointer; cdecl;
   TSDKAnimGetPose = function(component: Pointer): Pointer; cdecl;
   TSDKAnimSetKeyframe = procedure(component: Pointer; frame, l_x, l_y, l_z, r_x, r_y, r_z, s_x, s_y, s_z: Single); cdecl;
-  TSDKAnimSetCallback = procedure(component: Pointer; callback: Pointer); cdecl; // >_< callback is procedure(component: Pointer; name: PAnsiChar) cdecl
+  TSDKAnimSetCallback = procedure(component: Pointer; callback: Pointer); cdecl;
   TSDKAnimPlay = procedure(component: Pointer; name: PAnsiChar; repeats: Integer; weight, speed: Single; interpolate, pause_on_last_frame: Integer); cdecl;
   TSDKAnimIsPlaying = function(component: Pointer; name: PAnsiChar): Integer; cdecl;
   TSDKAnimStop = procedure(component: Pointer; name: PAnsiChar); cdecl;
@@ -119,6 +146,8 @@ type
   TSDKMaterialGetSpecularExponent = function(material: Pointer): Single; cdecl;
   TSDKMaterialGetSpecularTransparency = function(material: Pointer): Single; cdecl;
   TSDKMaterialGetReflectivity = function(material: Pointer): Single; cdecl;
+  TSDKMaterialGetTextureType = function(material: Pointer): Integer; cdecl;
+  TSDKMaterialGetSource = function(material: Pointer): Pointer; cdecl;
   TSDKMaterialSetMaterialType = procedure(material: Pointer; type_: Integer); cdecl;
   TSDKMaterialSetMaterialFilter = procedure(material: Pointer; filter: Integer); cdecl;
   TSDKMaterialSetMaterialProperty = procedure(material: Pointer; property_: Integer); cdecl;
@@ -241,7 +270,7 @@ type
   TSDKLightSetExponent = procedure(component: Pointer; exponent: Single); cdecl;
   TSDKLightGetColor = procedure(component: Pointer; r, g, b: PSingle); cdecl;
   TSDKLightGetDistance = function(component: Pointer): Single; cdecl;
-  TSDKLightIsLightDraw = function(component: Pointer): Integer; cdecl;   // >_< C header had void return - fixed to Integer nyaa~
+  TSDKLightIsLightDraw = function(component: Pointer): Integer; cdecl;
   TSDKLightSetLightDraw = procedure(component: Pointer; value: Integer); cdecl;
 
   // MESHTOOLS
@@ -254,6 +283,33 @@ var
   sdk_yeet : TSDKYeet;
   sdk_update : TSDKUpdate;
   sdk_platform_window_screen_resize : TSDKPlatformWindowScreenResize;
+
+  // RENDER SYSTEM
+  sdk_render_project : TSDKRenderProject;
+  sdk_render_project_inverse : TSDKRenderProjectInverse;
+  sdk_render_set_sun_direction : TSDKRenderSetSunDirection;
+  sdk_render_set_sun_color : TSDKRenderSetSunColor;
+  sdk_render_set_sun_ambient_color : TSDKRenderSetSunAmbientColor;
+  sdk_render_set_background_color : TSDKRenderSetBackgroundColor;
+  sdk_render_set_fog_distance : TSDKRenderSetFogDistance;
+  sdk_render_set_fog_color : TSDKRenderSetFogColor;
+  sdk_render_set_ortho_ratio : TSDKRenderSetOrthoRatio;
+  sdk_render_set_view_fov : TSDKRenderSetViewFov;
+  sdk_render_get_view_fov : TSDKRenderGetViewFov;
+  sdk_render_set_view_distance : TSDKRenderSetViewDistance;
+  sdk_render_get_view_distance : TSDKRenderGetViewDistance;
+  sdk_render_set_view_position : TSDKRenderSetViewPosition;
+  sdk_render_set_view_rotation : TSDKRenderSetViewRotation;
+  sdk_render_get_view_position : TSDKRenderGetViewPosition;
+  sdk_render_get_view_rotation : TSDKRenderGetViewRotation;
+  sdk_render_add_line : TSDKRenderAddLine;
+  sdk_render_add_line_marker : TSDKRenderAddLineMarker;
+  sdk_render_add_aabb : TSDKRenderAddAABB;
+  sdk_render_add_sphere : TSDKRenderAddSphere;
+  sdk_render_add_cylinder : TSDKRenderAddCylinder;
+  sdk_render_add_cube : TSDKRenderAddCube;
+  sdk_render_add_text : TSDKRenderAddText;
+  sdk_render_add_text_2d : TSDKRenderAddText2D;
 
   // RESOURCE SHARED
   sdk_framework_resource_get_status : TSDKResourceGetStatus;
@@ -277,6 +333,8 @@ var
   sdk_render_material_get_specular_exponent : TSDKMaterialGetSpecularExponent;
   sdk_render_material_get_specular_transparency : TSDKMaterialGetSpecularTransparency;
   sdk_render_material_get_reflectivity : TSDKMaterialGetReflectivity;
+  sdk_render_material_get_texture_type : TSDKMaterialGetTextureType;
+  sdk_render_material_get_source : TSDKMaterialGetSource;
   sdk_render_material_set_material_type : TSDKMaterialSetMaterialType;
   sdk_render_material_set_material_filter : TSDKMaterialSetMaterialFilter;
   sdk_render_material_set_material_property : TSDKMaterialSetMaterialProperty;
@@ -457,6 +515,33 @@ begin
   sdk_update := TSDKUpdate(LoadFunc('tramsdk_update'));
   sdk_platform_window_screen_resize := TSDKPlatformWindowScreenResize(LoadFunc('tramsdk_platform_window_screen_resize'));
 
+  // RENDER SYSTEM
+  sdk_render_project := TSDKRenderProject(LoadFunc('tramsdk_render_project'));
+  sdk_render_project_inverse := TSDKRenderProjectInverse(LoadFunc('tramsdk_render_project_inverse'));
+  sdk_render_set_sun_direction := TSDKRenderSetSunDirection(LoadFunc('tramsdk_render_set_sun_direction'));
+  sdk_render_set_sun_color := TSDKRenderSetSunColor(LoadFunc('tramsdk_render_set_sun_color'));
+  sdk_render_set_sun_ambient_color := TSDKRenderSetSunAmbientColor(LoadFunc('tramsdk_render_set_sun_ambient_color'));
+  sdk_render_set_background_color := TSDKRenderSetBackgroundColor(LoadFunc('tramsdk_render_set_background_color'));
+  sdk_render_set_fog_distance := TSDKRenderSetFogDistance(LoadFunc('tramsdk_render_set_fog_distance'));
+  sdk_render_set_fog_color := TSDKRenderSetFogColor(LoadFunc('tramsdk_render_set_fog_color'));
+  sdk_render_set_ortho_ratio := TSDKRenderSetOrthoRatio(LoadFunc('tramsdk_render_set_ortho_ratio'));
+  sdk_render_set_view_fov := TSDKRenderSetViewFov(LoadFunc('tramsdk_render_set_view_fov'));
+  sdk_render_get_view_fov := TSDKRenderGetViewFov(LoadFunc('tramsdk_render_get_view_fov'));
+  sdk_render_set_view_distance := TSDKRenderSetViewDistance(LoadFunc('tramsdk_render_set_view_distance'));
+  sdk_render_get_view_distance := TSDKRenderGetViewDistance(LoadFunc('tramsdk_render_get_view_distance'));
+  sdk_render_set_view_position := TSDKRenderSetViewPosition(LoadFunc('tramsdk_render_set_view_position'));
+  sdk_render_set_view_rotation := TSDKRenderSetViewRotation(LoadFunc('tramsdk_render_set_view_rotation'));
+  sdk_render_get_view_position := TSDKRenderGetViewPosition(LoadFunc('tramsdk_render_get_view_position'));
+  sdk_render_get_view_rotation := TSDKRenderGetViewRotation(LoadFunc('tramsdk_render_get_view_rotation'));
+  sdk_render_add_line := TSDKRenderAddLine(LoadFunc('tramsdk_render_add_line'));
+  sdk_render_add_line_marker := TSDKRenderAddLineMarker(LoadFunc('tramsdk_render_add_line_marker'));
+  sdk_render_add_aabb := TSDKRenderAddAABB(LoadFunc('tramsdk_render_add_aabb'));
+  sdk_render_add_sphere := TSDKRenderAddSphere(LoadFunc('tramsdk_render_add_sphere'));
+  sdk_render_add_cylinder := TSDKRenderAddCylinder(LoadFunc('tramsdk_render_add_cylinder'));
+  sdk_render_add_cube := TSDKRenderAddCube(LoadFunc('tramsdk_render_add_cube'));
+  sdk_render_add_text := TSDKRenderAddText(LoadFunc('tramsdk_render_add_text'));
+  sdk_render_add_text_2d := TSDKRenderAddText2D(LoadFunc('tramsdk_render_add_text_2d'));
+
   // RESOURCE SHARED
   sdk_framework_resource_get_status := TSDKResourceGetStatus(LoadFunc('tramsdk_framework_resource_get_status'));
   sdk_framework_resource_get_name := TSDKResourceGetName(LoadFunc('tramsdk_framework_resource_get_name'));
@@ -479,6 +564,8 @@ begin
   sdk_render_material_get_specular_exponent := TSDKMaterialGetSpecularExponent(LoadFunc('tramsdk_render_material_get_specular_exponent'));
   sdk_render_material_get_specular_transparency := TSDKMaterialGetSpecularTransparency(LoadFunc('tramsdk_render_material_get_specular_transparency'));
   sdk_render_material_get_reflectivity := TSDKMaterialGetReflectivity(LoadFunc('tramsdk_render_material_get_reflectivity'));
+  sdk_render_material_get_texture_type := TSDKMaterialGetTextureType(LoadFunc('tramsdk_render_material_get_texture_type'));
+  sdk_render_material_get_source := TSDKMaterialGetSource(LoadFunc('tramsdk_render_material_get_source'));
   sdk_render_material_set_material_type := TSDKMaterialSetMaterialType(LoadFunc('tramsdk_render_material_set_material_type'));
   sdk_render_material_set_material_filter := TSDKMaterialSetMaterialFilter(LoadFunc('tramsdk_render_material_set_material_filter'));
   sdk_render_material_set_material_property := TSDKMaterialSetMaterialProperty(LoadFunc('tramsdk_render_material_set_material_property'));
