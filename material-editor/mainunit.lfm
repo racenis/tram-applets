@@ -1,14 +1,14 @@
 object MainForm: TMainForm
-  Left = 505
+  Left = 492
   Height = 460
-  Top = 224
+  Top = 289
   Width = 635
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Material Editor'
   ClientHeight = 460
   ClientWidth = 635
-  Menu = MainMenu1
+  Menu = MainMenu
   OnCreate = FormCreate
   LCLVersion = '3.0.0.3'
   object RenderPanel: TPanel
@@ -267,33 +267,36 @@ object MainForm: TMainForm
       Caption = 'Reflectivity'
     end
   end
-  object MainMenu1: TMainMenu
+  object MainMenu: TMainMenu
     Left = 344
     Top = 8
-    object MenuItem1: TMenuItem
+    object MainMenuFile: TMenuItem
       Caption = 'FileMenu'
-      object MenuItem7: TMenuItem
+      object MainMenuNewMaterial: TMenuItem
         Caption = 'NewMaterialFile'
+        OnClick = MainMenuNewMaterialClick
       end
       object Separator2: TMenuItem
         Caption = '-'
       end
-      object MenuItem3: TMenuItem
+      object MainMenuOpenProject: TMenuItem
         Caption = 'OpenProject'
+        OnClick = MainMenuOpenProjectClick
       end
-      object MenuItem4: TMenuItem
+      object MainMenuSaveProject: TMenuItem
         Caption = 'SaveProject'
+        OnClick = MainMenuSaveProjectClick
       end
       object Separator1: TMenuItem
         Caption = '-'
       end
-      object MenuItem5: TMenuItem
+      object MainMenuExit: TMenuItem
         Caption = 'ExitProgram'
       end
     end
-    object MenuItem2: TMenuItem
+    object MainMenuHelp: TMenuItem
       Caption = 'HelpMenu'
-      object MenuItem6: TMenuItem
+      object MainMenuAbout: TMenuItem
         Caption = 'AboutProgram'
       end
     end
@@ -304,6 +307,13 @@ object MainForm: TMainForm
     object MaterialListMenuAdd: TMenuItem
       Caption = 'MaterialListMenuAdd'
       OnClick = MaterialListMenuAddClick
+    end
+    object MaterialListMenuAddFromTexture: TMenuItem
+      Caption = 'MaterialListMenuAddFromTexture'
+      OnClick = MaterialListMenuAddFromTextureClick
+    end
+    object Separator3: TMenuItem
+      Caption = '-'
     end
     object MaterialListMenuRemove: TMenuItem
       Caption = 'MaterialListMenuRemove'

@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
   Menus, ComCtrls, ColorBox, Spin, OpenGLContext, gl, CFunctions,
-  TramAssetMetadata, TramMaterialAsset, LCLType;
+  TramAssetMetadata, TramMaterialAsset, LCLType, NewMaterialDialogUnit;
 
 type
 
@@ -34,28 +34,33 @@ type
     MaterialReflectivitySelect: TFloatSpinEdit;
     MaterialFileSelect: TComboBox;
     MaterialList: TListView;
-    MainMenu1: TMainMenu;
-    MenuItem1: TMenuItem;
-    MenuItem2: TMenuItem;
-    MenuItem3: TMenuItem;
-    MenuItem4: TMenuItem;
-    MenuItem5: TMenuItem;
-    MenuItem6: TMenuItem;
-    MenuItem7: TMenuItem;
+    MainMenu: TMainMenu;
+    MainMenuFile: TMenuItem;
+    MainMenuHelp: TMenuItem;
+    MainMenuOpenProject: TMenuItem;
+    MainMenuSaveProject: TMenuItem;
+    MainMenuExit: TMenuItem;
+    MainMenuAbout: TMenuItem;
+    MainMenuNewMaterial: TMenuItem;
     MaterialDataPanel: TPanel;
     MaterialListMenu: TPopupMenu;
     MaterialListMenuAdd: TMenuItem;
     MaterialListMenuRemove: TMenuItem;
+    MaterialListMenuAddFromTexture: TMenuItem;
     RenderPanel: TPanel;
     Separator1: TMenuItem;
     Separator2: TMenuItem;
+    Separator3: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure GLboxPaint(Sender: TObject);
+    procedure MainMenuOpenProjectClick(Sender: TObject);
+    procedure MainMenuSaveProjectClick(Sender: TObject);
     procedure MaterialColorSelectChange(Sender: TObject);
     procedure MaterialExponentSelectChange(Sender: TObject);
     procedure MaterialFileSelectChange(Sender: TObject);
     procedure MaterialFilterSelectChange(Sender: TObject);
     procedure MaterialListMenuAddClick(Sender: TObject);
+    procedure MaterialListMenuAddFromTextureClick(Sender: TObject);
     procedure MaterialListMenuRemoveClick(Sender: TObject);
     procedure MaterialListSelectItem(Sender: TObject; Item: TListItem;
       Selected: Boolean);
@@ -66,6 +71,7 @@ type
     procedure MaterialSpecularitySelectChange(Sender: TObject);
     procedure MaterialTransparencySelectChange(Sender: TObject);
     procedure MaterialTypeSelectChange(Sender: TObject);
+    procedure MainMenuNewMaterialClick(Sender: TObject);
     procedure RenderPanelMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure RenderPanelMouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -196,6 +202,49 @@ begin
   GLbox.SwapBuffers;
 end;
 
+procedure TMainForm.MainMenuOpenProjectClick(Sender: TObject);
+var
+  materialFile: TAssetMetadata;
+  dialog: TSelectDirectoryDialog;
+begin
+  dialog := TSelectDirectoryDialog.Create(self);
+  dialog.Execute;
+
+  if (ID_YES <> Application.MessageBox(PChar(Format('Discard all unsaved changes and open %s?', [dialog.FileName])),
+                                      'Open Project',
+                                      MB_ICONQUESTION + MB_YESNO)) then Exit;
+
+  SetCurrentDir(dialog.FileName);
+
+  MaterialFileSelect.Clear;
+  MaterialList.Clear;
+  MaterialDataPanel.Enabled := False;
+
+  MaterialFiles.Free;
+
+  MaterialFiles := TMaterialCollection.Create();
+  MaterialFiles.ScanFromDisk;
+
+  for materialFile in MaterialFiles.GetAssets() do
+      MaterialFileSelect.AddItem(materialFile.GetName, materialFile);
+
+  for materialFile in MaterialFiles.GetAssets() do
+      materialFile.LoadFromDisk();
+
+  if MaterialFileSelect.Items.Count > 0 then begin
+     MaterialFileSelect.ItemIndex := 0;
+     self.MaterialFileSelectChange(self);
+  end;
+end;
+
+procedure TMainForm.MainMenuSaveProjectClick(Sender: TObject);
+var
+  materialFile: TAssetMetadata;
+begin
+  for materialFile in MaterialFiles.GetAssets() do
+        materialFile.SaveToDisk();
+end;
+
 procedure TMainForm.MaterialFileSelectChange(Sender: TObject);
 var
   material: TMaterialData;
@@ -226,13 +275,40 @@ begin
   end;
 
   newMaterialName := InputBox('Create a New Material', 'Please input material name', 'dingbat');
-  newMaterial := SelectedFile.NewMaterial(newMaterialName);
 
   if (newMaterialName = 'dingbat') and (ID_YES <> Application.MessageBox('Create a "dingbat"?',
                                       'Unclear Input',
                                       MB_ICONQUESTION + MB_YESNO)) then Exit;
 
+  newMaterial := SelectedFile.NewMaterial(newMaterialName);
+
   MaterialList.AddItem(newMaterialName, newMaterial);
+  MaterialList.Items.Item[MaterialList.Items.Count-1].SubItems.Add(newMaterial.materialType);
+  MaterialList.Items.Item[MaterialList.Items.Count-1].SubItems.Add(newMaterial.filter);
+  MaterialList.Items.Item[MaterialList.Items.Count-1].SubItems.Add(newMaterial.materialProperty);
+  MaterialList.Items.Item[MaterialList.Items.Count-1].SubItems.Add(newMaterial.source);
+
+  MaterialList.ItemIndex := MaterialList.Items.Count-1;
+end;
+
+procedure TMainForm.MaterialListMenuAddFromTextureClick(Sender: TObject);
+var
+  assetMetadata: TAssetMetadata;
+  material: TMaterialData;
+  newMaterial: TMaterialData;
+begin
+  for assetMetadata in MaterialFiles.GetAssets do
+      for material in (assetMetadata as TMaterial).GetMaterials do
+          NewMaterialDialog.AddMaterial(material);
+
+  NewMaterialDialog.Refresh;
+  NewMaterialDialog.ShowModal;
+
+  if NewMaterialDialog.GetSelectedMaterial = '' then Exit;
+
+  newMaterial := SelectedFile.NewMaterial(NewMaterialDialog.GetSelectedMaterial);
+
+  MaterialList.AddItem(NewMaterialDialog.GetSelectedMaterial, newMaterial);
   MaterialList.Items.Item[MaterialList.Items.Count-1].SubItems.Add(newMaterial.materialType);
   MaterialList.Items.Item[MaterialList.Items.Count-1].SubItems.Add(newMaterial.filter);
   MaterialList.Items.Item[MaterialList.Items.Count-1].SubItems.Add(newMaterial.materialProperty);
@@ -341,6 +417,11 @@ begin
   subItems := MaterialList.Items.FindData(SelectedMaterial).SubItems;
   subItems[0] := SelectedMaterial.materialType;
   ResetMaterial;
+end;
+
+procedure TMainForm.MainMenuNewMaterialClick(Sender: TObject);
+begin
+
 end;
 
 procedure TMainForm.MaterialFilterSelectChange(Sender: TObject);

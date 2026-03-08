@@ -103,7 +103,8 @@ begin
             // maybe in the future we will automatically add quotes, instead of
             // replacing spaces, but currently the C++ runtime doesn't know what
             // to do with quotes if we are writing what is supposed to be a name
-            if (not token.StartsWith('"')) and (not token.StartsWith('#')) then
+            if (not token.StartsWith('"')) and (not token.StartsWith('#'))
+            and not ((Length(token) > 0) and (token[1] in ['0'..'9']+['+'])) then
                token := token.Replace(' ', '-');
 
             if (col <> High(line)) then

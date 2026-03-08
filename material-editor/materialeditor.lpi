@@ -51,6 +51,20 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="MainUnit"/>
       </Unit>
+      <Unit>
+        <Filename Value="newmaterialdialogunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="NewMaterialDialog"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="NewMaterialDialogUnit"/>
+      </Unit>
+      <Unit>
+        <Filename Value="aboutdialogunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="AboutDialog"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="AboutDialogUnit"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

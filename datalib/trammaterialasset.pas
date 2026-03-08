@@ -244,14 +244,19 @@ begin
                    material.materialType, '',
                    material.filter, '',
                    material.materialProperty, '',
-                   Format('%f %f %f', [material.colorR, material.colorG, material.colorB]), '',
-                   string(material.specular), '',
-                   string(material.exponent),
-                   string(material.transparency),
-                   string(material.reflectivity),
+                   StringReplace(Format('%.2g %.2g %.2g',
+                                [material.colorR,
+                                 material.colorG,
+                                 material.colorB]), ',', '.', [rfReplaceAll]), '',
+                   FloatToStr(material.specular), '',
+                   FloatToStr(material.exponent), '',
+                   FloatToStr(material.transparency), '',
+                   FloatToStr(material.reflectivity), '',
                    material.source
     ]);
   end;
+
+  writeTableHeader;
 
   output.Free;
 end;
