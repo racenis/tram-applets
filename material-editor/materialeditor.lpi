@@ -62,6 +62,7 @@
         <Filename Value="aboutdialogunit.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="AboutDialog"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="AboutDialogUnit"/>
       </Unit>

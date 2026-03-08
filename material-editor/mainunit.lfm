@@ -9,6 +9,7 @@ object MainForm: TMainForm
   ClientHeight = 460
   ClientWidth = 635
   Menu = MainMenu
+  OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   LCLVersion = '3.0.0.3'
   object RenderPanel: TPanel
@@ -271,33 +272,38 @@ object MainForm: TMainForm
     Left = 344
     Top = 8
     object MainMenuFile: TMenuItem
-      Caption = 'FileMenu'
+      Caption = 'File'
       object MainMenuNewMaterial: TMenuItem
-        Caption = 'NewMaterialFile'
+        Caption = 'New Material File'
         OnClick = MainMenuNewMaterialClick
       end
       object Separator2: TMenuItem
         Caption = '-'
       end
       object MainMenuOpenProject: TMenuItem
-        Caption = 'OpenProject'
+        Caption = 'Open Project'
+        ShortCut = 16463
         OnClick = MainMenuOpenProjectClick
       end
       object MainMenuSaveProject: TMenuItem
-        Caption = 'SaveProject'
+        Caption = 'Save'
+        ShortCut = 16467
         OnClick = MainMenuSaveProjectClick
       end
       object Separator1: TMenuItem
         Caption = '-'
       end
       object MainMenuExit: TMenuItem
-        Caption = 'ExitProgram'
+        Caption = 'Quit'
+        ShortCut = 112
+        OnClick = MainMenuExitClick
       end
     end
     object MainMenuHelp: TMenuItem
-      Caption = 'HelpMenu'
+      Caption = 'Help'
       object MainMenuAbout: TMenuItem
-        Caption = 'AboutProgram'
+        Caption = 'About'
+        OnClick = MainMenuAboutClick
       end
     end
   end
@@ -305,18 +311,21 @@ object MainForm: TMainForm
     Left = 288
     Top = 64
     object MaterialListMenuAdd: TMenuItem
-      Caption = 'MaterialListMenuAdd'
+      Caption = 'Add'
+      ShortCut = 16462
       OnClick = MaterialListMenuAddClick
     end
     object MaterialListMenuAddFromTexture: TMenuItem
-      Caption = 'MaterialListMenuAddFromTexture'
+      Caption = 'Add From Texture'
+      ShortCut = 16457
       OnClick = MaterialListMenuAddFromTextureClick
     end
     object Separator3: TMenuItem
       Caption = '-'
     end
     object MaterialListMenuRemove: TMenuItem
-      Caption = 'MaterialListMenuRemove'
+      Caption = 'Remove'
+      ShortCut = 46
       OnClick = MaterialListMenuRemoveClick
     end
   end

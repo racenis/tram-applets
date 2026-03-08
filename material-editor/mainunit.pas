@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
   Menus, ComCtrls, ColorBox, Spin, OpenGLContext, gl, CFunctions,
-  TramAssetMetadata, TramMaterialAsset, LCLType, NewMaterialDialogUnit;
+  TramAssetMetadata, TramMaterialAsset, LCLType, NewMaterialDialogUnit,
+  AboutDialogUnit;
 
 type
 
@@ -51,8 +52,11 @@ type
     Separator1: TMenuItem;
     Separator2: TMenuItem;
     Separator3: TMenuItem;
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormCreate(Sender: TObject);
     procedure GLboxPaint(Sender: TObject);
+    procedure MainMenuAboutClick(Sender: TObject);
+    procedure MainMenuExitClick(Sender: TObject);
     procedure MainMenuOpenProjectClick(Sender: TObject);
     procedure MainMenuSaveProjectClick(Sender: TObject);
     procedure MaterialColorSelectChange(Sender: TObject);
@@ -195,11 +199,39 @@ begin
 
 end;
 
+procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+var
+  response: Integer;
+begin
+  response := Application.MessageBox('Save changes before exiting?',
+                                     'Exiting Project...',
+                                     MB_ICONQUESTION + MB_YESNOCANCEL);
+  if response = ID_CANCEL then begin
+     CanClose := False;
+     Exit;
+  end;
+
+  if response = ID_YES then
+     MainMenuSaveProjectClick(self);
+
+  CanClose := True;
+end;
+
 procedure TMainForm.GLboxPaint(Sender: TObject);
 begin
   sdk_update();
 
   GLbox.SwapBuffers;
+end;
+
+procedure TMainForm.MainMenuAboutClick(Sender: TObject);
+begin
+  AboutDialog.ShowModal;
+end;
+
+procedure TMainForm.MainMenuExitClick(Sender: TObject);
+begin
+  Close;
 end;
 
 procedure TMainForm.MainMenuOpenProjectClick(Sender: TObject);
@@ -251,8 +283,6 @@ var
 begin
   SelectedFile := MaterialFileSelect.Items.Objects[MaterialFileSelect.ItemIndex] as TMaterial;
   MaterialList.Clear;
-
-  Write(SelectedFile.GetName);
 
   for material in SelectedFile.GetMaterials do begin
     MaterialList.AddItem(material.name, material);
@@ -420,8 +450,25 @@ begin
 end;
 
 procedure TMainForm.MainMenuNewMaterialClick(Sender: TObject);
+var
+  newMaterialFileName: string;
+  newMaterialFile: TMaterial;
 begin
+  newMaterialFileName := InputBox('Create a New Material', 'Please input material name', '');
 
+  if newMaterialFileName = '' then Exit;
+
+  if ID_YES <> Application.MessageBox(PChar(Format('Create a %s?', [newMaterialFileName])),
+                                      'Input Confirmation',
+                                      MB_ICONQUESTION + MB_YESNO) then Exit;
+
+  newMaterialFile := MaterialFiles.InsertFromDB(newMaterialFileName, 0) as TMaterial;
+
+  MaterialFileSelect.AddItem(newMaterialFileName, newMaterialFile);
+  MaterialFileSelect.ItemIndex := MaterialFileSelect.Items.Count - 1;
+  MaterialFileSelectChange(self);
+
+  MaterialDataPanel.Enabled := False;
 end;
 
 procedure TMainForm.MaterialFilterSelectChange(Sender: TObject);

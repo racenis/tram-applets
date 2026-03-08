@@ -61,7 +61,6 @@ end;
 procedure TNewMaterialDialog.AddMaterial(newMaterial: TMaterialData);
 begin
   existingMaterials.Add(newMaterial);
-  WriteLn('initial add `', newMaterial.name, '`');
 end;
 
 procedure TNewMaterialDialog.Refresh;
@@ -70,17 +69,14 @@ var
   material: TMaterialData;
   dict: TStrBoolDictionary;
 begin
-  WriteLn('initing form....');
   textureCollection := TTextureCollection.Create;
   textureCollection.ScanFromDisk;
 
   // we'll mark all existing materials in here
   dict := TStrBoolDictionary.Create;
 
-  for material in existingMaterials do begin
-      WriteLn('added `', material.name, '`');
+  for material in existingMaterials do
       dict.AddOrSetValue(material.name, True);
-  end;
 
   suggestedMaterials.Clear;
 
