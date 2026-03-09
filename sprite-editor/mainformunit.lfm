@@ -1,0 +1,81 @@
+object MainForm: TMainForm
+  Left = 602
+  Height = 461
+  Top = 115
+  Width = 640
+  Caption = 'MainForm'
+  ClientHeight = 461
+  ClientWidth = 640
+  Menu = MainMenu
+  OnCreate = FormCreate
+  LCLVersion = '3.0.0.3'
+  object SpriteDisplay: TScrollBox
+    Left = 160
+    Height = 478
+    Top = 0
+    Width = 478
+    HorzScrollBar.Page = 1
+    HorzScrollBar.Range = 640
+    VertScrollBar.Page = 1
+    VertScrollBar.Range = 480
+    AutoScroll = False
+    TabOrder = 0
+    OnClick = SpriteDisplayClick
+    OnPaint = SpriteDisplayPaint
+  end
+  object BitBtn1: TBitBtn
+    Left = 348
+    Height = 30
+    Top = 139
+    Width = 75
+    Caption = 'BitBtn1'
+    OnClick = BitBtn1Click
+    TabOrder = 1
+  end
+  object SpriteFrameList: TListView
+    Left = 0
+    Height = 200
+    Top = 24
+    Width = 156
+    Columns = <    
+      item
+        Caption = 'Index'
+      end>
+    RowSelect = True
+    TabOrder = 2
+    ViewStyle = vsReport
+  end
+  object SpriteList: TComboBox
+    Left = 0
+    Height = 21
+    Top = 0
+    Width = 156
+    ItemHeight = 13
+    Style = csDropDownList
+    TabOrder = 3
+    OnChange = SpriteListChange
+  end
+  object SpriteValues: TValueListEditor
+    Left = 0
+    Height = 192
+    Top = 272
+    Width = 160
+    FixedCols = 0
+    RowCount = 2
+    TabOrder = 4
+    ColWidths = (
+      64
+      92
+    )
+  end
+  object MainMenu: TMainMenu
+    Left = 240
+    Top = 56
+    object MainMenuFile: TMenuItem
+      Caption = 'MainMenuFile'
+    end
+    object MainMenuHelp: TMenuItem
+      Caption = 'MainMenuHelp'
+    end
+  end
+end

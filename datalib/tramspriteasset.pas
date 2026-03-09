@@ -5,9 +5,30 @@ unit TramSpriteAsset;
 interface
 
 uses
-  Classes, SysUtils, TramAssetMetadata, FileUtil, TramAssetParser;
+  Classes, SysUtils, TramAssetMetadata, FileUtil, TramAssetParser, fgl;
 
 type
+
+  { TSpriteData }
+
+  TSpriteData = class
+  public
+     constructor Create;
+  public
+     isMarker: Boolean;
+     nameIfMarker: string;
+
+     offsetX: Integer;
+     offsetY: Integer;
+     width: Integer;
+     height: Integer;
+     midpointX: Integer;
+     midpointY: Integer;
+     borderH: Integer;
+     borderV: Integer;
+  end;
+  TSpriteDataList = specialize TFPGList<TSpriteData>;
+
   TSpriteCollection = class;
   TSprite = class(TAssetMetadata)
   public
@@ -22,12 +43,21 @@ type
 
       function GetPropertyList: TAssetPropertyList; override;
 
+      function NewSprite(): TSpriteData;
+      procedure RemoveSprite(sprite: TSpriteData);
+
+      procedure LoadFromDisk; override;
+      procedure SaveToDisk; override;
+
+      function GetSprites: TSpriteDataList;
+
       procedure LoadMetadata(); override;
   protected
       procedure SetDateInDB(date: Integer);
       procedure SetDateOnDisk(date: Integer);
   protected
-
+     material: string;
+     sprites: TSpriteDataList;
   end;
 
   TSpriteCollection = class(TAssetCollection)
@@ -48,6 +78,8 @@ constructor TSprite.Create(spriteName: string; collection: TSpriteCollection);
 begin
   self.name := spriteName;
   self.parent := collection;
+
+  self.sprites := TSpriteDataList.Create;
 end;
 
 function TSprite.GetType: string;
@@ -89,9 +121,120 @@ begin
   Result := [];
 end;
 
+function TSprite.NewSprite(): TSpriteData;
+begin
+  sprites.Add(TSpriteData.Create);
+end;
+
+procedure TSprite.RemoveSprite(sprite: TSpriteData);
+begin
+  sprites.Remove(sprite);
+end;
+
+procedure TSprite.LoadFromDisk;
+var
+  assetFile: TAssetParser;
+  rowIndex: Integer;
+  sprite: TSpriteData;
+  fs: TFormatSettings;
+begin
+  assetFile := TAssetParser.Create(GetPath);
+
+  if not assetFile.IsOpen then
+  begin
+    WriteLn('was not loaded!!!!!');
+    Exit;
+  end;
+
+  if assetFile.GetRowCount < 1 then
+  begin
+    WriteLn('was not loaded!!!!!');
+    Exit;
+  end;
+
+  if (assetFile.GetValue(0, 0) <> 'SPRv2') and (assetFile.GetValue(0, 0) <> 'SPRv3') then
+  begin
+    WriteLn('INCORRECT HEADER!!!');
+    Exit;
+  end;
+
+  fs := DefaultFormatSettings;
+  fs.DecimalSeparator := '.';
+
+  material := assetFile.GetValue(0, 1);
+
+  if assetFile.GetValue(0, 0) = 'SPRv2' then
+    for rowIndex := 1 to assetFile.GetRowCount - 1 do begin
+      sprite := TSpriteData.Create;
+
+      sprite.offsetX := StrToInt(assetFile.GetValue(rowIndex, 0));
+      sprite.offsetY := StrToInt(assetFile.GetValue(rowIndex, 1));
+      sprite.width := StrToInt(assetFile.GetValue(rowIndex, 2));
+      sprite.height := StrToInt(assetFile.GetValue(rowIndex, 3));
+      sprite.midpointX := StrToInt(assetFile.GetValue(rowIndex, 4));
+      sprite.midpointY := StrToInt(assetFile.GetValue(rowIndex, 5));
+      sprite.borderH := StrToInt(assetFile.GetValue(rowIndex, 6));
+      sprite.borderV := StrToInt(assetFile.GetValue(rowIndex, 7));
+
+      self.sprites.Add(sprite);
+    end;
+
+  if assetFile.GetValue(0, 0) = 'SPRv3' then
+    for rowIndex := 1 to assetFile.GetRowCount - 1 do
+    if assetFile.GetValue(rowIndex, 0) = 'frame' then begin
+      sprite := TSpriteData.Create;
+
+      sprite.isMarker := False;
+
+      sprite.offsetX := StrToInt(assetFile.GetValue(rowIndex, 1));
+      sprite.offsetY := StrToInt(assetFile.GetValue(rowIndex, 2));
+      sprite.width := StrToInt(assetFile.GetValue(rowIndex, 3));
+      sprite.height := StrToInt(assetFile.GetValue(rowIndex, 4));
+      sprite.midpointX := StrToInt(assetFile.GetValue(rowIndex, 5));
+      sprite.midpointY := StrToInt(assetFile.GetValue(rowIndex, 6));
+      sprite.borderH := StrToInt(assetFile.GetValue(rowIndex, 7));
+      sprite.borderV := StrToInt(assetFile.GetValue(rowIndex, 8));
+
+      self.sprites.Add(sprite);
+    end else begin
+      sprite := TSpriteData.Create;
+
+      sprite.isMarker := True;
+
+      sprite.nameIfMarker := assetFile.GetValue(rowIndex, 1);
+
+      self.sprites.Add(sprite);
+    end;
+
+end;
+
+procedure TSprite.SaveToDisk;
+begin
+  inherited SaveToDisk;
+end;
+
+function TSprite.GetSprites: TSpriteDataList;
+begin
+  Result := sprites;
+end;
+
 procedure TSprite.LoadMetadata();
 begin
 
+end;
+
+{ TSpriteData }
+
+constructor TSpriteData.Create;
+begin
+  offsetX := 0;
+  offsetY := 0;
+  width := 10;
+  height := 10;
+  midpointX := 5;
+  midpointY := 5;
+  borderH := 2;
+  borderV := 2;
 end;
 
 
