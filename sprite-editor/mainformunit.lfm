@@ -1,9 +1,9 @@
 object MainForm: TMainForm
-  Left = 602
+  Left = 367
   Height = 461
   Top = 115
   Width = 640
-  Caption = 'MainForm'
+  Caption = 'Tramway SDK Sprite Editor v0.1.1'
   ClientHeight = 461
   ClientWidth = 640
   Menu = MainMenu
@@ -20,17 +20,7 @@ object MainForm: TMainForm
     VertScrollBar.Range = 480
     AutoScroll = False
     TabOrder = 0
-    OnClick = SpriteDisplayClick
     OnPaint = SpriteDisplayPaint
-  end
-  object BitBtn1: TBitBtn
-    Left = 348
-    Height = 30
-    Top = 139
-    Width = 75
-    Caption = 'BitBtn1'
-    OnClick = BitBtn1Click
-    TabOrder = 1
   end
   object SpriteFrameList: TListView
     Left = 0
@@ -39,11 +29,15 @@ object MainForm: TMainForm
     Width = 156
     Columns = <    
       item
-        Caption = 'Index'
+        Caption = 'Index/Name'
+        Width = 150
       end>
+    PopupMenu = FrameListPopup
+    ReadOnly = True
     RowSelect = True
-    TabOrder = 2
+    TabOrder = 1
     ViewStyle = vsReport
+    OnSelectItem = SpriteFrameListSelectItem
   end
   object SpriteList: TComboBox
     Left = 0
@@ -52,7 +46,7 @@ object MainForm: TMainForm
     Width = 156
     ItemHeight = 13
     Style = csDropDownList
-    TabOrder = 3
+    TabOrder = 2
     OnChange = SpriteListChange
   end
   object SpriteValues: TValueListEditor
@@ -62,20 +56,105 @@ object MainForm: TMainForm
     Width = 160
     FixedCols = 0
     RowCount = 2
-    TabOrder = 4
+    TabOrder = 3
+    OnValidateEntry = SpriteValuesValidateEntry
     ColWidths = (
       64
       92
     )
   end
+  object SpriteTextureList: TComboBox
+    Left = 0
+    Height = 21
+    Top = 248
+    Width = 156
+    ItemHeight = 13
+    TabOrder = 4
+    Text = 'SpriteTextureList'
+    OnChange = SpriteTextureListChange
+  end
   object MainMenu: TMainMenu
     Left = 240
     Top = 56
     object MainMenuFile: TMenuItem
-      Caption = 'MainMenuFile'
+      Caption = 'File'
+      object MainMenuOpenProject: TMenuItem
+        Caption = 'Open Project'
+        OnClick = MainMenuOpenProjectClick
+      end
+      object MainMenuSaveAllSprites: TMenuItem
+        Caption = 'Save Project'
+        OnClick = MainMenuSaveAllSpritesClick
+      end
+      object Separator5: TMenuItem
+        Caption = '-'
+      end
+      object MainMenuNewSprite: TMenuItem
+        Caption = 'New Sprite'
+        OnClick = MainMenuNewSpriteClick
+      end
+      object Separator6: TMenuItem
+        Caption = '-'
+      end
+      object MainMenuQuit: TMenuItem
+        Caption = 'Quit'
+        OnClick = MainMenuQuitClick
+      end
     end
     object MainMenuHelp: TMenuItem
-      Caption = 'MainMenuHelp'
+      Caption = 'Help'
+      object MainMenuAbout: TMenuItem
+        Caption = 'About'
+        OnClick = MainMenuAboutClick
+      end
+    end
+  end
+  object FrameListPopup: TPopupMenu
+    Left = 72
+    Top = 103
+    object InsertFrameAbove: TMenuItem
+      Caption = 'Insert Frame Above'
+      OnClick = InsertFrameAboveClick
+    end
+    object InsertFrameBelow: TMenuItem
+      Caption = 'Insert Frame Below'
+      OnClick = InsertFrameBelowClick
+    end
+    object Separator4: TMenuItem
+      Caption = '-'
+    end
+    object DuplicateFrame: TMenuItem
+      Caption = 'Duplicate Frame/Marker'
+      OnClick = DuplicateFrameClick
+    end
+    object Separator2: TMenuItem
+      Caption = '-'
+    end
+    object InsertMarkerAbove: TMenuItem
+      Caption = 'Insert Marker Above'
+      OnClick = InsertMarkerAboveClick
+    end
+    object InsertMarkerBelow: TMenuItem
+      Caption = 'Insert Marker Below'
+      OnClick = InsertMarkerBelowClick
+    end
+    object Separator1: TMenuItem
+      Caption = '-'
+    end
+    object MoveFrameUp: TMenuItem
+      Caption = 'Move Frame/Marker Up'
+      OnClick = MoveFrameUpClick
+    end
+    object MoveFrameDown: TMenuItem
+      Caption = 'Move Frame/Marker Down'
+      OnClick = MoveFrameDownClick
+    end
+    object Separator3: TMenuItem
+      Caption = '-'
+    end
+    object RemoveFrame: TMenuItem
+      Caption = 'Remove Frame/Marker'
+      OnClick = RemoveFrameClick
     end
   end
 end

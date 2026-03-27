@@ -45,6 +45,13 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="MainFormUnit"/>
       </Unit>
+      <Unit>
+        <Filename Value="aboutdialogunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="AboutDialog"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="AboutDialogUnit"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -61,11 +68,6 @@
       <Debugging>
         <DebugInfoType Value="dsDwarf3"/>
       </Debugging>
-      <Options>
-        <Win32>
-          <GraphicApplication Value="True"/>
-        </Win32>
-      </Options>
     </Linking>
   </CompilerOptions>
   <Debugging>
