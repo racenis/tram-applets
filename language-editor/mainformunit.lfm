@@ -1,0 +1,58 @@
+object MainForm: TMainForm
+  Left = 311
+  Height = 581
+  Top = 132
+  Width = 800
+  Caption = 'Language Edtior -- UNFINISHED'
+  ClientHeight = 581
+  ClientWidth = 800
+  Menu = MainMenu
+  LCLVersion = '3.0.0.3'
+  object LanguageList: TEdit
+    Left = 0
+    Height = 21
+    Top = 0
+    Width = 200
+    TabOrder = 0
+    Text = 'LanguageList'
+  end
+  object ListBox1: TListBox
+    Left = 0
+    Height = 536
+    Top = 24
+    Width = 200
+    ItemHeight = 0
+    TabOrder = 1
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Height = 20
+    Top = 561
+    Width = 800
+    Panels = <>
+  end
+  object MainMenu: TMainMenu
+    Left = 380
+    Top = 193
+    object FileMenu: TMenuItem
+      Caption = 'FileMenu'
+      object NewSprite: TMenuItem
+        Caption = 'NewSprite'
+      end
+      object Separator1: TMenuItem
+        Caption = '-'
+      end
+      object Quit: TMenuItem
+        Caption = 'Quit'
+        OnClick = QuitClick
+      end
+    end
+    object HelpMenu: TMenuItem
+      Caption = 'HelpMenu'
+      object AboutMenu: TMenuItem
+        Caption = 'AboutMenu'
+        OnClick = AboutMenuClick
+      end
+    end
+  end
+end
