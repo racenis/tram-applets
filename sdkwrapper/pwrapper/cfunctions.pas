@@ -56,6 +56,33 @@ const
   RESOURCE_LOADED = 1;
   RESOURCE_READY = 2;
 
+  // DataType
+  DATA_SCALAR = 0;
+  DATA_VECTOR = 1;
+
+  // OperationType
+  OPERATION_COPY = 0;
+  OPERATION_OSCILLATOR = 1;
+  OPERATION_NOISE = 2;
+  OPERATION_CLAMP = 3;
+  OPERATION_NORMALIZE = 4;
+
+  // MergeType
+  MERGE_SET = 0;
+  MERGE_ADD = 1;
+  MERGE_SUBTRACT = 2;
+  MERGE_MULTIPLY = 3;
+  MERGE_DIVIDE = 4;
+
+  // MergeDest
+  MERGE_ANY = 0;
+  MERGE_X = 1;
+  MERGE_Y = 2;
+  MERGE_Z = 3;
+
+  // ConstraintType
+  CONSTRAINT_GREATER_THAN = 0;
+  CONSTRAINT_LESSER_THAN = 1;
 
 type
   TAABBTriangle = packed record
@@ -275,6 +302,52 @@ type
 
   // MESHTOOLS
   TSDKMakeCubeSphere = procedure(mesh: Pointer; subdivisions: Integer; radius: Single); cdecl;
+  
+  // PARTICLE RESOURCE
+  TSDKParticleParameterMake = function(): Pointer; cdecl;
+  TSDKParticleParameterYeet = procedure(param: Pointer); cdecl;
+  TSDKParticleParameterSetNone = procedure(param: Pointer); cdecl;
+  TSDKParticleParameterSetData = procedure(param: Pointer; data: PAnsiChar); cdecl;
+  TSDKParticleParameterSetScalar = procedure(param: Pointer; value: Single); cdecl;
+  TSDKParticleParameterSetVector = procedure(param: Pointer; x, y, z: Single); cdecl;
+
+  TSDKParticleOperationMake = function(): Pointer; cdecl;
+  TSDKParticleOperationYeet = procedure(op: Pointer); cdecl;
+  TSDKParticleOperationSetType = procedure(op: Pointer; type_: Integer); cdecl;
+  TSDKParticleOperationSetMerge = procedure(op: Pointer; merge: Integer); cdecl;
+  TSDKParticleOperationSetDest = procedure(op: Pointer; dest: Integer); cdecl;
+  TSDKParticleOperationSetTarget = procedure(op: Pointer; target: PAnsiChar); cdecl;
+  TSDKParticleOperationSetParam = procedure(op: Pointer; index: Integer; param: Pointer); cdecl;
+
+  TSDKParticleConstraintMake = function(): Pointer; cdecl;
+  TSDKParticleConstraintYeet = procedure(data: Pointer); cdecl;
+  TSDKParticleConstraintSetType = procedure(op: Pointer; type_: Integer); cdecl;
+  TSDKParticleConstraintSetDest = procedure(op: Pointer; dest: Integer); cdecl;
+  TSDKParticleConstraintSetProperty = procedure(op: Pointer; property_: PAnsiChar); cdecl;
+  TSDKParticleConstraintSetParam = procedure(op: Pointer; index: Integer; param: Pointer); cdecl;
+
+  TSDKParticleSystemSetSprite = procedure(sys, sprite: Pointer); cdecl;
+  TSDKParticleSystemSetWire = procedure(sys, material: Pointer); cdecl;
+  TSDKParticleSystemSetModel = procedure(sys, model: Pointer); cdecl;
+  TSDKParticleSystemAddValue = procedure(sys: Pointer; name: PAnsiChar; type_: Integer); cdecl;
+  TSDKParticleSystemAddOperation = procedure(sys, operation: Pointer); cdecl;
+  TSDKParticleSystemAddInitializer = procedure(sys, initializer: Pointer); cdecl;
+  TSDKParticleSystemAddConstraint = procedure(sys, constraint: Pointer); cdecl;
+  TSDKParticleSystemAddEmitter = procedure(sys, rate, delay: Pointer); cdecl;
+  TSDKParticleSystemSetParticleLimit = procedure(sys: Pointer; limit: Integer); cdecl;
+
+  TSDKParticleCreateSystem = function(particle: Pointer): Pointer; cdecl;
+  TSDKParticleGetBaseSystem = function(particle: Pointer): Pointer; cdecl;
+  TSDKParticleAddControl = procedure(particle: Pointer; name: PAnsiChar; type_: Integer); cdecl;
+  TSDKParticleFind = function(name: PAnsiChar): Pointer; cdecl;
+
+  // PARTICLE COMPONENT
+  TSDKParticleComponentMake = function(): Pointer; cdecl;
+  TSDKParticleComponentYeet = procedure(component: Pointer); cdecl;
+  TSDKParticleComponentUpdateLocation = procedure(component: Pointer; x, y, z: Single); cdecl;
+  TSDKParticleComponentSetParticle = procedure(component, particle: Pointer); cdecl;
+  TSDKParticleComponentSetControlScalar = procedure(component: Pointer; control: PAnsiChar; value: Single); cdecl;
+  TSDKParticleComponentSetControlVector = procedure(component: Pointer; control: PAnsiChar; x, y, z: Single); cdecl;
 
 var
 
@@ -486,6 +559,52 @@ var
 
   // MESHTOOLS
   sdk_ext_meshtools_make_cube_sphere: TSDKMakeCubeSphere;
+  
+  // PARTICLE RESOURCE
+  sdk_render_particle_parameter_make : TSDKParticleParameterMake;
+  sdk_render_particle_parameter_yeet : TSDKParticleParameterYeet;
+  sdk_render_particle_parameter_set_none : TSDKParticleParameterSetNone;
+  sdk_render_particle_parameter_set_data : TSDKParticleParameterSetData;
+  sdk_render_particle_parameter_set_scalar : TSDKParticleParameterSetScalar;
+  sdk_render_particle_parameter_set_vector : TSDKParticleParameterSetVector;
+
+  sdk_render_particle_operation_make : TSDKParticleOperationMake;
+  sdk_render_particle_operation_yeet : TSDKParticleOperationYeet;
+  sdk_render_particle_operation_set_type : TSDKParticleOperationSetType;
+  sdk_render_particle_operation_set_merge : TSDKParticleOperationSetMerge;
+  sdk_render_particle_operation_set_dest : TSDKParticleOperationSetDest;
+  sdk_render_particle_operation_set_target : TSDKParticleOperationSetTarget;
+  sdk_render_particle_operation_set_param : TSDKParticleOperationSetParam;
+
+  sdk_render_particle_constraint_make : TSDKParticleConstraintMake;
+  sdk_render_particle_constraint_yeet : TSDKParticleConstraintYeet;
+  sdk_render_particle_constraint_set_type : TSDKParticleConstraintSetType;
+  sdk_render_particle_constraint_set_dest : TSDKParticleConstraintSetDest;
+  sdk_render_particle_constraint_set_property : TSDKParticleConstraintSetProperty;
+  sdk_render_particle_constraint_set_param : TSDKParticleConstraintSetParam;
+
+  sdk_render_particle_system_set_sprite : TSDKParticleSystemSetSprite;
+  sdk_render_particle_system_set_wire : TSDKParticleSystemSetWire;
+  sdk_render_particle_system_set_model : TSDKParticleSystemSetModel;
+  sdk_render_particle_system_add_value : TSDKParticleSystemAddValue;
+  sdk_render_particle_system_add_operation : TSDKParticleSystemAddOperation;
+  sdk_render_particle_system_add_initializer : TSDKParticleSystemAddInitializer;
+  sdk_render_particle_system_add_constraint : TSDKParticleSystemAddConstraint;
+  sdk_render_particle_system_add_emitter : TSDKParticleSystemAddEmitter;
+  sdk_render_particle_system_set_particle_limit : TSDKParticleSystemSetParticleLimit;
+
+  sdk_render_particle_create_system : TSDKParticleCreateSystem;
+  sdk_render_particle_get_base_system : TSDKParticleGetBaseSystem;
+  sdk_render_particle_add_control : TSDKParticleAddControl;
+  sdk_render_particle_find : TSDKParticleFind;
+
+  // PARTICLE COMPONENT
+  sdk_components_particle_make : TSDKParticleComponentMake;
+  sdk_components_particle_yeet : TSDKParticleComponentYeet;
+  sdk_components_particle_update_location : TSDKParticleComponentUpdateLocation;
+  sdk_components_particle_set_particle : TSDKParticleComponentSetParticle;
+  sdk_components_particle_set_control_scalar : TSDKParticleComponentSetControlScalar;
+  sdk_components_particle_set_control_vector : TSDKParticleComponentSetControlVector;
 
 procedure SDKLoadLibs(const DLLPath: string);
 
@@ -717,6 +836,52 @@ begin
 
   // MESHTOOLS
   sdk_ext_meshtools_make_cube_sphere := TSDKMakeCubeSphere(LoadFunc('tramsdk_ext_meshtools_make_cube_sphere'));
+  
+  // PARTICLE RESOURCE
+  sdk_render_particle_parameter_make := TSDKParticleParameterMake(LoadFunc('tramsdk_render_particle_parameter_make'));
+  sdk_render_particle_parameter_yeet := TSDKParticleParameterYeet(LoadFunc('tramsdk_render_particle_parameter_yeet'));
+  sdk_render_particle_parameter_set_none := TSDKParticleParameterSetNone(LoadFunc('tramsdk_render_particle_parameter_set_none'));
+  sdk_render_particle_parameter_set_data := TSDKParticleParameterSetData(LoadFunc('tramsdk_render_particle_parameter_set_data'));
+  sdk_render_particle_parameter_set_scalar := TSDKParticleParameterSetScalar(LoadFunc('tramsdk_render_particle_parameter_set_scalar'));
+  sdk_render_particle_parameter_set_vector := TSDKParticleParameterSetVector(LoadFunc('tramsdk_render_particle_parameter_set_vector'));
+
+  sdk_render_particle_operation_make := TSDKParticleOperationMake(LoadFunc('tramsdk_render_particle_operation_make'));
+  sdk_render_particle_operation_yeet := TSDKParticleOperationYeet(LoadFunc('tramsdk_render_particle_operation_yeet'));
+  sdk_render_particle_operation_set_type := TSDKParticleOperationSetType(LoadFunc('tramsdk_render_particle_operation_set_type'));
+  sdk_render_particle_operation_set_merge := TSDKParticleOperationSetMerge(LoadFunc('tramsdk_render_particle_operation_set_merge'));
+  sdk_render_particle_operation_set_dest := TSDKParticleOperationSetDest(LoadFunc('tramsdk_render_particle_operation_set_dest'));
+  sdk_render_particle_operation_set_target := TSDKParticleOperationSetTarget(LoadFunc('tramsdk_render_particle_operation_set_target'));
+  sdk_render_particle_operation_set_param := TSDKParticleOperationSetParam(LoadFunc('tramsdk_render_particle_operation_set_param'));
+
+  sdk_render_particle_constraint_make := TSDKParticleConstraintMake(LoadFunc('tramsdk_render_particle_constraint_make'));
+  sdk_render_particle_constraint_yeet := TSDKParticleConstraintYeet(LoadFunc('tramsdk_render_particle_constraint_yeet'));
+  sdk_render_particle_constraint_set_type := TSDKParticleConstraintSetType(LoadFunc('tramsdk_render_particle_constraint_set_type'));
+  sdk_render_particle_constraint_set_dest := TSDKParticleConstraintSetDest(LoadFunc('tramsdk_render_particle_constraint_set_dest'));
+  sdk_render_particle_constraint_set_property := TSDKParticleConstraintSetProperty(LoadFunc('tramsdk_render_particle_constraint_set_property'));
+  sdk_render_particle_constraint_set_param := TSDKParticleConstraintSetParam(LoadFunc('tramsdk_render_particle_constraint_set_param'));
+
+  sdk_render_particle_system_set_sprite := TSDKParticleSystemSetSprite(LoadFunc('tramsdk_render_particle_system_set_sprite'));
+  sdk_render_particle_system_set_wire := TSDKParticleSystemSetWire(LoadFunc('tramsdk_render_particle_system_set_wire'));
+  sdk_render_particle_system_set_model := TSDKParticleSystemSetModel(LoadFunc('tramsdk_render_particle_system_set_model'));
+  sdk_render_particle_system_add_value := TSDKParticleSystemAddValue(LoadFunc('tramsdk_render_particle_system_add_value'));
+  sdk_render_particle_system_add_operation := TSDKParticleSystemAddOperation(LoadFunc('tramsdk_render_particle_system_add_operation'));
+  sdk_render_particle_system_add_initializer := TSDKParticleSystemAddInitializer(LoadFunc('tramsdk_render_particle_system_add_initializer'));
+  sdk_render_particle_system_add_constraint := TSDKParticleSystemAddConstraint(LoadFunc('tramsdk_render_particle_system_add_constraint'));
+  sdk_render_particle_system_add_emitter := TSDKParticleSystemAddEmitter(LoadFunc('tramsdk_render_particle_system_add_emitter'));
+  sdk_render_particle_system_set_particle_limit := TSDKParticleSystemSetParticleLimit(LoadFunc('tramsdk_render_particle_system_set_particle_limit'));
+
+  sdk_render_particle_create_system := TSDKParticleCreateSystem(LoadFunc('tramsdk_render_particle_create_system'));
+  sdk_render_particle_get_base_system := TSDKParticleGetBaseSystem(LoadFunc('tramsdk_render_particle_get_base_system'));
+  sdk_render_particle_add_control := TSDKParticleAddControl(LoadFunc('tramsdk_render_particle_add_control'));
+  sdk_render_particle_find := TSDKParticleFind(LoadFunc('tramsdk_render_particle_find'));
+
+  // PARTICLE COMPONENT
+  sdk_components_particle_make := TSDKParticleComponentMake(LoadFunc('tramsdk_components_particle_make'));
+  sdk_components_particle_yeet := TSDKParticleComponentYeet(LoadFunc('tramsdk_components_particle_yeet'));
+  sdk_components_particle_update_location := TSDKParticleComponentUpdateLocation(LoadFunc('tramsdk_components_particle_update_location'));
+  sdk_components_particle_set_particle := TSDKParticleComponentSetParticle(LoadFunc('tramsdk_components_particle_set_particle'));
+  sdk_components_particle_set_control_scalar := TSDKParticleComponentSetControlScalar(LoadFunc('tramsdk_components_particle_set_control_scalar'));
+  sdk_components_particle_set_control_vector := TSDKParticleComponentSetControlVector(LoadFunc('tramsdk_components_particle_set_control_vector'));
 
 end;
 
