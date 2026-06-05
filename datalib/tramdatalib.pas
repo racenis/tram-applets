@@ -16,7 +16,7 @@ uses
   TramEntityDefinitionAsset, TramLanguageAsset, TramQuestAsset, 
   Tram3DModelSourceAsset, TramTexturrSourceAsset, TramShaderAsset, 
   TramScriptAsset, TramCollisionModelAsset, TramItemAsset, TramTextureAsset, 
-  LazarusPackageIntf;
+  TramParticleAsset, LazarusPackageIntf;
 
 implementation
 

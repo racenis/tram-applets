@@ -124,6 +124,10 @@
         <Filename Value="tramtextureasset.pas"/>
         <UnitName Value="tramtextureasset"/>
       </Item>
+      <Item>
+        <Filename Value="tramparticleasset.pas"/>
+        <UnitName Value="tramparticleasset"/>
+      </Item>
     </Files>
     <RequiredPkgs>
       <Item>
