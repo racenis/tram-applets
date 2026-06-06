@@ -10,7 +10,10 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, lazopenglcontext, MainFormUnit, AboutDialogUnit
+  Forms, lazopenglcontext, MainFormUnit, AboutDialogUnit, OptionsSystemUnit,
+  OptionsOperationUnit, OptionsValueUnit, OptionsEmitterUnit,
+  OptionsConstraintUnit, OptionsParameterUnit
+{$mode ObjFPC}{$H+}
   { you can add units after this };
 
 {$R *.res}

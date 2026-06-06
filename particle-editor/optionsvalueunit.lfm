@@ -1,0 +1,52 @@
+object OptionsValueFrame: TOptionsValueFrame
+  Left = 0
+  Height = 240
+  Top = 0
+  Width = 320
+  ClientHeight = 240
+  ClientWidth = 320
+  TabOrder = 0
+  DesignLeft = 509
+  DesignTop = 158
+  object ValueNameLabel: TLabel
+    Left = 8
+    Height = 13
+    Top = 12
+    Width = 27
+    Caption = 'Name'
+  end
+  object ValueName: TEdit
+    Left = 56
+    Height = 21
+    Top = 8
+    Width = 80
+    TabOrder = 0
+    Text = 'ValueName'
+    OnChange = ValueNameChange
+  end
+  object ValueScalar: TRadioButton
+    Left = 56
+    Height = 17
+    Top = 32
+    Width = 49
+    Caption = 'Scalar'
+    TabOrder = 1
+    OnClick = ValueScalarClick
+  end
+  object ValueVector: TRadioButton
+    Left = 144
+    Height = 17
+    Top = 32
+    Width = 51
+    Caption = 'Vector'
+    TabOrder = 2
+    OnClick = ValueVectorClick
+  end
+  object ValueTypeLabel: TLabel
+    Left = 8
+    Height = 13
+    Top = 34
+    Width = 24
+    Caption = 'Type'
+  end
+end

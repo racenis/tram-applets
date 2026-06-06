@@ -137,6 +137,14 @@ object MainForm: TMainForm
     Caption = 'StopParticle'
     TabOrder = 14
   end
+  object OptionsPanel: TPanel
+    Left = 200
+    Height = 240
+    Top = 320
+    Width = 320
+    Caption = 'OptionsPanel'
+    TabOrder = 15
+  end
   object MainMenu: TMainMenu
     Left = 544
     Top = 472

@@ -59,6 +59,53 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="AboutDialogUnit"/>
       </Unit>
+      <Unit>
+        <Filename Value="optionssystemunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="OptionsSystemFrame"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="OptionsSystemUnit"/>
+      </Unit>
+      <Unit>
+        <Filename Value="optionsoperationunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="OptionsOperationFrame"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="OptionsOperationUnit"/>
+      </Unit>
+      <Unit>
+        <Filename Value="optionsconstraintunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="OptionsConstraintFrame"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="OptionsConstraintUnit"/>
+      </Unit>
+      <Unit>
+        <Filename Value="optionsvalueunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="OptionsValueFrame"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="OptionsValueUnit"/>
+      </Unit>
+      <Unit>
+        <Filename Value="optionsemitterunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="OptionsEmitterFrame"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="OptionsEmitterUnit"/>
+      </Unit>
+      <Unit>
+        <Filename Value="optionsparameterunit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="OptionsParameter"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="OptionsParameterUnit"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

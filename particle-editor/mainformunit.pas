@@ -7,7 +7,9 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, StdCtrls,
   ExtCtrls, ComCtrls, AboutDialogUnit, OpenGLContext, gl, CFunctions,
-  TramAssetMetadata, TramParticleAsset, LCLType;
+  TramAssetMetadata, TramParticleAsset, LCLType, OptionsSystemUnit,
+  OptionsValueUnit, OptionsConstraintUnit, OptionsEmitterUnit,
+  OptionsOperationUnit;
 
 type
 
@@ -16,6 +18,7 @@ type
   TMainForm = class(TForm)
     AddSystem: TButton;
     AutoPlay: TCheckBox;
+    OptionsPanel: TPanel;
     StopParticle: TButton;
     StartParticle: TButton;
     OpenProject: TMenuItem;
@@ -64,6 +67,8 @@ type
 
     PreviewMaterial: Pointer;
     PreviewMeshSphere: Pointer;
+
+    optionsFrame: TFrame;
 
     PreviewRotateX: Real;
     PreviewRotateY: Real;
@@ -130,7 +135,7 @@ begin
 
   if ParticleTree.Selected.Text = 'Values' then begin
      val := sys.AddValue;
-     OperationList.AddItem(val.dataName + #9 + 'egg', val);
+     OperationList.AddItem(val.dataName, val);
      Exit;
   end;
 end;
@@ -146,6 +151,7 @@ begin
   ParticleTree.Items.AddChild(node, 'Initializers');
   ParticleTree.Items.AddChild(node, 'Operations');
   ParticleTree.Items.AddChild(node, 'Constraints');
+  ParticleTree.Items.AddChild(node, 'Values');
   node.Expand(True);
 end;
 
@@ -217,6 +223,7 @@ begin
   // redraw the screen
   GLBox.invalidate;
 
+  optionsFrame := nil;
 
   Particles := TParticleCollection.Create();
   Particles.ScanFromDisk;
@@ -276,6 +283,16 @@ begin
   RemoveOp.Enabled := isSelected;
   MoveOpUp.Enabled := isSelected and isOperation;
   MoveOpDown.Enabled := isSelected and isOperation;
+
+  if OperationList.ItemIndex < 0 then Exit;
+  if (ParticleTree.Selected.Text = 'Operations') or (ParticleTree.Selected.Text = 'Initializers') then
+      (optionsFrame as TOptionsOperationFrame).SetOperation(OperationList.Items.Objects[OperationList.ItemIndex] as TParticleOperation);
+  if ParticleTree.Selected.Text = 'Constraints' then
+      (optionsFrame as TOptionsConstraintFrame).SetConstraint(OperationList.Items.Objects[OperationList.ItemIndex] as TParticleConstraint);
+  if ParticleTree.Selected.Text = 'Emitters' then
+      (optionsFrame as TOptionsEmitterFrame).SetEmitter(OperationList.Items.Objects[OperationList.ItemIndex] as TParticleEmitter);
+  if ParticleTree.Selected.Text = 'Values' then
+      (optionsFrame as TOptionsValueFrame).SetValue(OperationList.Items.Objects[OperationList.ItemIndex] as TParticleData);
 end;
 
 procedure TMainForm.ParticleListSelectionChange(Sender: TObject; User: boolean);
@@ -342,9 +359,16 @@ begin
   MoveOpUp.Enabled := False;
   MoveOpDown.Enabled := False;
 
+  if optionsFrame <> nil then begin
+     optionsFrame.Free;
+     optionsFrame := nil;
+  end;
+
   if ParticleTree.Selected.Text = 'Initializers' then begin
      AddOp.Caption := 'Add Op';
      RemoveOp.Caption := 'Remove Op';
+     optionsFrame := TOptionsOperationFrame.Create(OptionsPanel);
+     optionsFrame.Parent := OptionsPanel;
 
      for op in sys.GetInits do
          OperationList.AddItem(op.opType, op);
@@ -354,6 +378,8 @@ begin
   if ParticleTree.Selected.Text = 'Operations' then begin
      AddOp.Caption := 'Add Op';
      RemoveOp.Caption := 'Remove Op';
+     optionsFrame := TOptionsOperationFrame.Create(OptionsPanel);
+     optionsFrame.Parent := OptionsPanel;
      for op in sys.GetOps do
          OperationList.AddItem(op.opType, op);
      Exit;
@@ -362,6 +388,8 @@ begin
   if ParticleTree.Selected.Text = 'Constraints' then begin
      AddOp.Caption := 'Add Constr';
      RemoveOp.Caption := 'Remove Constr';
+     optionsFrame := TOptionsConstraintFrame.Create(OptionsPanel);
+     optionsFrame.Parent := OptionsPanel;
      for ct in sys.GetConstrs do
          OperationList.AddItem(ct.ctType, ct);
      Exit;
@@ -370,6 +398,8 @@ begin
   if ParticleTree.Selected.Text = 'Emitters' then begin
      AddOp.Caption := 'Add Emit';
      RemoveOp.Caption := 'Remove Emit';
+     optionsFrame := TOptionsEmitterFrame.Create(OptionsPanel);
+     optionsFrame.Parent := OptionsPanel;
      for em in sys.GetEmits do
          OperationList.AddItem('Emitter', em);
      Exit;
@@ -378,6 +408,8 @@ begin
   if ParticleTree.Selected.Text = 'Values' then begin
      AddOp.Caption := 'Add Value';
      RemoveOp.Caption := 'Remove Value';
+     optionsFrame := TOptionsValueFrame.Create(OptionsPanel);
+     optionsFrame.Parent := OptionsPanel;
      for val in sys.GetValues do
          OperationList.AddItem(val.dataName, val);
      Exit;
@@ -389,8 +421,9 @@ begin
   if not TParticleSystem(ParticleTree.Selected.Data).isBase then
      RemoveSystem.Enabled := True;
 
-
-
+  optionsFrame := TOptionsSystemFrame.Create(OptionsPanel);
+  optionsFrame.Parent := OptionsPanel;
+  (optionsFrame as TOptionsSystemFrame).SetSystem(sys);
 end;
 
 procedure TMainForm.QuitClick(Sender: TObject);

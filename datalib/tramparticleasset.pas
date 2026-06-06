@@ -31,9 +31,13 @@ type
      dataType: string;
   end;
 
+  { TParticleOperation }
+
   TParticleOperation = class
   public
      constructor Create;
+     procedure ToggleParams;
+     function GetParamName(param: Integer): string;
   public
      opType: string;
      mergeType: string;
@@ -47,9 +51,13 @@ type
      isInit: Boolean;
   end;
 
+  { TParticleConstraint }
+
   TParticleConstraint = class
   public
      constructor Create;
+     procedure ToggleParams;
+     function GetParamName(param: Integer): string;
   public
      ctType: string;
      mergeDest: string;
@@ -64,8 +72,8 @@ type
   public
      constructor Create;
   public
-     rate: TParticleOperation;
-     delay: TParticleOperation;
+     rate: TParticleParameter;
+     delay: TParticleParameter;
   end;
 
   TParticleDataList = specialize TFPGList<TParticleData>;
@@ -643,8 +651,80 @@ begin
   self.param2 := TParticleParameter.Create;
   self.param3 := TParticleParameter.Create;
   self.param4 := TParticleParameter.Create;
+  self.param1.paramType := 'scalar';
+  self.param1.x := '0';
 
   self.isInit := False;
+end;
+
+procedure TParticleOperation.ToggleParams;
+  procedure SetEnableParam(param: TParticleParameter; enabled: Boolean);
+  begin
+    if enabled and (param.paramType = 'none') then begin
+      param.paramType := 'scalar';
+    end;
+    if (not enabled) and (param.paramType <> 'none') then begin
+      param.paramType := 'none';
+    end;
+  end;
+begin
+  case opType of
+       'copy': begin
+         SetEnableParam(param1, True);
+         SetEnableParam(param2, False);
+         SetEnableParam(param3, False);
+         SetEnableParam(param4, False);
+       end;
+       'oscillator': begin
+         SetEnableParam(param1, True);
+         SetEnableParam(param2, True);
+         SetEnableParam(param3, True);
+         SetEnableParam(param4, False);
+       end;
+       'noise': begin
+         SetEnableParam(param1, True);
+         SetEnableParam(param2, True);
+         SetEnableParam(param3, False);
+         SetEnableParam(param4, False);
+       end;
+       'clamp': begin
+         SetEnableParam(param1, False);
+         SetEnableParam(param2, False);
+         SetEnableParam(param3, False);
+         SetEnableParam(param4, False);
+       end;
+       'normalize': begin
+         SetEnableParam(param1, False);
+         SetEnableParam(param2, False);
+         SetEnableParam(param3, False);
+         SetEnableParam(param4, False);
+       end;
+  end;
+end;
+
+function TParticleOperation.GetParamName(param: Integer): string;
+begin
+  case opType of
+       'copy': begin
+         if param = 1 then Exit('VALUE'); Exit('N/A');
+       end;
+       'oscillator': begin
+         if param = 1 then Exit('AMPLITUDE');
+         if param = 2 then Exit('FREQUENCY');
+         if param = 3 then Exit('PHASE'); Exit('N/A');
+       end;
+       'noise': begin
+         if param = 1 then Exit('OFFSET');
+         if param = 2 then Exit('AMPLITUDE'); Exit('N/A');
+       end;
+       'clamp': begin
+         Exit('N/A');
+       end;
+       'normalize': begin
+         Exit('N/A');
+       end;
+  end;
+  Exit('UNKNOWN');
 end;
 
 { TParticleConstraint }
@@ -658,14 +738,51 @@ begin
   self.param2 := TParticleParameter.Create;
   self.param3 := TParticleParameter.Create;
   self.param4 := TParticleParameter.Create;
+  self.param1.paramType := 'scalar';
+  self.param1.x := '0';
+end;
+
+procedure TParticleConstraint.ToggleParams;
+  procedure SetEnableParam(param: TParticleParameter; enabled: Boolean);
+  begin
+    if enabled and (param.paramType = 'none') then begin
+      param.paramType := 'scalar';
+    end;
+    if (not enabled) and (param.paramType <> 'none') then begin
+      param.paramType := 'none';
+    end;
+  end;
+begin
+  case ctType of
+       'lt', 'gt': begin
+         SetEnableParam(param1, True);
+         SetEnableParam(param2, False);
+         SetEnableParam(param3, False);
+         SetEnableParam(param4, False);
+       end;
+  end;
+end;
+
+function TParticleConstraint.GetParamName(param: Integer): string;
+begin
+  case ctType of
+       'lt', 'gt': begin
+         if param = 1 then Exit('VALUE'); Exit('N/A');
+       end;
+  end;
+  Exit('UNKNOWN');
 end;
 
 { TParticleEmitter }
 
 constructor TParticleEmitter.Create;
 begin
-  self.rate := TParticleOperation.Create;
-  self.delay := TParticleOperation.Create;
+  self.rate := TParticleParameter.Create;
+  self.delay := TParticleParameter.Create;
+  self.rate.paramType := 'scalar';
+  self.rate.x := '1';
+  self.delay.paramType := 'scalar';
+  self.delay.x := '1';
 end;
 
 end.

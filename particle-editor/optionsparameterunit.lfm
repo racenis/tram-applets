@@ -1,0 +1,75 @@
+object OptionsParameter: TOptionsParameter
+  Left = 0
+  Height = 32
+  Top = 0
+  Width = 220
+  ClientHeight = 32
+  ClientWidth = 220
+  TabOrder = 0
+  DesignLeft = 364
+  DesignTop = 641
+  object TypeValue: TRadioButton
+    Left = 0
+    Height = 17
+    Top = 8
+    Width = 38
+    Caption = 'Val.'
+    TabOrder = 0
+    OnClick = TypeValueClick
+  end
+  object TypeScalar: TRadioButton
+    Left = 32
+    Height = 17
+    Top = 8
+    Width = 33
+    Caption = 'Scl'
+    TabOrder = 1
+    OnClick = TypeScalarClick
+  end
+  object TypeVector: TRadioButton
+    Left = 64
+    Height = 17
+    Top = 8
+    Width = 37
+    Caption = 'Vec'
+    TabOrder = 2
+    OnClick = TypeVectorClick
+  end
+  object NumX: TFloatSpinEdit
+    Left = 101
+    Height = 21
+    Top = 6
+    Width = 42
+    DecimalPlaces = 1
+    OnChange = NumXChange
+    TabOrder = 3
+  end
+  object NumY: TFloatSpinEdit
+    Left = 141
+    Height = 21
+    Top = 6
+    Width = 40
+    DecimalPlaces = 1
+    OnChange = NumYChange
+    TabOrder = 4
+  end
+  object NumZ: TFloatSpinEdit
+    Left = 181
+    Height = 21
+    Top = 6
+    Width = 40
+    DecimalPlaces = 1
+    OnChange = NumZChange
+    TabOrder = 5
+  end
+  object ValueName: TComboBox
+    Left = 100
+    Height = 21
+    Top = 6
+    Width = 119
+    ItemHeight = 13
+    TabOrder = 6
+    Text = 'ValueName'
+    OnChange = ValueNameChange
+  end
+end

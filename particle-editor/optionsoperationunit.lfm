@@ -1,0 +1,197 @@
+object OptionsOperationFrame: TOptionsOperationFrame
+  Left = 0
+  Height = 240
+  Top = 0
+  Width = 320
+  ClientHeight = 240
+  ClientWidth = 320
+  TabOrder = 0
+  DesignLeft = 372
+  DesignTop = 279
+  object OperationType: TComboBox
+    Left = 72
+    Height = 21
+    Top = 8
+    Width = 100
+    ItemHeight = 13
+    Items.Strings = (
+      'copy'
+      'oscillator'
+      'noise'
+      'clamp'
+      'normalize'
+    )
+    Style = csDropDownList
+    TabOrder = 0
+    OnChange = OperationTypeChange
+  end
+  object MergeType: TComboBox
+    Left = 72
+    Height = 21
+    Top = 56
+    Width = 100
+    ItemHeight = 13
+    Items.Strings = (
+      'set'
+      'add'
+      'sub'
+      'mul'
+      'div'
+    )
+    Style = csDropDownList
+    TabOrder = 1
+    OnChange = MergeTypeChange
+  end
+  object MergeDestPanel: TPanel
+    Left = 72
+    Height = 34
+    Top = 80
+    Width = 242
+    BevelOuter = bvLowered
+    ClientHeight = 34
+    ClientWidth = 242
+    TabOrder = 2
+    object MergeDestAny: TRadioButton
+      Left = 8
+      Height = 17
+      Top = 8
+      Width = 39
+      Caption = 'Any'
+      TabOrder = 0
+      OnClick = MergeDestAnyClick
+    end
+    object MergeDestX: TRadioButton
+      Left = 48
+      Height = 17
+      Top = 8
+      Width = 26
+      Caption = 'X'
+      TabOrder = 1
+      OnClick = MergeDestXClick
+    end
+    object MergeDestY: TRadioButton
+      Left = 80
+      Height = 17
+      Top = 8
+      Width = 26
+      Caption = 'Y'
+      TabOrder = 2
+      OnClick = MergeDestYClick
+    end
+    object MergeDestZ: TRadioButton
+      Left = 112
+      Height = 17
+      Top = 8
+      Width = 26
+      Caption = 'Z'
+      TabOrder = 3
+      OnClick = MergeDestZClick
+    end
+  end
+  object OpTypeLabel: TLabel
+    Left = 8
+    Height = 13
+    Top = 12
+    Width = 48
+    Caption = 'Operation'
+  end
+  object MergeTypeLabel: TLabel
+    Left = 8
+    Height = 13
+    Top = 60
+    Width = 30
+    Caption = 'Merge'
+  end
+  object MergeDestLabel: TLabel
+    Left = 8
+    Height = 13
+    Top = 88
+    Width = 54
+    Caption = 'Destination'
+  end
+  object Param1Name: TEdit
+    Left = 8
+    Height = 21
+    Top = 120
+    Width = 80
+    ReadOnly = True
+    TabOrder = 3
+    Text = 'Param1Name'
+  end
+  object Param2Name: TEdit
+    Left = 8
+    Height = 21
+    Top = 152
+    Width = 80
+    ReadOnly = True
+    TabOrder = 4
+    Text = 'Param2Name'
+  end
+  object Param3Name: TEdit
+    Left = 8
+    Height = 21
+    Top = 184
+    Width = 80
+    ReadOnly = True
+    TabOrder = 5
+    Text = 'Param3Name'
+  end
+  object Param4Name: TEdit
+    Left = 8
+    Height = 21
+    Top = 216
+    Width = 80
+    ReadOnly = True
+    TabOrder = 6
+    Text = 'Param4Name'
+  end
+  object Param1Panel: TPanel
+    Left = 88
+    Height = 32
+    Top = 114
+    Width = 226
+    BevelOuter = bvNone
+    TabOrder = 7
+  end
+  object Param2Panel: TPanel
+    Left = 88
+    Height = 32
+    Top = 146
+    Width = 226
+    BevelOuter = bvNone
+    TabOrder = 8
+  end
+  object Param3Panel: TPanel
+    Left = 88
+    Height = 32
+    Top = 178
+    Width = 226
+    BevelOuter = bvNone
+    TabOrder = 9
+  end
+  object Param4Panel: TPanel
+    Left = 88
+    Height = 34
+    Top = 210
+    Width = 226
+    BevelOuter = bvNone
+    TabOrder = 10
+  end
+  object TargetLabel: TLabel
+    Left = 8
+    Height = 13
+    Top = 36
+    Width = 32
+    Caption = 'Target'
+  end
+  object TargetSelect: TComboBox
+    Left = 72
+    Height = 21
+    Top = 32
+    Width = 100
+    ItemHeight = 13
+    TabOrder = 11
+    Text = 'TargetSelect'
+    OnChange = TargetSelectChange
+  end
+end
