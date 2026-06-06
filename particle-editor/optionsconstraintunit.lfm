@@ -89,7 +89,7 @@ object OptionsConstraintFrame: TOptionsConstraintFrame
     Width = 80
     ReadOnly = True
     TabOrder = 2
-    Text = 'Param1Name'
+    Text = 'N/A'
   end
   object Param2Name: TEdit
     Left = 8
@@ -98,7 +98,7 @@ object OptionsConstraintFrame: TOptionsConstraintFrame
     Width = 80
     ReadOnly = True
     TabOrder = 3
-    Text = 'Param2Name'
+    Text = 'N/A'
   end
   object Param3Name: TEdit
     Left = 8
@@ -107,7 +107,7 @@ object OptionsConstraintFrame: TOptionsConstraintFrame
     Width = 80
     ReadOnly = True
     TabOrder = 4
-    Text = 'Param3Name'
+    Text = 'N/A'
   end
   object Param4Name: TEdit
     Left = 8
@@ -116,7 +116,7 @@ object OptionsConstraintFrame: TOptionsConstraintFrame
     Width = 80
     ReadOnly = True
     TabOrder = 5
-    Text = 'Param4Name'
+    Text = 'N/A'
   end
   object Param4Panel: TPanel
     Left = 88
@@ -157,7 +157,6 @@ object OptionsConstraintFrame: TOptionsConstraintFrame
     Width = 100
     ItemHeight = 13
     TabOrder = 10
-    Text = 'TargetSelect'
     OnChange = TargetSelectChange
   end
   object TargetLabel: TLabel

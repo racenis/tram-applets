@@ -21,7 +21,7 @@ object OptionsValueFrame: TOptionsValueFrame
     Top = 8
     Width = 80
     TabOrder = 0
-    Text = 'ValueName'
+    Text = 'none'
     OnChange = ValueNameChange
   end
   object ValueScalar: TRadioButton

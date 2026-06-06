@@ -21,8 +21,8 @@ type
     OptionsPanel: TPanel;
     StopParticle: TButton;
     StartParticle: TButton;
-    OpenProject: TMenuItem;
-    SaveSprites: TMenuItem;
+    MainMenuOpenProject: TMenuItem;
+    MainMenuSaveProject: TMenuItem;
     RemoveSystem: TButton;
     MoveOpUp: TButton;
     MoveOpDown: TButton;
@@ -36,8 +36,8 @@ type
     HelpMenu: TMenuItem;
     AboutMenu: TMenuItem;
     RenderPanel: TPanel;
-    Quit: TMenuItem;
-    NewParticleCreate: TMenuItem;
+    MainMenuQuit: TMenuItem;
+    MainMenuNewParticleCreate: TMenuItem;
     Separator1: TMenuItem;
     Separator2: TMenuItem;
     StatusBar1: TStatusBar;
@@ -47,11 +47,14 @@ type
     procedure AddSystemClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure GLboxPaint(Sender: TObject);
-    procedure NewParticleCreateClick(Sender: TObject);
+    procedure MainMenuNewParticleCreateClick(Sender: TObject);
+    procedure MainMenuOpenProjectClick(Sender: TObject);
+    procedure MoveOpDownClick(Sender: TObject);
+    procedure MoveOpUpClick(Sender: TObject);
     procedure OperationListSelectionChange(Sender: TObject; User: boolean);
     procedure ParticleListSelectionChange(Sender: TObject; User: boolean);
     procedure ParticleTreeChange(Sender: TObject; Node: TTreeNode);
-    procedure QuitClick(Sender: TObject);
+    procedure MainMenuQuitClick(Sender: TObject);
     procedure RemoveOpClick(Sender: TObject);
     procedure RemoveSystemClick(Sender: TObject);
     procedure RenderPanelMouseDown(Sender: TObject; Button: TMouseButton;
@@ -60,6 +63,7 @@ type
       Y: Integer);
     procedure RenderPanelMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure MainMenuSaveProjectClick(Sender: TObject);
   private
 
   public
@@ -231,7 +235,6 @@ begin
   for particleFile in Particles.GetAssets() do
       ParticleList.AddItem(particleFile.GetName, particleFile);
 
-  // right now we'll load all materials from disk. later maybe we will lazy load
   for particleFile in Particles.GetAssets() do
       particleFile.LoadFromDisk();
 
@@ -248,7 +251,7 @@ begin
   GLbox.SwapBuffers;
 end;
 
-procedure TMainForm.NewParticleCreateClick(Sender: TObject);
+procedure TMainForm.MainMenuNewParticleCreateClick(Sender: TObject);
 var
   newParticleName: string;
   newParticle: TParticle;
@@ -271,18 +274,101 @@ begin
   ParticleListSelectionChange(self, False);
 end;
 
+procedure TMainForm.MainMenuOpenProjectClick(Sender: TObject);
+var
+  particleFile: TAssetMetadata;
+  dialog: TSelectDirectoryDialog;
+begin
+  dialog := TSelectDirectoryDialog.Create(self);
+  dialog.Execute;
+
+  if (ID_YES <> Application.MessageBox(PChar(Format('Discard all unsaved changes and open %s?', [dialog.FileName])),
+                                      'Open Project',
+                                      MB_ICONQUESTION + MB_YESNO)) then Exit;
+
+  SetCurrentDir(dialog.FileName);
+
+  ParticleList.Clear;
+  ParticleTree.Items.Clear;
+  OperationList.Clear;
+  OptionsPanel.Enabled := False;
+
+  Particles.Free;
+
+  Particles := TParticleCollection.Create();
+  Particles.ScanFromDisk;
+
+  for particleFile in Particles.GetAssets() do
+      ParticleList.AddItem(particleFile.GetName, particleFile);
+
+  for particleFile in Particles.GetAssets() do
+      particleFile.LoadFromDisk();
+
+  if ParticleList.Items.Count > 0 then begin
+     ParticleList.ItemIndex := 0;
+     self.ParticleListSelectionChange(self, False);
+  end;
+end;
+
+procedure TMainForm.MoveOpDownClick(Sender: TObject);
+var
+  prevIndex: Integer;
+  op: TParticleOperation;
+  sys: TParticleSystem;
+begin
+  if ParticleTree.Selected.Parent <> nil then
+     sys := TParticleSystem(ParticleTree.Selected.Parent.Data)
+  else
+      sys := TParticleSystem(ParticleTree.Selected.Data);
+
+  prevIndex := OperationList.ItemIndex;
+
+  op := OperationList.Items.Objects[OperationList.ItemIndex] as TParticleOperation;
+  sys.MoveDown(op);
+
+  self.ParticleTreeChange(self, nil);
+
+  OperationList.ItemIndex := prevIndex + 1;
+end;
+
+procedure TMainForm.MoveOpUpClick(Sender: TObject);
+var
+  prevIndex: Integer;
+  op: TParticleOperation;
+  sys: TParticleSystem;
+begin
+  if ParticleTree.Selected.Parent <> nil then
+     sys := TParticleSystem(ParticleTree.Selected.Parent.Data)
+  else
+      sys := TParticleSystem(ParticleTree.Selected.Data);
+
+  prevIndex := OperationList.ItemIndex;
+
+  op := OperationList.Items.Objects[OperationList.ItemIndex] as TParticleOperation;
+  sys.MoveUp(op);
+
+  self.ParticleTreeChange(self, nil);
+
+  OperationList.ItemIndex := prevIndex - 1;
+end;
+
 procedure TMainForm.OperationListSelectionChange(Sender: TObject; User: boolean
   );
 var
   isSelected: Boolean;
   isOperation: Boolean;
+  isLast: Boolean;
+  isFirst: Boolean;
 begin
   isSelected := OperationList.ItemIndex >= 0;
   isOperation := (ParticleTree.Selected.Text = 'Initializers')
               or (ParticleTree.Selected.Text = 'Operations');
+  isLast := OperationList.ItemIndex + 1 >= OperationList.Items.Count;
+  isFirst := OperationList.ItemIndex = 0;
   RemoveOp.Enabled := isSelected;
-  MoveOpUp.Enabled := isSelected and isOperation;
-  MoveOpDown.Enabled := isSelected and isOperation;
+  MoveOpUp.Enabled := isSelected and isOperation and (not isFirst);
+  MoveOpDown.Enabled := isSelected and isOperation and (not isLast);
+  OptionsPanel.Enabled := True;
 
   if OperationList.ItemIndex < 0 then Exit;
   if (ParticleTree.Selected.Text = 'Operations') or (ParticleTree.Selected.Text = 'Initializers') then
@@ -303,9 +389,14 @@ var
 begin
   if ParticleList.ItemIndex < 0 then begin
      SelectedParticle := nil;
-     // TODO: disable particle tree
+     ParticleTree.Enabled := False;
+     OperationList.Enabled := False;
      Exit;
   end;
+
+  ParticleTree.Enabled := True;
+  OperationList.Enabled := False;
+  OptionsPanel.Enabled := False;
 
   SelectedParticle := ParticleList.Items.Objects[ParticleList.ItemIndex] as TParticle;
 
@@ -344,9 +435,13 @@ begin
   RemoveSystem.Enabled := False;
 
   if ParticleTree.Selected = nil then begin
-     // TODO: disable other stuff
+     OperationList.Enabled := False;
+     OptionsPanel.Enabled := False;
      Exit;
   end;
+
+  OperationList.Enabled := True;
+  OptionsPanel.Enabled := False;
 
   if ParticleTree.Selected.Parent <> nil then
      sys := TParticleSystem(ParticleTree.Selected.Parent.Data)
@@ -421,12 +516,14 @@ begin
   if not TParticleSystem(ParticleTree.Selected.Data).isBase then
      RemoveSystem.Enabled := True;
 
+  OptionsPanel.Enabled := True;
+
   optionsFrame := TOptionsSystemFrame.Create(OptionsPanel);
   optionsFrame.Parent := OptionsPanel;
   (optionsFrame as TOptionsSystemFrame).SetSystem(sys);
 end;
 
-procedure TMainForm.QuitClick(Sender: TObject);
+procedure TMainForm.MainMenuQuitClick(Sender: TObject);
 begin
   Application.Terminate;
 end;
@@ -537,6 +634,14 @@ procedure TMainForm.RenderPanelMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   IsPreviewDragged := False;
+end;
+
+procedure TMainForm.MainMenuSaveProjectClick(Sender: TObject);
+var
+  particleFile: TAssetMetadata;
+begin
+  for particleFile in Particles.GetAssets() do
+      particleFile.SaveToDisk();
 end;
 
 end.

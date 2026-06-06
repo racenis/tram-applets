@@ -3,7 +3,7 @@ object MainForm: TMainForm
   Height = 581
   Top = 153
   Width = 800
-  Caption = 'Particle Editor -- UNFINISHED'
+  Caption = 'Particle Editor'
   ClientHeight = 581
   ClientWidth = 800
   Menu = MainMenu
@@ -15,7 +15,7 @@ object MainForm: TMainForm
     Top = 0
     Width = 200
     TabOrder = 0
-    Text = 'ParticleListFilter'
+    TextHint = 'TODO: implement filtering'
   end
   object RenderPanel: TPanel
     Left = 480
@@ -86,6 +86,7 @@ object MainForm: TMainForm
     Width = 56
     Caption = 'Move Up'
     TabOrder = 8
+    OnClick = MoveOpUpClick
   end
   object MoveOpDown: TButton
     Left = 344
@@ -94,6 +95,7 @@ object MainForm: TMainForm
     Width = 56
     Caption = 'Move Down'
     TabOrder = 9
+    OnClick = MoveOpDownClick
   end
   object AddOp: TButton
     Left = 400
@@ -142,39 +144,45 @@ object MainForm: TMainForm
     Height = 240
     Top = 320
     Width = 320
-    Caption = 'OptionsPanel'
+    BevelOuter = bvNone
     TabOrder = 15
   end
   object MainMenu: TMainMenu
     Left = 544
     Top = 472
     object FileMenu: TMenuItem
-      Caption = 'FileMenu'
-      object NewParticleCreate: TMenuItem
-        Caption = 'NewParticleCreate'
-        OnClick = NewParticleCreateClick
+      Caption = 'File'
+      object MainMenuNewParticleCreate: TMenuItem
+        Caption = 'New Particle'
+        ShortCut = 16462
+        OnClick = MainMenuNewParticleCreateClick
       end
       object Separator2: TMenuItem
         Caption = '-'
       end
-      object SaveSprites: TMenuItem
-        Caption = 'SaveSprites'
+      object MainMenuSaveProject: TMenuItem
+        Caption = 'Save Project'
+        ShortCut = 16467
+        OnClick = MainMenuSaveProjectClick
       end
-      object OpenProject: TMenuItem
-        Caption = 'OpenProject'
+      object MainMenuOpenProject: TMenuItem
+        Caption = 'Open Project'
+        ShortCut = 16463
+        OnClick = MainMenuOpenProjectClick
       end
       object Separator1: TMenuItem
         Caption = '-'
       end
-      object Quit: TMenuItem
+      object MainMenuQuit: TMenuItem
         Caption = 'Quit'
-        OnClick = QuitClick
+        ShortCut = 112
+        OnClick = MainMenuQuitClick
       end
     end
     object HelpMenu: TMenuItem
-      Caption = 'HelpMenu'
+      Caption = 'Help'
       object AboutMenu: TMenuItem
-        Caption = 'AboutMenu'
+        Caption = 'About'
         OnClick = AboutMenuClick
       end
     end

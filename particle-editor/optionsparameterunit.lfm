@@ -69,7 +69,7 @@ object OptionsParameter: TOptionsParameter
     Width = 119
     ItemHeight = 13
     TabOrder = 6
-    Text = 'ValueName'
+    Text = 'none'
     OnChange = ValueNameChange
   end
 end

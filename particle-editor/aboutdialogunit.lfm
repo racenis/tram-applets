@@ -1,7 +1,7 @@
 object AboutDialog: TAboutDialog
-  Left = 305
+  Left = 300
   Height = 240
-  Top = 132
+  Top = 125
   Width = 320
   BorderIcons = [biMinimize, biMaximize]
   BorderStyle = bsDialog
@@ -29,8 +29,8 @@ object AboutDialog: TAboutDialog
     Left = 88
     Height = 24
     Top = 48
-    Width = 221
-    Caption = 'Material Editor Applet'
+    Width = 217
+    Caption = 'Particle Editor Applet'
     Font.CharSet = BALTIC_CHARSET
     Font.Height = -21
     Font.Name = 'Arial'
@@ -57,9 +57,9 @@ object AboutDialog: TAboutDialog
     Left = 64
     Height = 78
     Top = 112
-    Width = 183
+    Width = 191
     Alignment = taCenter
-    Caption = 'Tramway SDK © racenis 2022 — 2026'#13#10'Asset Manager Applet © racenis 2026'#13#10#13#10'Available under GPL license'#13#10#13#10'https://racenis.github.io/tram-sdk/'
+    Caption = 'Tramway SDK © racenis 2022 — 2026'#13#10'Particle Manager Applet © racenis 2026'#13#10#13#10'Available under GPL license'#13#10#13#10'https://racenis.github.io/tram-sdk/'
   end
   object CloseDialog: TButton
     Left = 120

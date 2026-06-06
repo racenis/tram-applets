@@ -369,9 +369,27 @@ var
   assetFile: TAssetParser;
   rowIndex: Integer;
   system: TParticleSystem;
-  fs: TFormatSettings;
+  data: TParticleData;
+  op: TParticleOperation;
+  ct: TParticleConstraint;
+  em: TParticleEmitter;
+
+  procedure ReadParam(index: Integer; p: TParticleParameter);
+  begin
+    p.paramType := assetFile.GetValue(index, 0);
+    case p.paramType of
+         'none':       Exit;
+         'data':       p.data := assetFile.GetValue(index, 1);
+         'scalar':     p.x := assetFile.GetValue(index, 1);
+         'vector':     begin
+             p.x := assetFile.GetValue(index, 1);
+             p.y := assetFile.GetValue(index, 2);
+             p.z := assetFile.GetValue(index, 3);
+         end;
+    end;
+  end;
 begin
-  (*assetFile := TAssetParser.Create(GetPath);
+  assetFile := TAssetParser.Create(GetPath);
 
   if not assetFile.IsOpen then
   begin
@@ -385,88 +403,170 @@ begin
     Exit;
   end;
 
-  if assetFile.GetValue(0, 0) <> 'MATv7' then
+  if assetFile.GetValue(0, 0) <> 'PRTv1' then
   begin
     WriteLn('INCORRECT HEADER!!!');
     Exit;
   end;
 
-  fs := DefaultFormatSettings;
-  fs.DecimalSeparator := '.';
+  rowIndex := 1;
+  while rowIndex < assetFile.GetRowCount do begin
 
-  for rowIndex := 1 to assetFile.GetRowCount - 1 do begin
-    material := TMaterialData.Create(assetFile.GetValue(rowIndex, 0));
+    if assetFile.GetValue(rowIndex, 0) = 'control' then begin
+      data := self.NewControl;
+      data.dataType := assetFile.GetValue(rowIndex, 2);
+      data.dataName := assetFile.GetValue(rowIndex, 1);
+      Inc(rowIndex);
+      Continue;
+    end;
 
-    material.materialType := assetFile.GetValue(rowIndex, 1);
-    material.filter := assetFile.GetValue(rowIndex, 2);
-    material.materialProperty := assetFile.GetValue(rowIndex, 3);
-    material.colorR := StrToFloat(assetFile.GetValue(rowIndex, 4), fs);
-    material.colorG := StrToFloat(assetFile.GetValue(rowIndex, 5), fs);
-    material.colorB := StrToFloat(assetFile.GetValue(rowIndex, 6), fs);
-    material.specular := StrToFloat(assetFile.GetValue(rowIndex, 7), fs);
-    material.exponent := StrToFloat(assetFile.GetValue(rowIndex, 8), fs);
-    material.transparency := StrToFloat(assetFile.GetValue(rowIndex, 9), fs);
-    material.reflectivity := StrToFloat(assetFile.GetValue(rowIndex, 10), fs);
-    material.source := assetFile.GetValue(rowIndex, 11);
+    Inc(rowIndex);
 
-    self.materials.Add(material);
-      // we should probably validate the file here.. ahh whatevs
+    if assetFile.GetValue(rowIndex-1, 0) = 'base' then begin
+      system := self.NewParticleSystem;
+      system.isBase := True;
+    end else if assetFile.GetValue(rowIndex-1, 0) = 'system' then begin
+      system := self.NewParticleSystem;
+      system.isBase := False;
+    end else Continue;
 
-  end;*)
+
+    while rowIndex < assetFile.GetRowCount do case assetFile.GetValue(rowIndex, 0) of
+       'sprite': begin
+         system.sprite := assetFile.GetValue(rowIndex, 1);
+         Inc(rowIndex);
+       end;
+       'wire': begin
+         system.wire := assetFile.GetValue(rowIndex, 1);
+         Inc(rowIndex);
+       end;
+       'model': begin
+         system.model := assetFile.GetValue(rowIndex, 1);
+         Inc(rowIndex);
+       end;
+       'value': begin
+         data := system.AddValue;
+         data.dataType := assetFile.GetValue(rowIndex, 2);
+         data.dataName := assetFile.GetValue(rowIndex, 1);
+         Inc(rowIndex);
+       end;
+       'initializer', 'operation': begin
+         if assetFile.GetValue(rowIndex, 0) = 'initializer' then
+            op := system.AddInit else op := system.AddOp;
+
+         op.opType := assetFile.GetValue(rowIndex, 1);
+         op.mergeType := assetFile.GetValue(rowIndex, 2);
+         op.mergeDest := assetFile.GetValue(rowIndex, 3);
+         op.target := assetFile.GetValue(rowIndex, 4);
+
+         Inc(rowIndex); ReadParam(rowIndex, op.param1);
+         Inc(rowIndex); ReadParam(rowIndex, op.param2);
+         Inc(rowIndex); ReadParam(rowIndex, op.param3);
+         Inc(rowIndex); ReadParam(rowIndex, op.param4);
+         Inc(rowIndex);
+       end;
+       'constraint': begin
+         ct := system.AddConstr;
+         ct.ctType := assetFile.GetValue(rowIndex, 1);
+         ct.mergeDest := assetFile.GetValue(rowIndex, 2);
+         ct.target := assetFile.GetValue(rowIndex, 3);
+
+         Inc(rowIndex); ReadParam(rowIndex, ct.param1);
+         Inc(rowIndex); ReadParam(rowIndex, ct.param2);
+         Inc(rowIndex); ReadParam(rowIndex, ct.param3);
+         Inc(rowIndex); ReadParam(rowIndex, ct.param4);
+         Inc(rowIndex);
+       end;
+       'emitter': begin
+         em := system.AddEmit;
+         Inc(rowIndex); ReadParam(rowIndex, em.rate);
+         Inc(rowIndex); ReadParam(rowIndex, em.delay);
+         Inc(rowIndex);
+       end;
+       'end': begin
+         Inc(rowIndex);
+         Break;
+       end;
+       else
+         Inc(rowIndex);
+    end;
+  end;
 end;
 
 procedure TParticle.SaveToDisk;
 var
   output: TAssetWriter;
   system: TParticleSystem;
+  data: TParticleData;
+  op: TParticleOperation;
+  ct: TParticleConstraint;
+  em: TParticleEmitter;
 
-  procedure writeTableHeader;
+  procedure WriteParam(p: TParticleParameter);
   begin
-    output.Append(['# material name', '|',
-      'type', '|',
-      'filter', '|',
-      'property', '|',
-      'color', '|',
-      'specl.', '|',
-      'exp.', '|',
-      'tr.', '|',
-      'refl.', '|',
-      'source'
-    ]);
+    case p.paramType of
+         'none':       output.Append(['none']);
+         'data':       output.Append(['data', p.data]);
+         'scalar':     output.Append(['scalar', p.x]);
+         'vector':     output.Append(['vector', p.x, p.y, p.z]);
+    end;
   end;
 begin
-  (*output := TAssetWriter.Create(GetPath);
+  output := TAssetWriter.Create(GetPath);
 
-  output.Append(['# Tramway SDK Material File']);
-  output.Append(['# Generated by: Material Editor v0.1.1']);
+  output.Append(['# Tramway SDK Particle File']);
+  output.Append(['# Generated by: Particle Editor v0.1.1']);
   output.Append(['# Generated on: ' + DateTimeToStr(Now)]);
   output.Append(nil);
 
-  output.Append(['MATv7']);
+  output.Append(['PRTv1']);
   output.Append(nil);
 
-  writeTableHeader;
-
-  for material in self.materials do begin
-    output.Append([material.name, '',
-                   material.materialType, '',
-                   material.filter, '',
-                   material.materialProperty, '',
-                   StringReplace(Format('%.2g %.2g %.2g',
-                                [material.colorR,
-                                 material.colorG,
-                                 material.colorB]), ',', '.', [rfReplaceAll]), '',
-                   FloatToStr(material.specular), '',
-                   FloatToStr(material.exponent), '',
-                   FloatToStr(material.transparency), '',
-                   FloatToStr(material.reflectivity), '',
-                   material.source
-    ]);
+  for data in self.controls do begin
+      output.Append(['control', data.dataName, data.dataType]);
   end;
 
-  writeTableHeader;
+  for system in self.systems do begin
+    if system.isBase then
+       output.Append(['base'])
+    else
+       output.Append(['system']);
 
-  output.Free;*)
+    if system.sprite <> '' then output.Append(['sprite', system.sprite]);
+    if system.wire <> '' then output.Append(['wire', system.wire]);
+    if system.model <> '' then output.Append(['model', system.model]);
+
+    for data in system.values do begin
+      output.Append(['value', data.dataName, data.dataType]);
+    end;
+
+    for op in system.ops do begin
+      output.Append(['operation', op.opType, op.mergeType, op.mergeDest, op.target]);
+      WriteParam(op.param1); WriteParam(op.param2);
+      WriteParam(op.param3); WriteParam(op.param4);
+    end;
+
+    for op in system.inits do begin
+      output.Append(['initializer', op.opType, op.mergeType, op.mergeDest, op.target]);
+      WriteParam(op.param1); WriteParam(op.param2);
+      WriteParam(op.param3); WriteParam(op.param4);
+    end;
+
+    for ct in system.constrs do begin
+      output.Append(['constraint', ct.ctType, ct.mergeDest, ct.target]);
+      WriteParam(ct.param1); WriteParam(ct.param2);
+      WriteParam(ct.param3); WriteParam(ct.param4);
+    end;
+
+    for em in system.emits do begin
+      output.Append(['emitter']);
+      WriteParam(em.rate); WriteParam(em.delay);
+    end;
+
+    output.Append(['end']);
+  end;
+
+  output.Free;
 end;
 
 procedure TParticle.LoadMetadata();

@@ -26,5 +26,8 @@ backup/
 *.bak
 lib/
 
+datalib/backup/
+datalib/lib/
+
 # Application bundle for Mac OS
 *.app/

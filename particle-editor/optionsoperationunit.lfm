@@ -116,7 +116,7 @@ object OptionsOperationFrame: TOptionsOperationFrame
     Width = 80
     ReadOnly = True
     TabOrder = 3
-    Text = 'Param1Name'
+    Text = 'N/A'
   end
   object Param2Name: TEdit
     Left = 8
@@ -125,7 +125,7 @@ object OptionsOperationFrame: TOptionsOperationFrame
     Width = 80
     ReadOnly = True
     TabOrder = 4
-    Text = 'Param2Name'
+    Text = 'N/A'
   end
   object Param3Name: TEdit
     Left = 8
@@ -134,7 +134,7 @@ object OptionsOperationFrame: TOptionsOperationFrame
     Width = 80
     ReadOnly = True
     TabOrder = 5
-    Text = 'Param3Name'
+    Text = 'N/A'
   end
   object Param4Name: TEdit
     Left = 8
@@ -143,7 +143,7 @@ object OptionsOperationFrame: TOptionsOperationFrame
     Width = 80
     ReadOnly = True
     TabOrder = 6
-    Text = 'Param4Name'
+    Text = 'N/A'
   end
   object Param1Panel: TPanel
     Left = 88
@@ -191,7 +191,6 @@ object OptionsOperationFrame: TOptionsOperationFrame
     Width = 100
     ItemHeight = 13
     TabOrder = 11
-    Text = 'TargetSelect'
     OnChange = TargetSelectChange
   end
 end
