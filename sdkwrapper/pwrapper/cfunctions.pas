@@ -207,6 +207,9 @@ type
   // ANIMATION RESOURCE
   TSDKAnimationFind = function(name: PAnsiChar): Pointer; cdecl;
   TSDKAnimationLoadAll = procedure(); cdecl;
+  
+  // SPRITE RESOURCE
+  TSDKSpriteFind = function(name: PAnsiChar): Pointer; cdecl;
 
   // ENITTY COMPONENT SHARED
   TSDKComponentInit = procedure(component: Pointer); cdecl;
@@ -441,6 +444,9 @@ var
   sdk_render_animation_find : TSDKAnimationFind;
   sdk_render_animation_load_all : TSDKAnimationLoadAll;
 
+  // SPRITE RESOURCE
+  sdk_render_sprite_find : TSDKSpriteFind;
+  
   // ENITITY COMPONENT SHARED
   sdk_framework_component_init : TSDKComponentInit;
   sdk_framework_component_is_ready : TSDKComponentIsReady;
@@ -718,6 +724,9 @@ begin
   sdk_render_animation_find := TSDKAnimationFind(LoadFunc('tramsdk_render_animation_find'));
   sdk_render_animation_load_all := TSDKAnimationLoadAll(LoadFunc('tramsdk_render_animation_load_all'));
 
+  // SPRITE RESOURCE
+  sdk_render_sprite_find := TSDKAnimationFind(LoadFunc('tramsdk_render_sprite_find'));
+  
   // ENTITY COMPONENT SHARED
   sdk_framework_component_init := TSDKComponentInit(LoadFunc('tramsdk_framework_component_init'));
   sdk_framework_component_is_ready := TSDKComponentIsReady(LoadFunc('tramsdk_framework_component_is_ready'));

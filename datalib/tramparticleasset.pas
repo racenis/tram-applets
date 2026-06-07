@@ -157,6 +157,7 @@ type
       procedure RemoveControl(particle: TParticleData);
 
       function GetParticleSystems: TParticleSystemList;
+      function GetControls: TParticleDataList;
   protected
       procedure SetDateInDB(date: Integer);
       procedure SetDateOnDisk(date: Integer);
@@ -601,6 +602,11 @@ end;
 function TParticle.GetParticleSystems: TParticleSystemList;
 begin
   Result := systems;
+end;
+
+function TParticle.GetControls: TParticleDataList;
+begin
+  Result := controls;
 end;
 
 

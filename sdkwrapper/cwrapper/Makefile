@@ -6,7 +6,7 @@ TARGET = wrapper.dll
 
 LIBS = ../../../tram-sdk/libtramsdk.a ../../../tram-sdk/libraries/binaries/win64/liblua.a
 
-OBJS = cwrapper.o uiwrapper.o render.o resource.o material.o model.o animation.o entitycomponent.o animationcomponent.o rendercomponent.o lightcomponent.o meshcomponent.o meshtools.o particle.o particlecomponent.o
+OBJS = cwrapper.o uiwrapper.o render.o resource.o material.o model.o animation.o sprite.o entitycomponent.o animationcomponent.o rendercomponent.o lightcomponent.o meshcomponent.o meshtools.o particle.o particlecomponent.o
 
 $(TARGET): $(OBJS) $(LIBS)
 	$(CXX) $(LDFLAGS) -o $@ $(OBJS) $(LIBS) -lopengl32 -lgdi32
@@ -21,6 +21,8 @@ model.o: model.cpp
 	$(CXX) $(CXXFLAGS) -c model.cpp -o model.o
 animation.o: animation.cpp
 	$(CXX) $(CXXFLAGS) -c animation.cpp -o animation.o
+sprite.o: sprite.cpp
+	$(CXX) $(CXXFLAGS) -c sprite.cpp -o sprite.o
 entitycomponent.o: entitycomponent.cpp
 	$(CXX) $(CXXFLAGS) -c entitycomponent.cpp -o entitycomponent.o
 rendercomponent.o: rendercomponent.cpp

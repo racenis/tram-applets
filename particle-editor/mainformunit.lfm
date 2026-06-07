@@ -130,6 +130,7 @@ object MainForm: TMainForm
     Width = 75
     Caption = 'StartParticle'
     TabOrder = 13
+    OnClick = StartParticleClick
   end
   object StopParticle: TButton
     Left = 725
@@ -137,7 +138,9 @@ object MainForm: TMainForm
     Top = 320
     Width = 75
     Caption = 'StopParticle'
+    Enabled = False
     TabOrder = 14
+    OnClick = StopParticleClick
   end
   object OptionsPanel: TPanel
     Left = 200
@@ -186,5 +189,11 @@ object MainForm: TMainForm
         OnClick = AboutMenuClick
       end
     end
+  end
+  object RenderTimer: TTimer
+    Interval = 30
+    OnTimer = RenderTimerTimer
+    Left = 654
+    Top = 477
   end
 end

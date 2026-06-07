@@ -6,11 +6,11 @@ using namespace tram;
 using namespace tram::Render;
 
 void* tramsdk_components_particle_make() {
-	return new ParticleComponent();
+	return PoolProxy<ParticleComponent>::New();
 }
 
 void tramsdk_components_particle_yeet(void* component) {
-	delete (ParticleComponent*)component;
+	PoolProxy<ParticleComponent>::Delete((ParticleComponent*)component);
 }
 
 void tramsdk_components_particle_update_location(void* component, float x, float y, float z) {
