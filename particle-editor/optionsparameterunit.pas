@@ -64,19 +64,19 @@ end;
 procedure TOptionsParameter.NumZChange(Sender: TObject);
 begin
   if parameter.paramType <> 'vector' then Exit;
-  parameter.z := NumZ.Text;
+  parameter.z := StringReplace(NumZ.Text, ',', '.', [rfReplaceAll]);
 end;
 
 procedure TOptionsParameter.NumYChange(Sender: TObject);
 begin
   if parameter.paramType <> 'vector' then Exit;
-  parameter.y := NumY.Text;
+  parameter.y := StringReplace(NumY.Text, ',', '.', [rfReplaceAll]);
 end;
 
 procedure TOptionsParameter.NumXChange(Sender: TObject);
 begin
   if (parameter.paramType <> 'scalar') and (parameter.paramType <> 'vector') then Exit;
-  parameter.x := NumX.Text;
+  parameter.x := StringReplace(NumX.Text, ',', '.', [rfReplaceAll]);
 end;
 
 procedure TOptionsParameter.SetParameter(param: TParticleParameter);

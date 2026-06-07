@@ -323,6 +323,7 @@ begin
   self.name := particleFileName;
   self.parent := collection;
   self.systems := TParticleSystemList.Create;
+  self.controls := TParticleDataList.Create;
 end;
 
 function TParticle.GetType: string;

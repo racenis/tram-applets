@@ -155,6 +155,7 @@ begin
   ParticleTree.Items.AddChild(node, 'Initializers');
   ParticleTree.Items.AddChild(node, 'Operations');
   ParticleTree.Items.AddChild(node, 'Constraints');
+  ParticleTree.Items.AddChild(node, 'Emitters');
   ParticleTree.Items.AddChild(node, 'Values');
   node.Expand(True);
 end;
@@ -408,7 +409,6 @@ begin
        node.Data := system;
        ParticleTree.Items.AddChild(node, 'Initializers');
        ParticleTree.Items.AddChild(node, 'Operations');
-       ParticleTree.Items.AddChild(node, 'Emitters');
        ParticleTree.Items.AddChild(node, 'Values');
     end else begin
       syscount += 1;
@@ -417,6 +417,7 @@ begin
       ParticleTree.Items.AddChild(node, 'Initializers');
       ParticleTree.Items.AddChild(node, 'Operations');
       ParticleTree.Items.AddChild(node, 'Constraints');
+      ParticleTree.Items.AddChild(node, 'Emitters');
       ParticleTree.Items.AddChild(node, 'Values');
     end;
   end;
