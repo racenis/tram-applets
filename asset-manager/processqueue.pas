@@ -86,7 +86,6 @@ begin
       if state = stateQuote then
          if path[index] = '"' then begin
            state := stateWhitespace;
-           WriteLn('Parsed off: ', token);
            SetLength(Result, Length(Result) + 1);
            Result[High(Result)] := token;
            token := '';

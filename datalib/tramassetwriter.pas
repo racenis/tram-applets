@@ -60,8 +60,17 @@ var
   line: array of string;
   token: string;
   col: Integer;
+  directory: string;
   outputFile: TFileStream;
 begin
+  directory := ExtractFileDir(self.path);
+
+  if (directory <> '') and (not DirectoryExists(directory)) then
+  begin
+    if not ForceDirectories(directory) then
+      raise Exception.CreateFmt(
+        'Could not create directory "%s"', [directory]);
+  end;
 
   // check if data is set for writing
   if data = nil then

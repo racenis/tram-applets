@@ -167,22 +167,19 @@ begin
   assetFile := TAssetParser.Create(GetPath);
 
   if not assetFile.IsOpen then
-  begin
-    WriteLn('was not loaded!!!!!');
-    Exit;
-  end;
+    raise Exception.CreateFmt(
+        'Material could not be loaded due to "%s" not being accessible.',
+        [GetPath]);
 
   if assetFile.GetRowCount < 1 then
-  begin
-    WriteLn('was not loaded!!!!!');
-    Exit;
-  end;
+    raise Exception.CreateFmt(
+        'Material file "%s" has no rows.',
+        [GetPath]);
 
   if assetFile.GetValue(0, 0) <> 'MATv7' then
-  begin
-    WriteLn('INCORRECT HEADER!!!');
-    Exit;
-  end;
+    raise Exception.CreateFmt(
+        'Material file "%s" has header "%s" while "%s" was expected.',
+        [GetPath, assetFile.GetValue(0, 0), 'MATv7']);
 
   fs := DefaultFormatSettings;
   fs.DecimalSeparator := '.';

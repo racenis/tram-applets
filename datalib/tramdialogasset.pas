@@ -138,22 +138,19 @@ begin
   assetFile := TAssetParser.Create(GetPath);
 
   if not assetFile.IsOpen then
-  begin
-    WriteLn('was not loaded!!!!!');
-    Exit;
-  end;
+    raise Exception.CreateFmt(
+        'Dialog could not be loaded due to "%s" not being accessible.',
+        [GetPath]);
 
   if assetFile.GetRowCount < 1 then
-  begin
-    WriteLn('was not loaded!!!!!');
-    Exit;
-  end;
+    raise Exception.CreateFmt(
+        'Dialog file "%s" has no rows.',
+        [GetPath]);
 
   if assetFile.GetValue(0, 0) <> 'DIALOGv1' then
-  begin
-    WriteLn('INCORRECT HEADER!!!');
-    Exit;
-  end;
+    raise Exception.CreateFmt(
+        'Dialog file "%s" has header "%s" while "%s" was expected.',
+        [GetPath, assetFile.GetValue(0, 0), 'DIALOGv1']);
 
   for rowIndex := 1 to assetFile.GetRowCount - 1 do
   case assetFile.GetValue(rowIndex, 0) of
@@ -182,7 +179,9 @@ begin
             //topic.nextTopics[High(topic.nextTopics)] := assetFile.GetValue(rowIndex, 2);
           end;
     end;
-    else WriteLn(assetFile.GetValue(rowIndex, 0));
+    else raise Exception.CreateFmt(
+        'Dialog "%s" has invalid record "%s" on line %d.',
+        [GetPath, assetFile.GetValue(rowIndex, 0), rowIndex + 1]);
   end;
 end;
 

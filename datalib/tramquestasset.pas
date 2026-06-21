@@ -161,22 +161,19 @@ begin
   assetFile := TAssetParser.Create(GetPath);
 
   if not assetFile.IsOpen then
-  begin
-    WriteLn('was not loaded!!!!!');
-    Exit;
-  end;
+    raise Exception.CreateFmt(
+        'Quest could not be loaded due to "%s" not being accessible.',
+        [GetPath]);
 
   if assetFile.GetRowCount < 1 then
-  begin
-    WriteLn('was not loaded!!!!!');
-    Exit;
-  end;
+    raise Exception.CreateFmt(
+        'Quest file "%s" has no rows.',
+        [GetPath]);
 
   if assetFile.GetValue(0, 0) <> 'QUESTv1' then
-  begin
-    WriteLn('INCORRECT HEADER!!!');
-    Exit;
-  end;
+    raise Exception.CreateFmt(
+        'Quest file "%s" has header "%s" while "%s" was expected.',
+        [GetPath, assetFile.GetValue(0, 0), 'QUESTv1']);
 
   // if quest -> new quest
   // remember pointer
@@ -218,9 +215,6 @@ begin
                end;
 
               else begin
-
-                WriteLn( newVariable.variableType);
-
                 newVariable.targetQuest := assetFile.GetValue(rowIndex, 3);
                 newVariable.targetVariable := assetFile.GetValue(rowIndex, 4);
 
@@ -269,16 +263,12 @@ begin
 
          prevQuest.triggers.Add(newTrigger);
        end
-       else WriteLn('What is this:', assetFile.GetValue(rowIndex, 0));
+       else raise Exception.CreateFmt(
+        'Quest "%s" has invalid record "%s" on line %d.',
+        [GetPath, assetFile.GetValue(rowIndex, 0), rowIndex + 1]);
 
 
   end;
-  //begin
-   // WriteLn(assetFile.GetValue(rowIndex, 0));
-  //end;
-
-
-
 end;
 
 function NoneIfBlank(param: string): string;

@@ -394,22 +394,19 @@ begin
   assetFile := TAssetParser.Create(GetPath);
 
   if not assetFile.IsOpen then
-  begin
-    WriteLn('was not loaded!!!!!');
-    Exit;
-  end;
+    raise Exception.CreateFmt(
+        'Particle could not be loaded due to "%s" not being accessible.',
+        [GetPath]);
 
   if assetFile.GetRowCount < 1 then
-  begin
-    WriteLn('was not loaded!!!!!');
-    Exit;
-  end;
+    raise Exception.CreateFmt(
+        'Particle file "%s" has no rows.',
+        [GetPath]);
 
   if assetFile.GetValue(0, 0) <> 'PRTv1' then
-  begin
-    WriteLn('INCORRECT HEADER!!!');
-    Exit;
-  end;
+    raise Exception.CreateFmt(
+        'Particle file "%s" has header "%s" while "%s" was expected.',
+        [GetPath, assetFile.GetValue(0, 0), 'PRTv1']);
 
   rowIndex := 1;
   while rowIndex < assetFile.GetRowCount do begin

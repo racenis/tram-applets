@@ -151,22 +151,19 @@ begin
   assetFile := TAssetParser.Create(GetPath);
 
   if not assetFile.IsOpen then
-  begin
-    WriteLn('was not loaded!!!!!');
-    Exit;
-  end;
+    raise Exception.CreateFmt(
+        'Sprite could not be loaded due to "%s" not being accessible.',
+        [GetPath]);
 
   if assetFile.GetRowCount < 1 then
-  begin
-    WriteLn('was not loaded!!!!!');
-    Exit;
-  end;
+    raise Exception.CreateFmt(
+        'Sprite file "%s" has no rows.',
+        [GetPath]);
 
-  if (assetFile.GetValue(0, 0) <> 'SPRv2') and (assetFile.GetValue(0, 0) <> 'SPRv3') then
-  begin
-    WriteLn('INCORRECT HEADER!!!');
-    Exit;
-  end;
+  if assetFile.GetValue(0, 0) <> 'SPRv2' then
+    raise Exception.CreateFmt(
+        'Sprite file "%s" has header "%s" while "%s" was expected.',
+        [GetPath, assetFile.GetValue(0, 0), 'SPRv2']);
 
   fs := DefaultFormatSettings;
   fs.DecimalSeparator := '.';
@@ -279,8 +276,6 @@ begin
   newFrame.midpointY := 8;
   newFrame.borderH := 2;
   newFrame.borderV := 2;
-
-  WriteLn('Inserting new frame at', index);
 
   self.sprites.Insert(index, newFrame);
 end;

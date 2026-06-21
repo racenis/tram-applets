@@ -30,6 +30,9 @@ implementation
 
 {$R *.lfm}
 
+uses
+  MainFormUnit;
+
 { TOptionsValueFrame }
 
 procedure TOptionsValueFrame.ValueScalarClick(Sender: TObject);
@@ -40,6 +43,7 @@ end;
 procedure TOptionsValueFrame.ValueNameChange(Sender: TObject);
 begin
   value.dataName := ValueName.Text;
+  MainForm.OperationList.Items.Strings[MainForm.OperationList.ItemIndex] := ValueName.Text;
 end;
 
 procedure TOptionsValueFrame.ValueVectorClick(Sender: TObject);

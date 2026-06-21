@@ -477,9 +477,6 @@ begin
   QuestTabTriggerList.Clear;
 
   for variable in selectedQuest.variables do
-      WriteLn('VarTYpe:', variable.variableType);
-
-  for variable in selectedQuest.variables do
       if variable.variableType = 'objective' then
          QuestTabObjectiveList.AddItem(variable.name, variable)
       else
@@ -1174,8 +1171,6 @@ begin
     Exit;
   end;
 
-  WriteLn(DialogTabItemList.ItemIndex);
-
   selectedTopic := DialogTabItemList.Items.Objects[DialogTabItemList.ItemIndex] as TDialogTopic;
 
   DialogTabRefresh;
@@ -1770,8 +1765,6 @@ begin
 
     Exit;
   end;
-
-  WriteLn(QuestTabItemList.ItemIndex);
 
   selectedQuest := QuestTabItemList.Items.Objects[QuestTabItemList.ItemIndex] as TQuestData;
 
